@@ -1196,28 +1196,28 @@
                 </ul>
             </div>
             
-            <!-- SECCIÓN: CONFIGURACIÓN DEL AUTOR -->
+            <!-- SECCIÓN: CONFIGURACIÓN DEL COLUMNISTA - CORREGIDO -->
             <div class="admin-section">
                 <h3>Configuración del Columnista</h3>
                 
                 <div class="form-group">
                     <label for="author-name-input">Nombre:</label>
-                    <input type="text" id="Anonimo" class="form-control" value="">
+                    <input type="text" id="author-name-input" class="form-control" value="">
                 </div>
                 
                 <div class="form-group">
                     <label for="author-photo-input">URL de la foto:</label>
-                    <input type="text" id="https://es.vecteezy.com/arte-vectorial/14300061-icono-de-glifo-de-perfil-de-hombre-anonimo-foto-para-documentos-ilustracion-vectorial">
+                    <input type="text" id="author-photo-input" class="form-control" value="">
                 </div>
                 
                 <div class="form-group">
                     <label for="author-quote-input">Frase inspiradora:</label>
-                    <input type="text" id="author-quote-input" class="form-control" value="Pensar distinto es un acto democratico">
+                    <input type="text" id="author-quote-input" class="form-control" value="">
                 </div>
                 
                 <div class="form-group">
                     <label for="author-bio-input">Biografía:</label>
-                    <textarea id="author-bio-input" class="form-control"></textarea>
+                    <textarea id="author-bio-input" class="form-control" rows="4"></textarea>
                 </div>
                 
                 <button class="admin-button success" id="save-author">Guardar Cambios del Autor</button>
@@ -1313,6 +1313,8 @@
         ];
 
         let currentArticleId = articles.length > 0 ? Math.max(...articles.map(a => a.id)) : 0;
+        
+        // DATOS DEL AUTOR - INICIALIZACIÓN CORRECTA
         let authorInfo = JSON.parse(localStorage.getItem('ladoC-author')) || {
             name: "Juan Pérez",
             photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
@@ -1670,7 +1672,7 @@
             document.getElementById('admin-panel').style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Cargar datos actuales en el formulario
+            // Cargar datos actuales en el formulario - CORREGIDO
             document.getElementById('author-name-input').value = authorInfo.name;
             document.getElementById('author-photo-input').value = authorInfo.photo;
             document.getElementById('author-quote-input').value = authorInfo.quote;
@@ -1936,7 +1938,17 @@
             const quote = document.getElementById('author-quote-input').value;
             const bio = document.getElementById('author-bio-input').value;
             
-            authorInfo = { name, photo, quote, bio };
+            if (!name || !photo || !quote || !bio) {
+                showNotification('Por favor complete todos los campos del autor', 'error');
+                return;
+            }
+            
+            // Guardar en el objeto authorInfo
+            authorInfo.name = name;
+            authorInfo.photo = photo;
+            authorInfo.quote = quote;
+            authorInfo.bio = bio;
+            
             saveToLocalStorage();
             
             // Actualizar vista pública
@@ -1949,6 +1961,14 @@
             document.getElementById('article-author').value = name;
             
             showNotification('Información del autor actualizada correctamente', 'success');
+            
+            // Actualizar todos los artículos existentes que no tengan autor específico
+            articles.forEach(article => {
+                if (!article.author || article.author === authorInfo.name) {
+                    article.author = name;
+                }
+            });
+            saveToLocalStorage();
         }
 
         function saveSite() {
