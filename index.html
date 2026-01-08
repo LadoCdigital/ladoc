@@ -1663,10 +1663,22 @@
         }
 
         // PANEL DE ADMINISTRACIÓN
-        function openAdminPanel() {
-            if (!isAdmin) {
-                showLoginModal();
-                return;
+       function openAdminPanel() {
+    if (!isAdmin) {
+        showLoginModal();
+        return;
+    }
+    
+    document.getElementById('admin-panel').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Cargar datos actuales en el formulario
+    document.getElementById('author-name-input').value = authorInfo.name || "Juan Pérez";
+    document.getElementById('author-photo-input').value = authorInfo.photo || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80";
+    document.getElementById('author-quote-input').value = authorInfo.quote || "Pensar distinto también es un acto de compromiso.";
+    document.getElementById('author-bio-input').value = authorInfo.bio || "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas.";
+    
+}
             }
             
             document.getElementById('admin-panel').style.display = 'block';
@@ -1933,15 +1945,37 @@
         }
 
         function saveAuthor() {
-            const name = document.getElementById('author-name-input').value;
-            const photo = document.getElementById('author-photo-input').value;
-            const quote = document.getElementById('author-quote-input').value;
-            const bio = document.getElementById('author-bio-input').value;
-            
-            if (!name || !photo || !quote || !bio) {
-                showNotification('Por favor complete todos los campos del autor', 'error');
-                return;
-            }
+    const name = document.getElementById('author-name-input').value;
+    const photo = document.getElementById('author-photo-input').value;
+    const quote = document.getElementById('author-quote-input').value;
+    const bio = document.getElementById('author-bio-input').value;
+    
+    if (!name || !photo || !quote || !bio) {
+        showNotification('Por favor complete todos los campos del autor', 'error');
+        return;
+    }
+    
+    // Guardar en el objeto authorInfo
+    authorInfo.name = name;
+    authorInfo.photo = photo;
+    authorInfo.quote = quote;
+    authorInfo.bio = bio;
+    
+    // Guardar en localStorage
+    localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
+    
+    // Actualizar vista pública inmediatamente
+    function updateAuthorDisplay() {
+    document.getElementById('author-name').textContent = authorInfo.name;
+    document.getElementById('author-photo').src = authorInfo.photo;
+    document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+    document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+}
+    // Actualizar también el campo de autor en el formulario de artículos
+    document.getElementById('article-author').value = name;
+    
+    showNotification('Información del autor actualizada correctamente', 'success');
+}
             
             // Guardar en el objeto authorInfo
             authorInfo.name = name;
@@ -2115,6 +2149,14 @@
 
         // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
+    // Verificar autenticación
+    checkAuth();
+    
+    // Inicializar información del autor en la barra lateral
+    updateAuthorDisplay(); // Usar la función actualizada
+    
+    // ... resto del código
+});
             // Verificar autenticación
             checkAuth();
             
