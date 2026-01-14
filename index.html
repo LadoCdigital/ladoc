@@ -1196,7 +1196,7 @@
                 </ul>
             </div>
             
-            <!-- SECCIÓN: CONFIGURACIÓN DEL AUTOR (CORREGIDA) -->
+            <!-- SECCIÓN: CONFIGURACIÓN DEL AUTOR -->
             <div class="admin-section">
                 <h3>Configuración del Columnista</h3>
                 
@@ -1207,12 +1207,12 @@
                 
                 <div class="form-group">
                     <label for="author-photo-input">URL de la foto:</label>
-                    <input type="text" id="author-photo-input" class="form-control" value="">
+                    <input type="text" id="author-photo-input" class="form-control" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80">
                 </div>
                 
                 <div class="form-group">
                     <label for="author-quote-input">Frase inspiradora:</label>
-                    <input type="text" id="author-quote-input" class="form-control" value="">
+                    <input type="text" id="author-quote-input" class="form-control" value="Pensar distinto también es un acto de compromiso.">
                 </div>
                 
                 <div class="form-group">
@@ -1670,7 +1670,7 @@
             document.getElementById('admin-panel').style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Cargar datos actuales en el formulario (CORREGIDO)
+            // Cargar datos actuales en el formulario
             document.getElementById('author-name-input').value = authorInfo.name;
             document.getElementById('author-photo-input').value = authorInfo.photo;
             document.getElementById('author-quote-input').value = authorInfo.quote;
@@ -1935,11 +1935,6 @@
             const photo = document.getElementById('author-photo-input').value;
             const quote = document.getElementById('author-quote-input').value;
             const bio = document.getElementById('author-bio-input').value;
-            
-            if (!name || !photo || !quote || !bio) {
-                showNotification('Por favor complete todos los campos del autor', 'error');
-                return;
-            }
             
             authorInfo = { name, photo, quote, bio };
             saveToLocalStorage();
