@@ -1,53 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lado C - Una mirada distinta sobre la política</title>
-    
-    <!-- VERIFICACIÓN GOOGLE SEARCH CONSOLE -->
-    <meta name="google-site-verification" content="TU_CODIGO_DE_VERIFICACION">
-    
-    <!-- META TAGS PARA SEO -->
-    <meta name="description" content="Lado C - Análisis político desde Catamarca con perspectiva socialista democrática. Editoriales de Juan Pérez sobre política nacional e internacional.">
-    <meta name="keywords" content="política Catamarca, análisis político, socialismo democrático, Juan Pérez, opinión política, Argentina, editorial político">
-    <meta name="author" content="Juan Pérez">
-    
-    <!-- OPEN GRAPH PARA REDES SOCIALES -->
-    <meta property="og:title" content="Lado C - Una mirada distinta sobre la política">
-    <meta property="og:description" content="Análisis político desde una perspectiva socialista democrática. Columnas de opinión sobre política catamarqueña, nacional e internacional.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
-    <meta property="og:url" content="https://tusitio.com">
-    <meta property="og:type" content="website">
-    
-    <!-- TWITTER CARDS -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Lado C - Una mirada distinta sobre la política">
-    <meta name="twitter:description" content="Análisis político desde una perspectiva socialista democrática">
-    
-    <!-- SCHEMA.ORG MARKUP -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Lado C",
-      "description": "Análisis político desde una perspectiva socialista democrática",
-      "url": "https://tusitio.com",
-      "author": {
-        "@type": "Person",
-        "name": "Juan Pérez",
-        "jobTitle": "Periodista y politólogo",
-        "description": "Columnista especializado en análisis político desde una perspectiva socialista democrática"
-      }
-    }
-    </script>
-    
-    <!-- Resto de tus enlaces y estilos... -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <!-- ... -->
-    <title>Lado C - Una mirada distinta sobre la política</title>
-    <meta name="google-site-verification" content="F8afRuc1cHF1sPvgUsci7IupBV6B40Zhehvl4xD9AHA" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
@@ -1240,7 +1196,7 @@
                 </ul>
             </div>
             
-            <!-- SECCIÓN: CONFIGURACIÓN DEL COLUMNISTA - CORREGIDO -->
+            <!-- SECCIÓN: CONFIGURACIÓN DEL AUTOR (CORREGIDA) -->
             <div class="admin-section">
                 <h3>Configuración del Columnista</h3>
                 
@@ -1261,7 +1217,7 @@
                 
                 <div class="form-group">
                     <label for="author-bio-input">Biografía:</label>
-                    <textarea id="author-bio-input" class="form-control" rows="4"></textarea>
+                    <textarea id="author-bio-input" class="form-control"></textarea>
                 </div>
                 
                 <button class="admin-button success" id="save-author">Guardar Cambios del Autor</button>
@@ -1357,8 +1313,6 @@
         ];
 
         let currentArticleId = articles.length > 0 ? Math.max(...articles.map(a => a.id)) : 0;
-        
-        // DATOS DEL AUTOR - INICIALIZACIÓN CORRECTA
         let authorInfo = JSON.parse(localStorage.getItem('ladoC-author')) || {
             name: "Juan Pérez",
             photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
@@ -1707,28 +1661,16 @@
         }
 
         // PANEL DE ADMINISTRACIÓN
-       function openAdminPanel() {
-    if (!isAdmin) {
-        showLoginModal();
-        return;
-    }
-    
-    document.getElementById('admin-panel').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    // Cargar datos actuales en el formulario
-    document.getElementById('author-name-input').value = authorInfo.name || "Juan Pérez";
-    document.getElementById('author-photo-input').value = authorInfo.photo || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80";
-    document.getElementById('author-quote-input').value = authorInfo.quote || "Pensar distinto también es un acto de compromiso.";
-    document.getElementById('author-bio-input').value = authorInfo.bio || "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas.";
-    
-}
+        function openAdminPanel() {
+            if (!isAdmin) {
+                showLoginModal();
+                return;
             }
             
             document.getElementById('admin-panel').style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Cargar datos actuales en el formulario - CORREGIDO
+            // Cargar datos actuales en el formulario (CORREGIDO)
             document.getElementById('author-name-input').value = authorInfo.name;
             document.getElementById('author-photo-input').value = authorInfo.photo;
             document.getElementById('author-quote-input').value = authorInfo.quote;
@@ -1989,44 +1931,17 @@
         }
 
         function saveAuthor() {
-    const name = document.getElementById('author-name-input').value;
-    const photo = document.getElementById('author-photo-input').value;
-    const quote = document.getElementById('author-quote-input').value;
-    const bio = document.getElementById('author-bio-input').value;
-    
-    if (!name || !photo || !quote || !bio) {
-        showNotification('Por favor complete todos los campos del autor', 'error');
-        return;
-    }
-    
-    // Guardar en el objeto authorInfo
-    authorInfo.name = name;
-    authorInfo.photo = photo;
-    authorInfo.quote = quote;
-    authorInfo.bio = bio;
-    
-    // Guardar en localStorage
-    localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
-    
-    // Actualizar vista pública inmediatamente
-    function updateAuthorDisplay() {
-    document.getElementById('author-name').textContent = authorInfo.name;
-    document.getElementById('author-photo').src = authorInfo.photo;
-    document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-    document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-}
-    // Actualizar también el campo de autor en el formulario de artículos
-    document.getElementById('article-author').value = name;
-    
-    showNotification('Información del autor actualizada correctamente', 'success');
-}
+            const name = document.getElementById('author-name-input').value;
+            const photo = document.getElementById('author-photo-input').value;
+            const quote = document.getElementById('author-quote-input').value;
+            const bio = document.getElementById('author-bio-input').value;
             
-            // Guardar en el objeto authorInfo
-            authorInfo.name = name;
-            authorInfo.photo = photo;
-            authorInfo.quote = quote;
-            authorInfo.bio = bio;
+            if (!name || !photo || !quote || !bio) {
+                showNotification('Por favor complete todos los campos del autor', 'error');
+                return;
+            }
             
+            authorInfo = { name, photo, quote, bio };
             saveToLocalStorage();
             
             // Actualizar vista pública
@@ -2039,14 +1954,6 @@
             document.getElementById('article-author').value = name;
             
             showNotification('Información del autor actualizada correctamente', 'success');
-            
-            // Actualizar todos los artículos existentes que no tengan autor específico
-            articles.forEach(article => {
-                if (!article.author || article.author === authorInfo.name) {
-                    article.author = name;
-                }
-            });
-            saveToLocalStorage();
         }
 
         function saveSite() {
@@ -2193,14 +2100,6 @@
 
         // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
-    // Verificar autenticación
-    checkAuth();
-    
-    // Inicializar información del autor en la barra lateral
-    updateAuthorDisplay(); // Usar la función actualizada
-    
-    // ... resto del código
-});
             // Verificar autenticación
             checkAuth();
             
