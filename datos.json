@@ -1,0 +1,9 @@
+{
+  "articles": [],
+  "author": {
+    "name": "Tu Nombre",
+    "photo": "tu-foto.jpg",
+    "quote": "Tu frase",
+    "bio": "Tu biografía"
+  }
+}
