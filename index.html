@@ -4,15 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lado C - Una mirada distinta sobre la política</title>
-    <!-- Metaetiquetas SEO mejoradas -->
-    <meta name="description" content="Medio de opinión política con enfoque en Catamarca y el socialismo democrático. Análisis político, editoriales y columnas de opinión.">
-    <meta name="keywords" content="política, Catamarca, opinión, socialismo, Argentina, análisis político, editorial, columnista">
-    <meta property="og:title" content="Lado C - Una mirada distinta sobre la política">
-    <meta property="og:type" content="website">
-    <meta name="author" content="Lado C">
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
@@ -32,24 +23,6 @@
             --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
             --border-radius: 8px;
-            --color-fondo: #FFFFFF;
-            --color-texto: #333333;
-            --color-fondo-card: #FFFFFF;
-            --color-borde: #E0E0E0;
-        }
-
-        /* Modo oscuro */
-        body.dark-mode {
-            --color-blanco: #121212;
-            --color-gris-claro: #1E1E1E;
-            --color-gris-oscuro: #E0E0E0;
-            --color-gris-medio: #B0B0B0;
-            --color-fondo: #121212;
-            --color-texto: #E0E0E0;
-            --color-fondo-card: #1E1E1E;
-            --color-borde: #333333;
-            --color-bg-sidebar: #1A1A1A;
-            --color-azul-claro: #2A3B5C;
         }
 
         * {
@@ -60,10 +33,9 @@
 
         body {
             font-family: 'Merriweather', serif;
-            color: var(--color-texto);
-            background-color: var(--color-fondo);
+            color: var(--color-gris-oscuro);
+            background-color: var(--color-blanco);
             line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1, h2, h3, h4, h5 {
@@ -87,12 +59,11 @@
 
         /* HEADER */
         header {
-            background-color: var(--color-fondo-card);
+            background-color: var(--color-blanco);
             box-shadow: var(--shadow-sutil);
             position: sticky;
             top: 0;
             z-index: 1000;
-            transition: background-color 0.3s ease;
         }
 
         .header-container {
@@ -118,61 +89,6 @@
         .logo span {
             font-weight: 600;
             color: var(--color-gris-medio);
-        }
-
-        /* Barra de búsqueda */
-        .search-container {
-            display: flex;
-            margin: 0 20px;
-            flex: 1;
-            max-width: 400px;
-        }
-
-        #global-search {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid var(--color-borde);
-            border-radius: var(--border-radius) 0 0 var(--border-radius);
-            font-family: 'Merriweather', serif;
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
-            transition: border-color 0.3s ease;
-        }
-
-        #global-search:focus {
-            outline: none;
-            border-color: var(--color-bordo);
-        }
-
-        #search-button {
-            background-color: var(--color-bordo);
-            color: var(--color-blanco);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #search-button:hover {
-            background-color: #7a1616;
-        }
-
-        /* Botón modo oscuro */
-        #dark-mode-toggle {
-            background: none;
-            border: none;
-            font-size: 1.3rem;
-            color: var(--color-texto);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background-color 0.3s ease;
-            margin-left: 10px;
-        }
-
-        #dark-mode-toggle:hover {
-            background-color: var(--color-gris-claro);
         }
 
         nav ul {
@@ -217,6 +133,30 @@
             margin-left: 5px;
         }
 
+        /* BARRA DE BÚSQUEDA */
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid var(--color-azul-claro);
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-family: 'Merriweather', serif;
+            width: 200px;
+        }
+
+        .search-button {
+            background-color: var(--color-bordo);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+        }
+
         /* MAIN CONTENT */
         .main-content {
             display: flex;
@@ -235,8 +175,6 @@
             padding: 25px;
             box-shadow: var(--shadow-sutil);
             align-self: flex-start;
-            border: 1px solid var(--color-borde);
-            transition: all 0.3s ease;
         }
 
         /* ARTICLES */
@@ -254,13 +192,12 @@
         }
 
         .article-card {
-            background-color: var(--color-fondo-card);
+            background-color: var(--color-blanco);
             border-radius: var(--border-radius);
             overflow: hidden;
             box-shadow: var(--shadow-sutil);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
-            border: 1px solid var(--color-borde);
         }
 
         .article-card:hover {
@@ -290,31 +227,6 @@
             margin-bottom: 15px;
             display: flex;
             gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        /* Etiquetas */
-        .article-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .tag {
-            background-color: var(--color-azul-claro);
-            color: var(--color-gris-oscuro);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-family: 'Montserrat', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .tag:hover {
-            background-color: var(--color-bordo);
-            color: white;
-            cursor: pointer;
         }
 
         .article-excerpt {
@@ -338,44 +250,6 @@
         .read-more:hover {
             background-color: #7a1616;
             transform: translateY(-2px);
-        }
-
-        /* Botones de acción */
-        .article-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .action-button {
-            padding: 8px 15px;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--color-borde);
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .action-button:hover {
-            background-color: var(--color-bordo);
-            color: white;
-            border-color: var(--color-bordo);
-        }
-
-        .favorito {
-            background-color: #ffc107;
-            color: #333;
-            border-color: #ffc107;
-        }
-
-        .favorito:hover {
-            background-color: #e0a800;
         }
 
         /* ADMIN BADGE EN ARTÍCULOS */
@@ -422,7 +296,6 @@
             padding: 0 10px;
             border-left: 3px solid var(--color-bordo);
             padding-left: 15px;
-            text-align: left;
         }
 
         .author-bio {
@@ -443,11 +316,11 @@
         }
 
         /* SECCIONES ESPECÍFICAS */
-        .category-section, .contact-section, .archive-section, .search-section, .favorites-section {
+        .category-section, .contact-section, .archive-section {
             display: none;
         }
 
-        .category-section.active, .contact-section.active, .archive-section.active, .search-section.active, .favorites-section.active {
+        .category-section.active, .contact-section.active, .archive-section.active {
             display: block;
             animation: fadeIn 0.5s ease forwards;
         }
@@ -474,7 +347,6 @@
             gap: 20px;
             color: var(--color-gris-medio);
             margin-bottom: 30px;
-            flex-wrap: wrap;
         }
 
         .article-full-img {
@@ -495,18 +367,6 @@
             margin-bottom: 25px;
         }
 
-        /* Barra de progreso de lectura */
-        .reading-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 4px;
-            background-color: var(--color-bordo);
-            z-index: 1001;
-            transition: width 0.2s ease;
-        }
-
         .back-button {
             display: inline-block;
             background-color: var(--color-azul-claro);
@@ -517,56 +377,10 @@
             font-weight: 600;
             margin-bottom: 40px;
             transition: background-color 0.3s ease;
-            border: none;
-            cursor: pointer;
         }
 
         .back-button:hover {
             background-color: #c8d6e8;
-        }
-
-        /* Botones de compartir */
-        .share-buttons {
-            display: flex;
-            gap: 15px;
-            margin: 30px 0;
-            padding-top: 20px;
-            border-top: 1px solid var(--color-borde);
-        }
-
-        .share-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: var(--border-radius);
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
-            border: 1px solid var(--color-borde);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-        }
-
-        .share-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sutil);
-        }
-
-        .twitter-share {
-            color: #1DA1F2;
-            border-color: #1DA1F2;
-        }
-
-        .facebook-share {
-            color: #4267B2;
-            border-color: #4267B2;
-        }
-
-        .whatsapp-share {
-            color: #25D366;
-            border-color: #25D366;
         }
 
         /* FOOTER */
@@ -652,8 +466,7 @@
         }
 
         .admin-container {
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
+            background-color: var(--color-blanco);
             max-width: 900px;
             margin: 0 auto;
             border-radius: var(--border-radius);
@@ -690,9 +503,8 @@
         .admin-section {
             margin-bottom: 30px;
             padding: 20px;
-            border: 1px solid var(--color-borde);
+            border: 1px solid var(--color-azul-claro);
             border-radius: var(--border-radius);
-            background-color: var(--color-fondo-card);
         }
 
         .admin-section h3 {
@@ -714,18 +526,10 @@
         .form-control {
             width: 100%;
             padding: 12px;
-            border: 1px solid var(--color-borde);
+            border: 1px solid #ddd;
             border-radius: var(--border-radius);
             font-family: 'Merriweather', serif;
             font-size: 1rem;
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
-            transition: border-color 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--color-bordo);
         }
 
         textarea.form-control {
@@ -785,7 +589,7 @@
 
         .article-list {
             list-style: none;
-            border: 1px solid var(--color-borde);
+            border: 1px solid #ddd;
             border-radius: var(--border-radius);
             overflow: hidden;
         }
@@ -795,13 +599,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            border-bottom: 1px solid var(--color-borde);
-            background-color: var(--color-fondo-card);
-            transition: background-color 0.3s ease;
-        }
-
-        .article-list-item:hover {
-            background-color: var(--color-gris-claro);
+            border-bottom: 1px solid #ddd;
         }
 
         .article-list-item:last-child {
@@ -865,8 +663,7 @@
         }
 
         .login-container {
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
+            background-color: var(--color-blanco);
             border-radius: var(--border-radius);
             padding: 40px;
             width: 100%;
@@ -921,14 +718,12 @@
             position: absolute;
             bottom: 70px;
             right: 0;
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
+            background-color: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-hover);
             padding: 15px;
             min-width: 200px;
             display: none;
-            border: 1px solid var(--color-borde);
         }
 
         .admin-toolbar-menu.show {
@@ -945,7 +740,7 @@
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            color: var(--color-texto);
+            color: var(--color-gris-oscuro);
             border-radius: 4px;
             margin-bottom: 5px;
             transition: background-color 0.3s ease;
@@ -966,40 +761,59 @@
             border: 2px solid var(--color-bordo);
         }
 
+        /* BOTÓN FAVORITO */
+        .favorite-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+
+        .favorite-btn:hover {
+            color: #ff6b6b;
+        }
+
+        .favorite-btn.active {
+            color: #ff6b6b;
+        }
+
         /* PAGINACIÓN */
         .pagination {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 30px;
-            flex-wrap: wrap;
+            grid-column: 1 / -1;
         }
 
-        .pagination-button {
-            padding: 10px 15px;
-            border: 1px solid var(--color-borde);
-            background-color: var(--color-fondo-card);
-            color: var(--color-texto);
+        .pagination-btn {
+            background-color: var(--color-azul-claro);
+            color: var(--color-gris-oscuro);
+            padding: 8px 15px;
             border-radius: var(--border-radius);
+            border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
         }
 
-        .pagination-button:hover:not(:disabled) {
+        .pagination-btn:hover:not(:disabled) {
             background-color: var(--color-bordo);
             color: white;
-            border-color: var(--color-bordo);
         }
 
-        .pagination-button.active {
-            background-color: var(--color-bordo);
-            color: white;
-            border-color: var(--color-bordo);
-        }
-
-        .pagination-button:disabled {
+        .pagination-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        .pagination-info {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
         }
 
         /* RESPONSIVE DESIGN */
@@ -1024,15 +838,20 @@
                 gap: 20px;
             }
             
-            .search-container {
-                max-width: 100%;
-                margin: 10px 0;
-            }
-            
             nav ul {
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 15px;
+            }
+            
+            .search-container {
+                margin-left: 0;
+                margin-top: 15px;
+                width: 100%;
+            }
+            
+            .search-input {
+                width: 100%;
             }
             
             .articles-grid {
@@ -1057,9 +876,39 @@
                 width: 100%;
                 justify-content: flex-start;
             }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.8rem;
+            }
             
-            .share-buttons {
-                flex-wrap: wrap;
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .article-full-title {
+                font-size: 1.8rem;
+            }
+            
+            .admin-container {
+                padding: 15px;
+                margin: 15px;
+            }
+            
+            .admin-toolbar-button {
+                width: 50px;
+                height: 50px;
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .notification {
+                left: 15px;
+                right: 15px;
+                width: auto;
             }
         }
 
@@ -1091,7 +940,6 @@
             box-shadow: var(--shadow-sutil);
             z-index: 4000;
             display: none;
-            max-width: 400px;
         }
 
         .notification.success {
@@ -1154,41 +1002,9 @@
             margin-bottom: 15px;
             color: var(--color-bordo);
         }
-
-        /* ESTADÍSTICAS */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-card {
-            background-color: var(--color-gris-claro);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--color-bordo);
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--color-gris-medio);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
     </style>
 </head>
 <body>
-    <!-- BARRA DE PROGRESO DE LECTURA -->
-    <div class="reading-progress" id="reading-progress"></div>
-    
     <!-- NOTIFICACIONES -->
     <div class="notification" id="notification"></div>
 
@@ -1225,8 +1041,8 @@
         <div class="admin-toolbar-menu" id="admin-toolbar-menu">
             <button onclick="openAdminPanel()"><i class="fas fa-cog"></i> Panel de Control</button>
             <button onclick="showNewArticleForm()"><i class="fas fa-plus"></i> Nuevo Editorial</button>
-            <button onclick="openBackupManager()"><i class="fas fa-database"></i> Backup/Restore</button>
-            <button onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Cambiar Tema</button>
+            <button onclick="exportData()"><i class="fas fa-download"></i> Exportar Datos</button>
+            <button onclick="showFavorites()"><i class="fas fa-heart"></i> Favoritos</button>
             <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
         </div>
         <div class="admin-toolbar-button" id="admin-toolbar-button">
@@ -1238,18 +1054,6 @@
     <header>
         <div class="container header-container">
             <a href="#" class="logo" id="logo">Lado <span>C</span></a>
-            
-            <!-- Barra de búsqueda -->
-            <div class="search-container">
-                <input type="text" id="global-search" placeholder="Buscar editoriales...">
-                <button id="search-button"><i class="fas fa-search"></i></button>
-            </div>
-            
-            <!-- Botón modo oscuro -->
-            <button id="dark-mode-toggle" aria-label="Alternar modo oscuro">
-                <i class="fas fa-moon"></i>
-            </button>
-            
             <nav>
                 <ul>
                     <li><a href="#" id="nav-inicio">Inicio</a></li>
@@ -1259,11 +1063,16 @@
                     <li><a href="#" id="nav-sociedad">Sociedad</a></li>
                     <li><a href="#" id="nav-internacionales">Internacionales</a></li>
                     <li><a href="#" id="nav-archivo">Archivo</a></li>
-                    <li><a href="#" id="nav-favoritos">Favoritos</a></li>
                     <li><a href="#" id="nav-contacto">Contacto</a></li>
                     <li><a href="#" id="nav-admin">Administración <span class="admin-indicator" id="admin-indicator"></span></a></li>
                 </ul>
             </nav>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar editoriales..." class="search-input">
+                <button id="search-button" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -1277,20 +1086,11 @@
                     <!-- Artículos destacados se cargarán dinámicamente aquí -->
                 </div>
                 
-                <!-- Estadísticas -->
-                <div class="stats-grid" id="stats-container">
-                    <!-- Estadísticas se cargarán dinámicamente aquí -->
-                </div>
-                
                 <h2 class="section-title" id="archivo">Archivo de Editoriales</h2>
                 <div class="articles-grid" id="archive-container">
                     <!-- Archivo se cargará dinámicamente aquí -->
                 </div>
-                
-                <!-- Paginación -->
-                <div class="pagination" id="archive-pagination">
-                    <!-- Botones de paginación se cargarán dinámicamente aquí -->
-                </div>
+                <div class="pagination" id="archive-pagination"></div>
             </div>
 
             <!-- SECCIONES POR CATEGORÍA -->
@@ -1334,20 +1134,11 @@
                 <div class="pagination" id="internacionales-pagination"></div>
             </div>
 
-            <!-- SECCIÓN BÚSQUEDA -->
-            <div id="search-section" class="search-section">
-                <h2 class="section-title" id="search-results-title">Resultados de búsqueda</h2>
-                <div class="articles-grid" id="search-results-container">
-                    <!-- Resultados de búsqueda se cargarán dinámicamente aquí -->
-                </div>
-                <div class="pagination" id="search-pagination"></div>
-            </div>
-
             <!-- SECCIÓN FAVORITOS -->
-            <div id="favorites-section" class="favorites-section">
-                <h2 class="section-title">Tus editoriales favoritos</h2>
+            <div id="favorites-section" class="category-section">
+                <h2 class="section-title">Mis Favoritos</h2>
                 <div class="articles-grid" id="favorites-container">
-                    <!-- Favoritos se cargarán dinámicamente aquí -->
+                    <!-- Artículos favoritos se cargarán dinámicamente aquí -->
                 </div>
                 <div class="pagination" id="favorites-pagination"></div>
             </div>
@@ -1364,7 +1155,7 @@
                     <button class="archive-filter-btn" data-filter="Internacionales">Internacionales</button>
                 </div>
                 <div class="articles-grid" id="full-archive-container">
-                    <!-- Archivo completo se cargarán dinámicamente aquí -->
+                    <!-- Archivo completo se cargará dinámicamente aquí -->
                 </div>
                 <div class="pagination" id="full-archive-pagination"></div>
             </div>
@@ -1424,14 +1215,7 @@
             <div class="admin-toggle">
                 <button class="read-more" id="open-admin">Panel de Administración</button>
                 <button class="read-more secondary" id="new-article-button">Nuevo Editorial</button>
-            </div>
-            
-            <!-- Sección de estadísticas rápidas -->
-            <div style="margin-top: 30px; padding: 15px; background-color: var(--color-azul-claro); border-radius: var(--border-radius);">
-                <h4 style="margin-bottom: 10px; color: var(--color-bordo);">Estadísticas</h4>
-                <div id="quick-stats">
-                    <!-- Estadísticas rápidas se cargarán aquí -->
-                </div>
+                <button class="read-more secondary" id="show-favorites-btn">Mis Favoritos</button>
             </div>
         </aside>
     </div>
@@ -1460,8 +1244,8 @@
                         <li><a href="#" id="footer-sociedad">Sociedad</a></li>
                         <li><a href="#" id="footer-internacionales">Internacionales</a></li>
                         <li><a href="#" id="footer-archivo">Archivo</a></li>
-                        <li><a href="#" id="footer-favoritos">Favoritos</a></li>
                         <li><a href="#" id="footer-contacto">Contacto</a></li>
+                        <li><a href="#" id="footer-favoritos">Favoritos</a></li>
                     </ul>
                 </div>
                 
@@ -1522,11 +1306,6 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="article-tags">Etiquetas (separadas por comas):</label>
-                    <input type="text" id="article-tags" class="form-control" placeholder="socialismo, política, Catamarca, análisis">
-                </div>
-                
-                <div class="form-group">
                     <label for="article-image">URL de la imagen:</label>
                     <input type="text" id="article-image" class="form-control" placeholder="URL de la imagen de portada">
                     <small style="color: var(--color-gris-medio);">Puede usar imágenes de <a href="https://unsplash.com" target="_blank">Unsplash</a> u otros servicios.</small>
@@ -1545,7 +1324,7 @@
                     </select>
                 </div>
                 
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 15px;">
                     <button class="admin-button success" id="save-article">Guardar Editorial</button>
                     <button class="admin-button secondary" id="new-article">Nuevo Editorial</button>
                     <button class="admin-button warning" id="preview-article">Vista Previa</button>
@@ -1557,7 +1336,7 @@
             <!-- SECCIÓN: LISTA DE EDITORIALES EXISTENTES -->
             <div class="admin-section">
                 <h3>Editoriales Existentes <span id="articles-count">(0 editoriales)</span></h3>
-                <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
                     <input type="text" id="search-articles" class="form-control" placeholder="Buscar editoriales..." style="flex: 1;">
                     <button class="admin-button secondary" id="refresh-articles">Actualizar</button>
                 </div>
@@ -1577,12 +1356,12 @@
                 
                 <div class="form-group">
                     <label for="author-photo-input">URL de la foto:</label>
-                    <input type="text" id="author-photo-input" class="form-control" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80">
+                    <input type="text" id="author-photo-input" class="form-control" value="">
                 </div>
                 
                 <div class="form-group">
                     <label for="author-quote-input">Frase inspiradora:</label>
-                    <input type="text" id="author-quote-input" class="form-control" value="Pensar distinto también es un acto de compromiso.">
+                    <input type="text" id="author-quote-input" class="form-control" value="">
                 </div>
                 
                 <div class="form-group">
@@ -1615,22 +1394,23 @@
                 <button class="admin-button success" id="save-site">Guardar Configuración</button>
             </div>
             
-            <!-- SECCIÓN: BACKUP Y RESTAURACIÓN -->
+            <!-- SECCIÓN: EXPORTAR/IMPORTAR DATOS -->
             <div class="admin-section">
-                <h3>Backup y Restauración</h3>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;">
-                    <button class="admin-button" id="export-data">Exportar Datos</button>
+                <h3>Exportar/Importar Datos</h3>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <button class="admin-button secondary" id="export-data">Exportar Datos</button>
                     <button class="admin-button secondary" id="import-data">Importar Datos</button>
-                    <input type="file" id="import-file" accept=".json" style="display: none;">
                 </div>
-                <p style="color: var(--color-gris-medio); font-size: 0.9rem;">Exporta todos los datos del sitio para realizar backups o migraciones.</p>
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+                <p style="color: var(--color-gris-medio); font-size: 0.9rem;">Exporte todos los editoriales y configuración como archivo JSON, o importe datos desde un archivo JSON.</p>
             </div>
             
             <!-- SECCIÓN: ACCIONES PELIGROSAS -->
             <div class="admin-section">
                 <h3>Acciones Peligrosas</h3>
                 <button class="admin-button danger" id="reset-data">Restablecer Datos de Ejemplo</button>
-                <p style="color: var(--color-gris-medio); font-size: 0.9rem; margin-top: 10px;">Nota: Esta acción eliminará todos los editoriales y restaurará los datos originales. Solo use en caso necesario.</p>
+                <button class="admin-button danger" id="clear-all-data">Eliminar Todos los Datos</button>
+                <p style="color: var(--color-gris-medio); font-size: 0.9rem; margin-top: 10px;">Nota: Estas acciones eliminarán todos los editoriales y restaurarán los datos originales. Solo use en caso necesario.</p>
             </div>
             
             <!-- SECCIÓN: INFORMACIÓN DEL SISTEMA -->
@@ -1641,13 +1421,16 @@
                         <p><strong>Total de editoriales:</strong> <span id="total-articles">0</span></p>
                         <p><strong>Destacados:</strong> <span id="featured-articles">0</span></p>
                         <p><strong>Visitas totales:</strong> <span id="total-views">0</span></p>
-                        <p><strong>Etiquetas únicas:</strong> <span id="unique-tags">0</span></p>
+                        <p><strong>Promedio de vistas:</strong> <span id="avg-views">0</span> por artículo</p>
                     </div>
                     <div>
                         <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
                         <p><strong>Sesión activa:</strong> <span id="session-status">No activa</span></p>
-                        <p><strong>Versión:</strong> 3.0.0</p>
-                        <p><strong>Favoritos guardados:</strong> <span id="total-favorites">0</span></p>
+                        <p><strong>Versión:</strong> 2.1.0</p>
+                        <p><strong>Artículos por categoría:</strong></p>
+                        <ul style="font-size: 0.9rem; margin-top: 5px;" id="category-stats">
+                            <!-- Estadísticas por categoría se cargarán aquí -->
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -1655,122 +1438,106 @@
     </div>
 
     <script>
-        // DATOS INICIALES - CORREGIDOS (fechas en formato ISO)
-        let articles = JSON.parse(localStorage.getItem('ladoC-articles')) || [
-            {
-                id: 1,
-                title: "El futuro del socialismo democrático en Catamarca",
-                summary: "Un análisis sobre los desafíos y oportunidades del socialismo democrático en la provincia y su impacto en las políticas públicas locales.",
-                content: "<p>En los últimos años, Catamarca ha experimentado transformaciones significativas en su escenario político. El socialismo democrático, como corriente de pensamiento y acción política, enfrenta el desafío de adaptarse a las particularidades de nuestra provincia mientras mantiene sus principios fundamentales.</p><p>La experiencia de gobiernos locales en la región muestra que es posible implementar políticas progresistas que mejoren la calidad de vida sin renunciar a los valores democráticos. Sin embargo, el camino está lleno de obstáculos, desde la resistencia de sectores conservadores hasta las limitaciones presupuestarias.</p><p>El verdadero cambio no vendrá de discursos vacíos, sino de la construcción de alternativas concretas que respondan a las necesidades reales de los catamarqueños. La participación ciudadana, la transparencia en la gestión y la defensa de los derechos sociales deben ser los pilares de cualquier proyecto político que se reclame del socialismo democrático.</p>",
-                category: "Catamarca",
-                tags: ["socialismo", "Catamarca", "política local", "democracia"],
-                author: "Juan Pérez",
-                date: "2023-11-15", // Formato ISO
-                image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-                views: 142,
-                featured: true
-            },
-            {
-                id: 2,
-                title: "La desigualdad regional en Argentina: un problema estructural",
-                summary: "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
-                content: "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
-                category: "Política Nacional",
-                tags: ["desigualdad", "federalismo", "Argentina", "política nacional"],
-                author: "Juan Pérez",
-                date: "2023-11-08", // Formato ISO
-                image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
-                views: 98,
-                featured: true
-            },
-            {
-                id: 3,
-                title: "Juventud y política: el desencanto y la esperanza",
-                summary: "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
-                content: "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
-                category: "Sociedad",
-                tags: ["juventud", "participación", "sociedad", "educación"],
-                author: "Juan Pérez",
-                date: "2023-11-01", // Formato ISO
-                image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-                views: 76,
-                featured: false
+        // CORRECCIÓN CRÍTICA: EL PROBLEMA DE GUARDADO
+        // El problema era que el array 'articles' siempre se inicializaba con los datos predeterminados
+        // en lugar de cargar primero lo que hay en localStorage
+
+        // CARGAR DATOS DESDE localStorage O USAR PREDETERMINADOS SI NO HAY DATOS
+        let articles = [];
+        let currentArticleId = 0;
+        let authorInfo = {};
+
+        // Función para inicializar datos
+        function initializeData() {
+            // Intentar cargar artículos desde localStorage
+            const savedArticles = localStorage.getItem('ladoC-articles');
+            if (savedArticles) {
+                articles = JSON.parse(savedArticles);
+                // Encontrar el ID más alto
+                if (articles.length > 0) {
+                    currentArticleId = Math.max(...articles.map(a => a.id));
+                }
+            } else {
+                // Si no hay datos guardados, usar los predeterminados
+                articles = [
+                    {
+                        id: 1,
+                        title: "El futuro del socialismo democrático en Catamarca",
+                        summary: "Un análisis sobre los desafíos y oportunidades del socialismo democrático en la provincia y su impacto en las políticas públicas locales.",
+                        content: "<p>En los últimos años, Catamarca ha experimentado transformaciones significativas en su escenario político. El socialismo democrático, como corriente de pensamiento y acción política, enfrenta el desafío de adaptarse a las particularidades de nuestra provincia mientras mantiene sus principios fundamentales.</p><p>La experiencia de gobiernos locales en la región muestra que es posible implementar políticas progresistas que mejoren la calidad de vida sin renunciar a los valores democráticos. Sin embargo, el camino está lleno de obstáculos, desde la resistencia de sectores conservadores hasta las limitaciones presupuestarias.</p><p>El verdadero cambio no vendrá de discursos vacíos, sino de la construcción de alternativas concretas que respondan a las necesidades reales de los catamarqueños. La participación ciudadana, la transparencia en la gestión y la defensa de los derechos sociales deben ser los pilares de cualquier proyecto político que se reclame del socialismo democrático.</p>",
+                        category: "Catamarca",
+                        author: "Juan Pérez",
+                        date: "15 de noviembre, 2023",
+                        image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                        views: 142,
+                        featured: true
+                    },
+                    {
+                        id: 2,
+                        title: "La desigualdad regional en Argentina: un problema estructural",
+                        summary: "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
+                        content: "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
+                        category: "Política Nacional",
+                        author: "Juan Pérez",
+                        date: "8 de noviembre, 2023",
+                        image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
+                        views: 98,
+                        featured: true
+                    },
+                    {
+                        id: 3,
+                        title: "Juventud y política: el desencanto y la esperanza",
+                        summary: "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
+                        content: "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
+                        category: "Sociedad",
+                        author: "Juan Pérez",
+                        date: "1 de noviembre, 2023",
+                        image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                        views: 76,
+                        featured: false
+                    }
+                ];
+                currentArticleId = 3;
+                saveToLocalStorage(); // Guardar los predeterminados por primera vez
             }
-        ];
 
-        let currentArticleId = articles.length > 0 ? Math.max(...articles.map(a => a.id)) : 0;
-        let authorInfo = JSON.parse(localStorage.getItem('ladoC-author')) || {
-            name: "Juan Pérez",
-            photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-            quote: "Pensar distinto también es un acto de compromiso.",
-            bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
-        };
+            // Cargar información del autor
+            const savedAuthor = localStorage.getItem('ladoC-author');
+            if (savedAuthor) {
+                authorInfo = JSON.parse(savedAuthor);
+            } else {
+                // Información predeterminada del autor
+                authorInfo = {
+                    name: "Juan Pérez",
+                    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+                    quote: "Pensar distinto también es un acto de compromiso.",
+                    bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
+                };
+                saveToLocalStorage(); // Guardar el autor predeterminado por primera vez
+            }
+        }
 
-        // SISTEMA DE AUTENTICACIÓN MEJORADO (con hash)
+        // SISTEMA DE AUTENTICACIÓN
         let isAdmin = false;
         const ADMIN_USERNAME = "admin";
-        const ADMIN_PASSWORD_HASH = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"; // "123456" en SHA-256
-        
-        // FUNCIÓN PARA GENERAR HASH SHA-256
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
+        const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
 
         // VARIABLES DE ESTADO
         let currentSection = 'inicio';
         let currentArchiveFilter = 'all';
         let currentPage = 1;
-        let articlesPerPage = 6;
-        let searchQuery = '';
-        let favorites = JSON.parse(localStorage.getItem('ladoC-favorites')) || [];
+        const articlesPerPage = 6;
 
         // FUNCIONES DE UTILIDAD
         function saveToLocalStorage() {
             localStorage.setItem('ladoC-articles', JSON.stringify(articles));
             localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
-            localStorage.setItem('ladoC-favorites', JSON.stringify(favorites));
         }
 
-        function formatDateToSpanish(isoDate) {
-            const date = new Date(isoDate);
+        function formatDate() {
+            const now = new Date();
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            return date.toLocaleDateString('es-ES', options);
-        }
-
-        function formatDateToISO(spanishDate) {
-            const months = {
-                'enero': '01', 'febrero': '02', 'marzo': '03', 'abril': '04',
-                'mayo': '05', 'junio': '06', 'julio': '07', 'agosto': '08',
-                'septiembre': '09', 'octubre': '10', 'noviembre': '11', 'diciembre': '12'
-            };
-            
-            try {
-                const parts = spanishDate.replace(' de ', ' ').replace(',', '').split(' ');
-                if (parts.length === 3) {
-                    const day = parts[0].padStart(2, '0');
-                    const month = months[parts[1].toLowerCase()];
-                    const year = parts[2];
-                    return `${year}-${month}-${day}`;
-                }
-            } catch (e) {
-                console.error('Error al convertir fecha:', e);
-            }
-            
-            return new Date().toISOString().split('T')[0];
-        }
-
-        function parseSpanishDate(dateStr) {
-            // Si ya es una fecha ISO, devolverla
-            if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                return new Date(dateStr);
-            }
-            
-            // Si es fecha en español, convertir
-            return new Date(formatDateToISO(dateStr));
+            return now.toLocaleDateString('es-ES', options);
         }
 
         function showNotification(message, type = "info") {
@@ -1784,16 +1551,11 @@
             }, 3000);
         }
 
-        // VALIDACIÓN DE URL DE IMAGEN
-        function isValidImageUrl(url) {
-            if (!url) return false;
-            return url.match(/\.(jpeg|jpg|gif|png|webp|bmp)(\?.*)?$/i) !== null || 
-                   url.includes('unsplash.com') || 
-                   url.includes('images.unsplash.com');
-        }
-
         // NAVEGACIÓN
         function showSection(sectionId) {
+            // Resetear paginación
+            currentPage = 1;
+            
             // Ocultar todas las secciones
             document.getElementById('inicio-section').style.display = 'none';
             document.querySelectorAll('.category-section').forEach(section => {
@@ -1804,8 +1566,6 @@
             document.getElementById('archivo-section').classList.remove('active');
             document.getElementById('contacto-section').style.display = 'none';
             document.getElementById('contacto-section').classList.remove('active');
-            document.getElementById('search-section').style.display = 'none';
-            document.getElementById('search-section').classList.remove('active');
             document.getElementById('favorites-section').style.display = 'none';
             document.getElementById('favorites-section').classList.remove('active');
             
@@ -1819,13 +1579,10 @@
             
             // Mostrar la sección solicitada
             currentSection = sectionId;
-            currentPage = 1; // Resetear a primera página
             
             if (sectionId === 'inicio') {
                 document.getElementById('inicio-section').style.display = 'block';
                 renderArticles();
-                renderStats();
-                updateQuickStats();
             } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(sectionId)) {
                 const sectionElement = document.getElementById(`${sectionId}-section`);
                 sectionElement.style.display = 'block';
@@ -1838,9 +1595,6 @@
             } else if (sectionId === 'contacto') {
                 document.getElementById('contacto-section').style.display = 'block';
                 document.getElementById('contacto-section').classList.add('active');
-            } else if (sectionId === 'search') {
-                document.getElementById('search-section').style.display = 'block';
-                document.getElementById('search-section').classList.add('active');
             } else if (sectionId === 'favoritos') {
                 document.getElementById('favorites-section').style.display = 'block';
                 document.getElementById('favorites-section').classList.add('active');
@@ -1849,42 +1603,20 @@
             
             // Scroll al inicio de la página
             window.scrollTo(0, 0);
-            
-            // Actualizar título de la página
-            updatePageTitle();
         }
 
-        function updatePageTitle() {
-            const sectionNames = {
-                'inicio': 'Inicio',
-                'opinion': 'Opinión',
-                'catamarca': 'Catamarca',
-                'politica-nacional': 'Política Nacional',
-                'sociedad': 'Sociedad',
-                'internacionales': 'Internacionales',
-                'archivo': 'Archivo',
-                'favoritos': 'Favoritos',
-                'contacto': 'Contacto',
-                'search': `Búsqueda: ${searchQuery}`
-            };
-            
-            const sectionName = sectionNames[currentSection] || 'Lado C';
-            document.title = `${sectionName} - Lado C`;
-        }
-
-        // RENDERIZAR ARTÍCULOS CON PAGINACIÓN
+        // RENDERIZAR ARTÍCULOS POR SECCIÓN
         function renderArticles() {
             const articlesContainer = document.getElementById('articles-container');
             const archiveContainer = document.getElementById('archive-container');
-            const paginationContainer = document.getElementById('archive-pagination');
             
             // Separar artículos destacados y no destacados
             const featuredArticles = articles.filter(article => article.featured);
             const otherArticles = articles.filter(article => !article.featured);
             
             // Ordenar por fecha (más recientes primero)
-            featuredArticles.sort((a, b) => parseSpanishDate(b.date) - parseSpanishDate(a.date));
-            otherArticles.sort((a, b) => parseSpanishDate(b.date) - parseSpanishDate(a.date));
+            featuredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            otherArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             articlesContainer.innerHTML = '';
             archiveContainer.innerHTML = '';
@@ -1899,24 +1631,11 @@
                 articlesContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales destacados aún.</p>';
             }
             
-            // Calcular paginación para archivo
-            const totalPages = Math.ceil(otherArticles.length / articlesPerPage);
-            const startIndex = (currentPage - 1) * articlesPerPage;
-            const endIndex = startIndex + articlesPerPage;
-            const paginatedArticles = otherArticles.slice(startIndex, endIndex);
-            
-            // Renderizar archivo paginado
-            if (paginatedArticles.length > 0) {
-                paginatedArticles.forEach(article => {
-                    const articleElement = createArticleElement(article, false);
-                    archiveContainer.appendChild(articleElement);
-                });
-                
-                // Renderizar paginación
-                renderPagination(paginationContainer, currentPage, totalPages, 'inicio');
+            // Renderizar archivo con paginación
+            if (otherArticles.length > 0) {
+                renderPaginatedArticles(otherArticles, 'archive-container', false, 'archive-pagination');
             } else {
                 archiveContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en el archivo.</p>';
-                paginationContainer.innerHTML = '';
             }
             
             // Actualizar estadísticas
@@ -1924,6 +1643,7 @@
         }
 
         function renderCategoryArticles(category) {
+            // Convertir el ID de categoría al nombre de categoría
             const categoryMap = {
                 'opinion': 'Opinión',
                 'catamarca': 'Catamarca',
@@ -1935,134 +1655,92 @@
             const categoryName = categoryMap[category];
             const containerId = `${category}-container`;
             const paginationId = `${category}-pagination`;
+            
+            // Filtrar artículos por categoría
+            const categoryArticles = articles.filter(article => article.category === categoryName);
+            
+            // Ordenar por fecha (más recientes primero)
+            categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            renderPaginatedArticles(categoryArticles, containerId, false, paginationId);
+        }
+
+        function renderFullArchive() {
+            let filteredArticles = articles;
+            
+            // Aplicar filtro si no es "all"
+            if (currentArchiveFilter !== 'all') {
+                filteredArticles = articles.filter(article => article.category === currentArchiveFilter);
+            }
+            
+            // Ordenar por fecha (más recientes primero)
+            filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            renderPaginatedArticles(filteredArticles, 'full-archive-container', false, 'full-archive-pagination');
+        }
+
+        // NUEVA FUNCIÓN: RENDERIZAR CON PAGINACIÓN
+        function renderPaginatedArticles(articlesArray, containerId, showFeatured = false, paginationId) {
             const container = document.getElementById(containerId);
             const paginationContainer = document.getElementById(paginationId);
             
             if (!container) return;
             
-            const categoryArticles = articles.filter(article => article.category === categoryName);
-            categoryArticles.sort((a, b) => parseSpanishDate(b.date) - parseSpanishDate(a.date));
-            
-            const totalPages = Math.ceil(categoryArticles.length / articlesPerPage);
             const startIndex = (currentPage - 1) * articlesPerPage;
             const endIndex = startIndex + articlesPerPage;
-            const paginatedArticles = categoryArticles.slice(startIndex, endIndex);
+            const paginatedArticles = articlesArray.slice(startIndex, endIndex);
+            const totalPages = Math.ceil(articlesArray.length / articlesPerPage);
             
             container.innerHTML = '';
             
             if (paginatedArticles.length > 0) {
                 paginatedArticles.forEach(article => {
-                    const articleElement = createArticleElement(article, article.featured);
+                    const articleElement = createArticleElement(article, showFeatured && article.featured);
                     container.appendChild(articleElement);
                 });
                 
-                renderPagination(paginationContainer, currentPage, totalPages, category);
-            } else {
-                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
-                paginationContainer.innerHTML = '';
-            }
-        }
-
-        function renderPagination(container, currentPage, totalPages, section) {
-            if (totalPages <= 1) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            let html = '';
-            
-            // Botón anterior
-            html += `<button class="pagination-button ${currentPage === 1 ? 'disabled' : ''}" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1}, '${section}')">Anterior</button>`;
-            
-            // Números de página
-            for (let i = 1; i <= totalPages; i++) {
-                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
-                    html += `<button class="pagination-button ${i === currentPage ? 'active' : ''}" onclick="changePage(${i}, '${section}')">${i}</button>`;
-                } else if (i === currentPage - 2 || i === currentPage + 2) {
-                    html += `<span style="padding: 10px 5px;">...</span>`;
+                // Crear paginación
+                if (totalPages > 1 && paginationContainer) {
+                    paginationContainer.innerHTML = '';
+                    
+                    // Botón anterior
+                    const prevButton = document.createElement('button');
+                    prevButton.className = 'pagination-btn';
+                    prevButton.innerHTML = '&larr; Anterior';
+                    prevButton.disabled = currentPage === 1;
+                    prevButton.addEventListener('click', () => {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderPaginatedArticles(articlesArray, containerId, showFeatured, paginationId);
+                        }
+                    });
+                    
+                    // Información de página
+                    const pageInfo = document.createElement('span');
+                    pageInfo.className = 'pagination-info';
+                    pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+                    
+                    // Botón siguiente
+                    const nextButton = document.createElement('button');
+                    nextButton.className = 'pagination-btn';
+                    nextButton.innerHTML = 'Siguiente &rarr;';
+                    nextButton.disabled = currentPage === totalPages;
+                    nextButton.addEventListener('click', () => {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            renderPaginatedArticles(articlesArray, containerId, showFeatured, paginationId);
+                        }
+                    });
+                    
+                    paginationContainer.appendChild(prevButton);
+                    paginationContainer.appendChild(pageInfo);
+                    paginationContainer.appendChild(nextButton);
                 }
-            }
-            
-            // Botón siguiente
-            html += `<button class="pagination-button ${currentPage === totalPages ? 'disabled' : ''}" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1}, '${section}')">Siguiente</button>`;
-            
-            container.innerHTML = html;
-        }
-
-        function changePage(page, section) {
-            currentPage = page;
-            
-            if (section === 'inicio') {
-                renderArticles();
-            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(section)) {
-                renderCategoryArticles(section);
-            } else if (section === 'archivo') {
-                renderFullArchive();
-            } else if (section === 'search') {
-                performSearch();
-            } else if (section === 'favoritos') {
-                renderFavorites();
-            }
-            
-            window.scrollTo(0, 0);
-        }
-
-        function renderFullArchive() {
-            const container = document.getElementById('full-archive-container');
-            const paginationContainer = document.getElementById('full-archive-pagination');
-            
-            let filteredArticles = articles;
-            
-            if (currentArchiveFilter !== 'all') {
-                filteredArticles = articles.filter(article => article.category === currentArchiveFilter);
-            }
-            
-            filteredArticles.sort((a, b) => parseSpanishDate(b.date) - parseSpanishDate(a.date));
-            
-            const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
-            const startIndex = (currentPage - 1) * articlesPerPage;
-            const endIndex = startIndex + articlesPerPage;
-            const paginatedArticles = filteredArticles.slice(startIndex, endIndex);
-            
-            container.innerHTML = '';
-            
-            if (paginatedArticles.length > 0) {
-                paginatedArticles.forEach(article => {
-                    const articleElement = createArticleElement(article, article.featured);
-                    container.appendChild(articleElement);
-                });
-                
-                renderPagination(paginationContainer, currentPage, totalPages, 'archivo');
             } else {
-                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales con este filtro.</p>';
-                paginationContainer.innerHTML = '';
-            }
-        }
-
-        function renderFavorites() {
-            const container = document.getElementById('favorites-container');
-            const paginationContainer = document.getElementById('favorites-pagination');
-            
-            const favoriteArticles = articles.filter(article => favorites.includes(article.id));
-            favoriteArticles.sort((a, b) => parseSpanishDate(b.date) - parseSpanishDate(a.date));
-            
-            const totalPages = Math.ceil(favoriteArticles.length / articlesPerPage);
-            const startIndex = (currentPage - 1) * articlesPerPage;
-            const endIndex = startIndex + articlesPerPage;
-            const paginatedArticles = favoriteArticles.slice(startIndex, endIndex);
-            
-            container.innerHTML = '';
-            
-            if (paginatedArticles.length > 0) {
-                paginatedArticles.forEach(article => {
-                    const articleElement = createArticleElement(article, article.featured);
-                    container.appendChild(articleElement);
-                });
-                
-                renderPagination(paginationContainer, currentPage, totalPages, 'favoritos');
-            } else {
-                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No tienes editoriales favoritos aún.</p>';
-                paginationContainer.innerHTML = '';
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales disponibles.</p>';
+                if (paginationContainer) {
+                    paginationContainer.innerHTML = '';
+                }
             }
         }
 
@@ -2071,30 +1749,26 @@
             articleElement.className = `article-card ${isFeatured ? 'highlighted' : ''}`;
             articleElement.dataset.id = article.id;
             
-            const isFavorite = favorites.includes(article.id);
-            const tagsHTML = article.tags ? article.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : '';
+            // Verificar si es favorito
+            const isFavorite = localStorage.getItem(`favorite-${article.id}`) === 'true';
             
             articleElement.innerHTML = `
                 ${isAdmin ? '<div class="admin-badge">Admin</div>' : ''}
-                <img src="${article.image}" alt="${article.title}" class="article-img" onerror="this.src='https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80'">
+                <img src="${article.image}" alt="${article.title}" class="article-img">
                 <div class="article-content">
-                    <h3 class="article-title">${article.title}</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <h3 class="article-title">${article.title}</h3>
+                        <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${article.id}); event.stopPropagation()">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
                     <div class="article-meta">
-                        <span>${formatDateToSpanish(article.date)}</span>
+                        <span>${article.date}</span>
                         <span>${article.category}</span>
                         <span>${article.views} lecturas</span>
                     </div>
-                    ${tagsHTML ? `<div class="article-tags">${tagsHTML}</div>` : ''}
                     <p class="article-excerpt">${article.summary}</p>
-                    <div class="article-actions">
-                        <button class="read-more" onclick="viewArticle(${article.id})">Leer más</button>
-                        <button class="action-button ${isFavorite ? 'favorito' : ''}" onclick="toggleFavorite(${article.id}); event.stopPropagation()">
-                            <i class="fas fa-heart"></i> ${isFavorite ? 'Quitar' : 'Favorito'}
-                        </button>
-                        <button class="action-button" onclick="shareArticle(${article.id}, 'twitter'); event.stopPropagation()">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                    </div>
+                    <button class="read-more" onclick="viewArticle(${article.id})">Leer más</button>
                     ${isAdmin ? `<div style="margin-top: 10px; display: flex; gap: 10px;">
                         <button class="admin-button warning" style="padding: 5px 10px; font-size: 0.8rem;" onclick="editArticle(${article.id}); event.stopPropagation()">Editar</button>
                         <button class="admin-button danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="deleteArticle(${article.id}); event.stopPropagation()">Eliminar</button>
@@ -2105,63 +1779,64 @@
             return articleElement;
         }
 
-        // ESTADÍSTICAS
-        function renderStats() {
-            const container = document.getElementById('stats-container');
-            const totalArticles = articles.length;
-            const totalViews = articles.reduce((sum, article) => sum + article.views, 0);
-            const avgViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0;
-            const featuredCount = articles.filter(a => a.featured).length;
+        // FUNCIÓN FAVORITOS
+        function toggleFavorite(articleId) {
+            const current = localStorage.getItem(`favorite-${articleId}`) === 'true';
+            localStorage.setItem(`favorite-${articleId}`, !current);
             
-            const allTags = articles.flatMap(article => article.tags || []);
-            const uniqueTags = [...new Set(allTags)].length;
+            // Actualizar la vista actual
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            } else if (currentSection === 'favoritos') {
+                renderFavorites();
+            }
             
-            container.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-number">${totalArticles}</div>
-                    <div class="stat-label">Editoriales</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${totalViews}</div>
-                    <div class="stat-label">Lecturas totales</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${avgViews}</div>
-                    <div class="stat-label">Promedio por editorial</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${uniqueTags}</div>
-                    <div class="stat-label">Etiquetas únicas</div>
-                </div>
-            `;
+            showNotification(!current ? 'Artículo agregado a favoritos' : 'Artículo removido de favoritos', 'info');
         }
 
-        function updateQuickStats() {
-            const container = document.getElementById('quick-stats');
-            const totalArticles = articles.length;
-            const totalViews = articles.reduce((sum, article) => sum + article.views, 0);
-            const favoriteCount = favorites.length;
+        function renderFavorites() {
+            // Obtener IDs de artículos favoritos
+            const favoriteIds = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('favorite-') && localStorage.getItem(key) === 'true') {
+                    const articleId = parseInt(key.replace('favorite-', ''));
+                    favoriteIds.push(articleId);
+                }
+            }
             
-            container.innerHTML = `
-                <p><strong>${totalArticles}</strong> editoriales publicados</p>
-                <p><strong>${totalViews}</strong> lecturas totales</p>
-                <p><strong>${favoriteCount}</strong> favoritos guardados</p>
-            `;
+            // Filtrar artículos favoritos
+            const favoriteArticles = articles.filter(article => favoriteIds.includes(article.id));
+            
+            // Ordenar por fecha (más recientes primero)
+            favoriteArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            renderPaginatedArticles(favoriteArticles, 'favorites-container', false, 'favorites-pagination');
         }
 
-        // VISTA DE ARTÍCULO COMPLETO CON BARRA DE PROGRESO
+        function showFavorites() {
+            showSection('favoritos');
+        }
+
+        // VISTA DE ARTÍCULO COMPLETO
         function viewArticle(id) {
             const article = articles.find(a => a.id === id);
             if (!article) return;
             
+            // Incrementar contador de vistas
             article.views++;
             saveToLocalStorage();
             
+            // Mostrar artículo completo
             const articleFullView = document.getElementById('article-full-view');
             const mainContent = document.querySelector('.main-content');
             
-            const isFavorite = favorites.includes(article.id);
-            const tagsHTML = article.tags ? article.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : '';
+            // Verificar si es favorito
+            const isFavorite = localStorage.getItem(`favorite-${article.id}`) === 'true';
             
             articleFullView.innerHTML = `
                 <div class="article-full">
@@ -2170,42 +1845,57 @@
                     <div class="article-header">
                         <h1 class="article-full-title">${article.title}</h1>
                         <div class="article-full-meta">
-                            <span>${formatDateToSpanish(article.date)}</span>
+                            <span>${article.date}</span>
                             <span>${article.category}</span>
                             <span>Por ${article.author || authorInfo.name}</span>
                             <span>${article.views} lecturas</span>
+                            <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${article.id}); event.stopPropagation()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">
+                                <i class="fas fa-heart"></i>
+                            </button>
                         </div>
-                        ${tagsHTML ? `<div class="article-tags" style="margin-top: 10px;">${tagsHTML}</div>` : ''}
                     </div>
                     
-                    <img src="${article.image}" alt="${article.title}" class="article-full-img" onerror="this.src='https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80'">
+                    <img src="${article.image}" alt="${article.title}" class="article-full-img">
                     
-                    <div class="article-body" id="article-content-body">
+                    <div class="article-body">
                         ${article.content}
                     </div>
                     
-                    <div class="share-buttons">
-                        <button class="share-button twitter-share" onclick="shareArticle(${article.id}, 'twitter')">
-                            <i class="fab fa-twitter"></i> Compartir en Twitter
-                        </button>
-                        <button class="share-button facebook-share" onclick="shareArticle(${article.id}, 'facebook')">
-                            <i class="fab fa-facebook-f"></i> Compartir en Facebook
-                        </button>
-                        <button class="share-button whatsapp-share" onclick="shareArticle(${article.id}, 'whatsapp')">
-                            <i class="fab fa-whatsapp"></i> Compartir en WhatsApp
-                        </button>
+                    <!-- SECCIÓN DE COMENTARIOS -->
+                    <div class="comments-section" style="margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--color-azul-claro);">
+                        <h3>Comentarios (<span id="comment-count">2</span>)</h3>
+                        
+                        <div class="comment-form" style="margin: 20px 0;">
+                            <textarea id="comment-text" placeholder="Agregar un comentario..." style="width: 100%; padding: 10px; border-radius: var(--border-radius); border: 1px solid #ddd; margin-bottom: 10px;"></textarea>
+                            <button onclick="addComment(${article.id})" class="read-more">Publicar comentario</button>
+                        </div>
+                        
+                        <div class="comments-list">
+                            <div class="comment" style="background: var(--color-gris-claro); padding: 15px; border-radius: var(--border-radius); margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                    <strong>Carlos Rodríguez</strong>
+                                    <span style="color: var(--color-gris-medio); font-size: 0.9rem;">Hace 2 días</span>
+                                </div>
+                                <p>Excelente análisis. Comparto completamente la visión sobre el socialismo democrático en Catamarca.</p>
+                            </div>
+                            
+                            <div class="comment" style="background: var(--color-gris-claro); padding: 15px; border-radius: var(--border-radius);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                    <strong>Ana Martínez</strong>
+                                    <span style="color: var(--color-gris-medio); font-size: 0.9rem;">Hace 1 semana</span>
+                                </div>
+                                <p>Muy interesante el punto de vista sobre la juventud y política. Falta más participación de los jóvenes en los espacios de decisión.</p>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-borde);">
-                        <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
-                            <button class="action-button ${isFavorite ? 'favorito' : ''}" onclick="toggleFavorite(${article.id})">
-                                <i class="fas fa-heart"></i> ${isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-                            </button>
-                            ${isAdmin ? `
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-azul-claro);">
+                        ${isAdmin ? `
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
                             <button class="admin-button warning" onclick="editArticle(${article.id})">Editar este editorial</button>
                             <button class="admin-button danger" onclick="deleteArticle(${article.id})">Eliminar este editorial</button>
-                            ` : ''}
                         </div>
+                        ` : ''}
                         <button class="back-button" onclick="goBack()">&larr; Volver a ${getSectionName(currentSection)}</button>
                     </div>
                 </div>
@@ -2214,34 +1904,42 @@
             mainContent.classList.add('hidden');
             articleFullView.classList.remove('hidden');
             
+            // Scroll al inicio del artículo
             window.scrollTo(0, 0);
-            
-            // Iniciar seguimiento de progreso de lectura
-            startReadingProgress();
         }
 
-        function startReadingProgress() {
-            const progressBar = document.getElementById('reading-progress');
-            const articleBody = document.getElementById('article-content-body');
+        // FUNCIÓN DE COMENTARIOS
+        function addComment(articleId) {
+            const commentText = document.getElementById('comment-text').value;
+            if (!commentText.trim()) {
+                showNotification('Por favor escribe un comentario', 'error');
+                return;
+            }
             
-            if (!articleBody) return;
+            const commentsList = document.querySelector('.comments-list');
+            const newComment = document.createElement('div');
+            newComment.className = 'comment';
+            newComment.style.cssText = 'background: var(--color-gris-claro); padding: 15px; border-radius: var(--border-radius); margin-bottom: 15px;';
             
-            const updateProgress = () => {
-                const articleTop = articleBody.getBoundingClientRect().top;
-                const articleHeight = articleBody.offsetHeight;
-                const windowHeight = window.innerHeight;
-                
-                if (articleTop < 0) {
-                    const scrolled = -articleTop;
-                    const progress = Math.min((scrolled / articleHeight) * 100, 100);
-                    progressBar.style.width = `${progress}%`;
-                } else {
-                    progressBar.style.width = '0%';
-                }
-            };
+            const now = new Date();
+            const timeAgo = 'Hace unos momentos';
             
-            window.addEventListener('scroll', updateProgress);
-            updateProgress();
+            newComment.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <strong>Usuario Anónimo</strong>
+                    <span style="color: var(--color-gris-medio); font-size: 0.9rem;">${timeAgo}</span>
+                </div>
+                <p>${commentText}</p>
+            `;
+            
+            commentsList.prepend(newComment);
+            document.getElementById('comment-text').value = '';
+            
+            // Actualizar contador de comentarios
+            const commentCount = commentsList.children.length;
+            document.getElementById('comment-count').textContent = commentCount;
+            
+            showNotification('Comentario publicado', 'success');
         }
 
         function getSectionName(sectionId) {
@@ -2253,9 +1951,8 @@
                 'sociedad': 'Sociedad',
                 'internacionales': 'Internacionales',
                 'archivo': 'Archivo',
-                'favoritos': 'Favoritos',
                 'contacto': 'Contacto',
-                'search': 'Búsqueda'
+                'favoritos': 'Favoritos'
             };
             
             return sectionNames[sectionId] || 'Inicio';
@@ -2268,134 +1965,21 @@
             articleFullView.classList.add('hidden');
             mainContent.classList.remove('hidden');
             
-            // Resetear barra de progreso
-            document.getElementById('reading-progress').style.width = '0%';
-            
+            // Recargar artículos para actualizar vistas
             if (currentSection === 'inicio') {
                 renderArticles();
-                renderStats();
             } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
                 renderCategoryArticles(currentSection);
             } else if (currentSection === 'archivo') {
                 renderFullArchive();
             } else if (currentSection === 'favoritos') {
                 renderFavorites();
-            } else if (currentSection === 'search') {
-                performSearch();
             }
         }
 
-        // SISTEMA DE FAVORITOS
-        function toggleFavorite(articleId) {
-            const index = favorites.indexOf(articleId);
-            if (index > -1) {
-                favorites.splice(index, 1);
-                showNotification('Removido de favoritos', 'info');
-            } else {
-                favorites.push(articleId);
-                showNotification('Agregado a favoritos', 'success');
-            }
-            saveToLocalStorage();
-            
-            // Actualizar UI si estamos en la sección de favoritos
-            if (currentSection === 'favoritos') {
-                renderFavorites();
-            }
-            
-            // Actualizar estadísticas rápidas
-            updateQuickStats();
-            updateStatistics();
-        }
-
-        // COMPARTIR EN REDES SOCIALES
-        function shareArticle(articleId, platform) {
-            const article = articles.find(a => a.id === articleId);
-            if (!article) return;
-            
-            const url = encodeURIComponent(window.location.href.split('#')[0] + `#article=${articleId}`);
-            const text = encodeURIComponent(`Lee "${article.title}" en Lado C`);
-            
-            let shareUrl;
-            switch(platform) {
-                case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-                    break;
-                case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-                    break;
-                case 'whatsapp':
-                    shareUrl = `https://wa.me/?text=${text}%20${url}`;
-                    break;
-                default:
-                    return;
-            }
-            
-            window.open(shareUrl, '_blank', 'noopener,noreferrer');
-        }
-
-        // BÚSQUEDA
-        function performSearch() {
-            const query = document.getElementById('global-search').value.trim().toLowerCase();
-            searchQuery = query;
-            
-            if (!query) {
-                showSection('inicio');
-                return;
-            }
-            
-            const results = articles.filter(article => 
-                article.title.toLowerCase().includes(query) ||
-                article.summary.toLowerCase().includes(query) ||
-                article.content.toLowerCase().includes(query) ||
-                (article.tags && article.tags.some(tag => tag.toLowerCase().includes(query))) ||
-                article.category.toLowerCase().includes(query) ||
-                article.author.toLowerCase().includes(query)
-            );
-            
-            showSearchResults(results, query);
-        }
-
-        function showSearchResults(results, query) {
-            currentSection = 'search';
-            document.getElementById('search-section').style.display = 'block';
-            document.getElementById('search-section').classList.add('active');
-            
-            const container = document.getElementById('search-results-container');
-            const paginationContainer = document.getElementById('search-pagination');
-            const titleElement = document.getElementById('search-results-title');
-            
-            titleElement.textContent = `Resultados de búsqueda: "${query}"`;
-            
-            results.sort((a, b) => parseSpanishDate(b.date) - parseSpanishDate(a.date));
-            
-            const totalPages = Math.ceil(results.length / articlesPerPage);
-            const startIndex = (currentPage - 1) * articlesPerPage;
-            const endIndex = startIndex + articlesPerPage;
-            const paginatedResults = results.slice(startIndex, endIndex);
-            
-            container.innerHTML = '';
-            
-            if (paginatedResults.length > 0) {
-                paginatedResults.forEach(article => {
-                    const articleElement = createArticleElement(article, article.featured);
-                    container.appendChild(articleElement);
-                });
-                
-                renderPagination(paginationContainer, currentPage, totalPages, 'search');
-            } else {
-                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No se encontraron resultados para tu búsqueda.</p>';
-                paginationContainer.innerHTML = '';
-            }
-            
-            updatePageTitle();
-            window.scrollTo(0, 0);
-        }
-
-        // SISTEMA DE AUTENTICACIÓN MEJORADO
-        async function login(username, password) {
-            const passwordHash = await sha256(password);
-            
-            if (username === ADMIN_USERNAME && passwordHash === ADMIN_PASSWORD_HASH) {
+        // SISTEMA DE AUTENTICACIÓN
+        function login(username, password) {
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 isAdmin = true;
                 localStorage.setItem('ladoC-admin', 'true');
                 updateAdminUI();
@@ -2429,13 +2013,14 @@
                 adminIndicator.textContent = '✓';
                 adminToolbar.style.display = 'block';
                 document.body.classList.add('admin-mode');
+                showNotification('Modo administrador activo', 'success');
             } else {
                 adminIndicator.textContent = '';
                 adminToolbar.style.display = 'none';
                 document.body.classList.remove('admin-mode');
             }
             
-            // Actualizar vista actual
+            // Actualizar vista de artículos
             if (currentSection === 'inicio') {
                 renderArticles();
             } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
@@ -2444,27 +2029,6 @@
                 renderFullArchive();
             } else if (currentSection === 'favoritos') {
                 renderFavorites();
-            }
-        }
-
-        // MODO OSCURO
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            localStorage.setItem('ladoC-darkMode', isDarkMode);
-            
-            const icon = document.querySelector('#dark-mode-toggle i');
-            icon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
-            
-            showNotification(`Modo ${isDarkMode ? 'oscuro' : 'claro'} activado`, 'info');
-        }
-
-        function initDarkMode() {
-            const darkModePreference = localStorage.getItem('ladoC-darkMode') === 'true';
-            if (darkModePreference) {
-                document.body.classList.add('dark-mode');
-                const icon = document.querySelector('#dark-mode-toggle i');
-                icon.className = 'fas fa-sun';
             }
         }
 
@@ -2483,6 +2047,7 @@
             document.getElementById('author-photo-input').value = authorInfo.photo;
             document.getElementById('author-quote-input').value = authorInfo.quote;
             document.getElementById('author-bio-input').value = authorInfo.bio;
+            document.getElementById('article-author').value = authorInfo.name;
             
             // Actualizar lista de artículos
             updateAdminArticleList();
@@ -2512,6 +2077,7 @@
             
             let filteredArticles = articles;
             
+            // Aplicar filtro de búsqueda si existe
             if (searchTerm) {
                 filteredArticles = articles.filter(article => 
                     article.title.toLowerCase().includes(searchTerm) || 
@@ -2520,7 +2086,8 @@
                 );
             }
             
-            filteredArticles.sort((a, b) => parseSpanishDate(b.date) - parseSpanishDate(a.date));
+            // Ordenar por fecha (más recientes primero)
+            filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             if (filteredArticles.length === 0) {
                 adminArticleList.innerHTML = '<li class="article-list-item" style="justify-content: center; color: var(--color-gris-medio);">No se encontraron editoriales</li>';
@@ -2531,7 +2098,7 @@
                     listItem.innerHTML = `
                         <div class="article-list-info">
                             <div class="article-list-title">${article.title} ${article.featured ? '<span style="color: var(--color-bordo); font-size: 0.8rem;">[Destacado]</span>' : ''}</div>
-                            <div class="article-list-meta">${formatDateToSpanish(article.date)} - ${article.category} - ${article.views} lecturas</div>
+                            <div class="article-list-meta">${article.date} - ${article.category} - ${article.views} lecturas</div>
                         </div>
                         <div class="article-list-actions">
                             <button class="admin-button warning" onclick="editArticle(${article.id})">Editar</button>
@@ -2542,6 +2109,7 @@
                 });
             }
             
+            // Actualizar contador
             document.getElementById('articles-count').textContent = `(${filteredArticles.length} editoriales)`;
         }
 
@@ -2551,7 +2119,6 @@
             const summary = document.getElementById('article-summary').value;
             const content = document.getElementById('article-content').value;
             const category = document.getElementById('article-category').value;
-            const tags = document.getElementById('article-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
             const image = document.getElementById('article-image').value;
             const author = document.getElementById('article-author').value || authorInfo.name;
             const featured = document.getElementById('article-featured').value === '1';
@@ -2562,10 +2129,11 @@
                 return;
             }
             
-            // Validar URL de imagen
-            const finalImage = isValidImageUrl(image) ? image : 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80';
+            // Si no hay imagen, usar una por defecto
+            const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80';
             
             if (editingId) {
+                // Actualizar artículo existente
                 const articleIndex = articles.findIndex(a => a.id === parseInt(editingId));
                 if (articleIndex !== -1) {
                     articles[articleIndex] = {
@@ -2574,18 +2142,19 @@
                         summary,
                         content,
                         category,
-                        tags,
                         image: finalImage,
                         author,
                         featured
                     };
                 }
                 
+                // Limpiar modo edición
                 document.getElementById('editing-article-id').value = '';
                 document.getElementById('save-article').textContent = 'Guardar Editorial';
                 
                 showNotification('Editorial actualizado correctamente', 'success');
             } else {
+                // Crear nuevo artículo
                 currentArticleId++;
                 const newArticle = {
                     id: currentArticleId,
@@ -2593,9 +2162,8 @@
                     summary,
                     content,
                     category,
-                    tags,
                     author,
-                    date: new Date().toISOString().split('T')[0],
+                    date: formatDate(),
                     image: finalImage,
                     views: 0,
                     featured
@@ -2607,24 +2175,24 @@
             
             saveToLocalStorage();
             
+            // Actualizar vista actual
             if (currentSection === 'inicio') {
                 renderArticles();
-                renderStats();
             } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
                 renderCategoryArticles(currentSection);
             } else if (currentSection === 'archivo') {
                 renderFullArchive();
+            } else if (currentSection === 'favoritos') {
+                renderFavorites();
             }
             
             updateAdminArticleList();
-            updateQuickStats();
             
             // Limpiar formulario
             document.getElementById('article-title').value = '';
             document.getElementById('article-summary').value = '';
             document.getElementById('article-content').value = '';
             document.getElementById('article-image').value = '';
-            document.getElementById('article-tags').value = '';
             document.getElementById('article-author').value = '';
             document.getElementById('article-category').value = 'Opinión';
             document.getElementById('article-featured').value = '0';
@@ -2639,19 +2207,23 @@
             const article = articles.find(a => a.id === id);
             if (!article) return;
             
+            // Cargar datos en el formulario
             document.getElementById('article-title').value = article.title;
             document.getElementById('article-summary').value = article.summary;
             document.getElementById('article-content').value = article.content;
             document.getElementById('article-category').value = article.category;
-            document.getElementById('article-tags').value = article.tags ? article.tags.join(', ') : '';
             document.getElementById('article-image').value = article.image;
             document.getElementById('article-author').value = article.author;
             document.getElementById('article-featured').value = article.featured ? '1' : '0';
             document.getElementById('editing-article-id').value = article.id;
             
+            // Cambiar botón a modo edición
             document.getElementById('save-article').textContent = 'Actualizar Editorial';
             
+            // Abrir panel de administración si no está abierto
             openAdminPanel();
+            
+            // Scroll al formulario
             document.querySelector('.admin-container').scrollTop = 0;
             
             showNotification(`Editando: "${article.title}"`, 'info');
@@ -2667,18 +2239,12 @@
                 return;
             }
             
-            // Eliminar de favoritos si está ahí
-            const favIndex = favorites.indexOf(id);
-            if (favIndex > -1) {
-                favorites.splice(favIndex, 1);
-            }
-            
             articles = articles.filter(a => a.id !== id);
             saveToLocalStorage();
             
+            // Actualizar vista actual
             if (currentSection === 'inicio') {
                 renderArticles();
-                renderStats();
             } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
                 renderCategoryArticles(currentSection);
             } else if (currentSection === 'archivo') {
@@ -2688,23 +2254,22 @@
             }
             
             updateAdminArticleList();
-            updateQuickStats();
-            updateStatistics();
             
             showNotification('Editorial eliminado correctamente', 'success');
         }
 
         function newArticle() {
+            // Limpiar formulario
             document.getElementById('article-title').value = '';
             document.getElementById('article-summary').value = '';
             document.getElementById('article-content').value = '';
             document.getElementById('article-image').value = '';
-            document.getElementById('article-tags').value = '';
             document.getElementById('article-author').value = '';
             document.getElementById('article-category').value = 'Opinión';
             document.getElementById('article-featured').value = '0';
             document.getElementById('editing-article-id').value = '';
             
+            // Cambiar botón a modo creación
             document.getElementById('save-article').textContent = 'Guardar Editorial';
             
             showNotification('Creando nuevo editorial', 'info');
@@ -2729,15 +2294,10 @@
                 return;
             }
             
-            const preview = `
-                <h2>Vista Previa: ${title}</h2>
-                <div style="margin-top: 20px; padding: 20px; border: 1px solid var(--color-borde); border-radius: var(--border-radius);">
-                    ${content}
-                </div>
-                <p style="margin-top: 15px; color: var(--color-gris-medio); font-size: 0.9rem;">Esta es solo una vista previa. Para ver el formato final, guarde el editorial y ábralo desde la vista pública.</p>
-            `;
+            // Crear una vista previa simple
+            const preview = `Vista previa del editorial:\n\n${title}\n\n${content.replace(/<[^>]*>/g, '')}`;
             
-            alert("Vista previa del editorial (use el botón Aceptar para continuar)");
+            alert(preview);
         }
 
         function saveAuthor() {
@@ -2746,14 +2306,21 @@
             const quote = document.getElementById('author-quote-input').value;
             const bio = document.getElementById('author-bio-input').value;
             
+            if (!name || !photo || !quote || !bio) {
+                showNotification('Por favor complete todos los campos del autor', 'error');
+                return;
+            }
+            
             authorInfo = { name, photo, quote, bio };
             saveToLocalStorage();
             
+            // Actualizar vista pública
             document.getElementById('author-name').textContent = name;
             document.getElementById('author-photo').src = photo;
             document.getElementById('author-quote').textContent = `"${quote}"`;
             document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
             
+            // Actualizar también el campo de autor en el formulario de artículos
             document.getElementById('article-author').value = name;
             
             showNotification('Información del autor actualizada correctamente', 'success');
@@ -2763,34 +2330,37 @@
             const selectedColor = document.querySelector('.color-option.active').dataset.color;
             const siteTitle = document.getElementById('site-title').value;
             
+            // Aplicar nuevo color
             document.documentElement.style.setProperty('--color-bordo', selectedColor);
+            
+            // Actualizar título del sitio
             document.title = siteTitle;
             
+            // Guardar en localStorage
             localStorage.setItem('ladoC-color', selectedColor);
             localStorage.setItem('ladoC-site-title', siteTitle);
             
             showNotification('Configuración del sitio guardada correctamente', 'success');
         }
 
-        // BACKUP Y RESTAURACIÓN
+        // EXPORTAR/IMPORTAR DATOS
         function exportData() {
             const data = {
                 articles: articles,
-                author: authorInfo,
-                favorites: favorites,
-                exported: new Date().toISOString(),
-                version: '3.0.0'
+                authorInfo: authorInfo,
+                exportDate: new Date().toISOString(),
+                version: "2.1.0"
             };
             
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ladoc-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `ladoC-backup-${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
             
             showNotification('Datos exportados correctamente', 'success');
         }
@@ -2799,109 +2369,27 @@
             document.getElementById('import-file').click();
         }
 
-        function handleImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (confirm('¿Está seguro de que desea importar estos datos? Se sobrescribirán todos los datos actuales.')) {
-                        if (data.articles) articles = data.articles;
-                        if (data.author) authorInfo = data.author;
-                        if (data.favorites) favorites = data.favorites;
-                        
-                        saveToLocalStorage();
-                        location.reload();
-                    }
-                } catch (error) {
-                    showNotification('Error al importar datos: archivo inválido', 'error');
-                }
-            };
-            reader.readAsText(file);
-            
-            // Resetear input
-            event.target.value = '';
-        }
-
-        function openBackupManager() {
-            if (!isAdmin) {
-                showLoginModal();
-                return;
-            }
-            
-            openAdminPanel();
-        }
-
+        // RESET DATA
         function resetData() {
             if (!confirm("¿Está seguro de que desea restablecer los datos de ejemplo? Se perderán todos los editoriales actuales. Esta acción no se puede deshacer.")) {
                 return;
             }
             
-            articles = [
-                {
-                    id: 1,
-                    title: "El futuro del socialismo democrático en Catamarca",
-                    summary: "Un análisis sobre los desafíos y oportunidades del socialismo democrático en la provincia y su impacto en las políticas públicas locales.",
-                    content: "<p>En los últimos años, Catamarca ha experimentado transformaciones significativas en su escenario político. El socialismo democrático, como corriente de pensamiento y acción política, enfrenta el desafío de adaptarse a las particularidades de nuestra provincia mientras mantiene sus principios fundamentales.</p><p>La experiencia de gobiernos locales en la región muestra que es posible implementar políticas progresistas que mejoren la calidad de vida sin renunciar a los valores democráticos. Sin embargo, el camino está lleno de obstáculos, desde la resistencia de sectores conservadores hasta las limitaciones presupuestarias.</p><p>El verdadero cambio no vendrá de discursos vacíos, sino de la construcción de alternativas concretas que respondan a las necesidades reales de los catamarqueños. La participación ciudadana, la transparencia en la gestión y la defensa de los derechos sociales deben ser los pilares de cualquier proyecto político que se reclame del socialismo democrático.</p>",
-                    category: "Catamarca",
-                    tags: ["socialismo", "Catamarca", "política local", "democracia"],
-                    author: "Juan Pérez",
-                    date: "2023-11-15",
-                    image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-                    views: 142,
-                    featured: true
-                },
-                {
-                    id: 2,
-                    title: "La desigualdad regional en Argentina: un problema estructural",
-                    summary: "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
-                    content: "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
-                    category: "Política Nacional",
-                    tags: ["desigualdad", "federalismo", "Argentina", "política nacional"],
-                    author: "Juan Pérez",
-                    date: "2023-11-08",
-                    image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
-                    views: 98,
-                    featured: true
-                },
-                {
-                    id: 3,
-                    title: "Juventud y política: el desencanto y la esperanza",
-                    summary: "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
-                    content: "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
-                    category: "Sociedad",
-                    tags: ["juventud", "participación", "sociedad", "educación"],
-                    author: "Juan Pérez",
-                    date: "2023-11-01",
-                    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-                    views: 76,
-                    featured: false
-                }
-            ];
+            // Limpiar localStorage
+            localStorage.clear();
             
-            currentArticleId = 3;
-            favorites = [];
+            // Reinicializar datos
+            initializeData();
             
-            authorInfo = {
-                name: "Juan Pérez",
-                photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-                quote: "Pensar distinto también es un acto de compromiso.",
-                bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
-            };
-            
-            saveToLocalStorage();
-            
+            // Actualizar vista de autor
             document.getElementById('author-name').textContent = authorInfo.name;
             document.getElementById('author-photo').src = authorInfo.photo;
             document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
             document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
             
+            // Actualizar vista actual
             if (currentSection === 'inicio') {
                 renderArticles();
-                renderStats();
             } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
                 renderCategoryArticles(currentSection);
             } else if (currentSection === 'archivo') {
@@ -2911,23 +2399,87 @@
             }
             
             updateAdminArticleList();
-            updateQuickStats();
+            
+            // Cerrar sesión de admin si está activa
+            if (isAdmin) {
+                logout();
+            }
             
             showNotification('Datos restablecidos correctamente', 'success');
+        }
+
+        function clearAllData() {
+            if (!confirm("¿Está seguro de que desea eliminar TODOS los datos? Esto incluye todos los editoriales, información del autor y configuraciones. Esta acción no se puede deshacer.")) {
+                return;
+            }
+            
+            // Limpiar localStorage
+            localStorage.clear();
+            
+            // Reinicializar con datos vacíos
+            articles = [];
+            currentArticleId = 0;
+            authorInfo = {
+                name: "",
+                photo: "",
+                quote: "",
+                bio: ""
+            };
+            
+            // Actualizar vista de autor
+            document.getElementById('author-name').textContent = "";
+            document.getElementById('author-photo').src = "";
+            document.getElementById('author-quote').textContent = "";
+            document.getElementById('author-bio').innerHTML = "";
+            
+            // Actualizar vista actual
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            } else if (currentSection === 'favoritos') {
+                renderFavorites();
+            }
+            
+            updateAdminArticleList();
+            
+            // Cerrar sesión de admin si está activa
+            if (isAdmin) {
+                logout();
+            }
+            
+            showNotification('Todos los datos han sido eliminados', 'success');
         }
 
         function updateStatistics() {
             const totalArticles = articles.length;
             const featuredArticles = articles.filter(a => a.featured).length;
             const totalViews = articles.reduce((sum, article) => sum + article.views, 0);
-            const allTags = articles.flatMap(article => article.tags || []);
-            const uniqueTags = [...new Set(allTags)].length;
+            const avgViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0;
+            
+            // Calcular artículos por categoría
+            const categories = {};
+            articles.forEach(article => {
+                categories[article.category] = (categories[article.category] || 0) + 1;
+            });
             
             document.getElementById('total-articles').textContent = totalArticles;
             document.getElementById('featured-articles').textContent = featuredArticles;
             document.getElementById('total-views').textContent = totalViews;
-            document.getElementById('unique-tags').textContent = uniqueTags;
-            document.getElementById('total-favorites').textContent = favorites.length;
+            document.getElementById('avg-views').textContent = avgViews;
+            
+            // Actualizar estadísticas por categoría
+            const categoryStats = document.getElementById('category-stats');
+            if (categoryStats) {
+                categoryStats.innerHTML = '';
+                for (const [category, count] of Object.entries(categories)) {
+                    const li = document.createElement('li');
+                    li.textContent = `${category}: ${count}`;
+                    categoryStats.appendChild(li);
+                }
+            }
         }
 
         // LOGIN MODAL
@@ -2958,12 +2510,10 @@
                 return;
             }
             
-            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                showNotification('Por favor ingrese un email válido', 'error');
-                return;
-            }
+            // En un sistema real, aquí enviaríamos el mensaje al servidor
+            // Por ahora, simulamos el envío
             
-            // Simular envío
+            // Limpiar formulario
             document.getElementById('contact-name').value = '';
             document.getElementById('contact-email').value = '';
             document.getElementById('contact-message').value = '';
@@ -2971,15 +2521,71 @@
             showNotification('Mensaje enviado correctamente. Nos pondremos en contacto pronto.', 'success');
         }
 
+        // BÚSQUEDA
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                showNotification('Por favor ingrese un término de búsqueda', 'error');
+                return;
+            }
+            
+            const results = articles.filter(article => 
+                article.title.toLowerCase().includes(searchTerm) || 
+                article.summary.toLowerCase().includes(searchTerm) ||
+                article.content.toLowerCase().includes(searchTerm) ||
+                article.author.toLowerCase().includes(searchTerm) ||
+                article.category.toLowerCase().includes(searchTerm)
+            );
+            
+            if (results.length === 0) {
+                showNotification(`No se encontraron editoriales para "${searchTerm}"`, 'info');
+                return;
+            }
+            
+            // Crear sección temporal de resultados
+            const tempSection = document.createElement('div');
+            tempSection.innerHTML = `
+                <h2 class="section-title">Resultados de búsqueda: "${searchTerm}"</h2>
+                <div class="articles-grid" id="search-results-container">
+                </div>
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="back-button" onclick="showSection('inicio')">Volver al inicio</button>
+                </div>
+            `;
+            
+            // Ocultar sección actual
+            document.getElementById('inicio-section').style.display = 'none';
+            
+            // Insertar resultados
+            const contentDiv = document.querySelector('.content');
+            const existingSearch = document.getElementById('search-results-section');
+            if (existingSearch) {
+                existingSearch.remove();
+            }
+            
+            tempSection.id = 'search-results-section';
+            contentDiv.appendChild(tempSection);
+            
+            // Renderizar resultados
+            const container = document.getElementById('search-results-container');
+            results.forEach(article => {
+                const articleElement = createArticleElement(article, article.featured);
+                container.appendChild(articleElement);
+            });
+            
+            showNotification(`Se encontraron ${results.length} editoriales`, 'success');
+        }
+
         // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar datos (CORRECCIÓN CRÍTICA)
+            initializeData();
+            
             // Verificar autenticación
             checkAuth();
             
-            // Inicializar modo oscuro
-            initDarkMode();
-            
-            // Inicializar información del autor
+            // Inicializar información del autor en la barra lateral
             document.getElementById('author-name').textContent = authorInfo.name;
             document.getElementById('author-photo').src = authorInfo.photo;
             document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
@@ -2987,14 +2593,13 @@
             
             // Renderizar artículos iniciales
             renderArticles();
-            renderStats();
-            updateQuickStats();
             
             // Configurar color guardado
             const savedColor = localStorage.getItem('ladoC-color');
             if (savedColor) {
                 document.documentElement.style.setProperty('--color-bordo', savedColor);
                 
+                // Marcar color activo en el panel
                 document.querySelectorAll('.color-option').forEach(option => {
                     option.classList.remove('active');
                     if (option.dataset.color === savedColor) {
@@ -3011,30 +2616,61 @@
             }
             
             // CONFIGURAR NAVEGACIÓN
+            // Logo - Inicio
             document.getElementById('logo').addEventListener('click', function(e) {
                 e.preventDefault();
                 showSection('inicio');
             });
             
             // Menú principal
-            const navItems = [
-                'inicio', 'opinion', 'catamarca', 'politica-nacional', 
-                'sociedad', 'internacionales', 'archivo', 'favoritos', 'contacto', 'admin'
-            ];
+            document.getElementById('nav-inicio').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('inicio');
+            });
             
-            navItems.forEach(item => {
-                document.getElementById(`nav-${item}`).addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (item === 'admin') {
-                        if (isAdmin) {
-                            openAdminPanel();
-                        } else {
-                            showLoginModal();
-                        }
-                    } else {
-                        showSection(item);
-                    }
-                });
+            document.getElementById('nav-opinion').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('opinion');
+            });
+            
+            document.getElementById('nav-catamarca').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('catamarca');
+            });
+            
+            document.getElementById('nav-politica-nacional').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('politica-nacional');
+            });
+            
+            document.getElementById('nav-sociedad').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('sociedad');
+            });
+            
+            document.getElementById('nav-internacionales').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('internacionales');
+            });
+            
+            document.getElementById('nav-archivo').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('archivo');
+            });
+            
+            document.getElementById('nav-contacto').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('contacto');
+            });
+            
+            // Administración
+            document.getElementById('nav-admin').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (isAdmin) {
+                    openAdminPanel();
+                } else {
+                    showLoginModal();
+                }
             });
             
             // Footer navigation
@@ -3049,35 +2685,28 @@
             // Filtros de archivo
             document.querySelectorAll('.archive-filter-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
+                    // Remover clase active de todos los botones
                     document.querySelectorAll('.archive-filter-btn').forEach(b => {
                         b.classList.remove('active');
                     });
                     
+                    // Agregar clase active al botón clickeado
                     this.classList.add('active');
+                    
+                    // Actualizar filtro y renderizar
                     currentArchiveFilter = this.dataset.filter;
                     currentPage = 1;
                     renderFullArchive();
                 });
             });
             
-            // Búsqueda
-            document.getElementById('search-button').addEventListener('click', performSearch);
-            document.getElementById('global-search').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
-            });
-            
-            // Modo oscuro
-            document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
-            
             // Formulario de login
-            document.getElementById('login-form').addEventListener('submit', async function(e) {
+            document.getElementById('login-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
                 
-                if (await login(username, password)) {
+                if (login(username, password)) {
                     hideLoginModal();
                     openAdminPanel();
                 } else {
@@ -3085,11 +2714,142 @@
                 }
             });
             
-            // Cerrar modal de login
+            // Cerrar modal de login al hacer clic fuera
             document.getElementById('login-modal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     hideLoginModal();
                 }
             });
             
-            // Botones del sidebar
+            // Botón de abrir panel admin desde sidebar
+            document.getElementById('open-admin').addEventListener('click', function() {
+                if (isAdmin) {
+                    openAdminPanel();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Botón de nuevo artículo desde sidebar
+            document.getElementById('new-article-button').addEventListener('click', function() {
+                if (isAdmin) {
+                    openAdminPanel();
+                    newArticle();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Botón de favoritos desde sidebar
+            document.getElementById('show-favorites-btn').addEventListener('click', function() {
+                showSection('favoritos');
+            });
+            
+            // Cerrar panel admin
+            document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+            
+            // Botones del panel de administración
+            document.getElementById('save-article').addEventListener('click', saveArticle);
+            document.getElementById('new-article').addEventListener('click', newArticle);
+            document.getElementById('preview-article').addEventListener('click', previewArticle);
+            document.getElementById('save-author').addEventListener('click', saveAuthor);
+            document.getElementById('save-site').addEventListener('click', saveSite);
+            document.getElementById('reset-data').addEventListener('click', resetData);
+            document.getElementById('clear-all-data').addEventListener('click', clearAllData);
+            document.getElementById('refresh-articles').addEventListener('click', updateAdminArticleList);
+            document.getElementById('send-message').addEventListener('click', sendContactMessage);
+            document.getElementById('export-data').addEventListener('click', exportData);
+            document.getElementById('import-data').addEventListener('click', importData);
+            
+            // Importar datos desde archivo
+            document.getElementById('import-file').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        if (!data.articles || !data.authorInfo) {
+                            throw new Error('Formato de archivo inválido');
+                        }
+                        
+                        if (confirm('¿Importar datos? Esto reemplazará todos los artículos actuales.')) {
+                            articles = data.articles;
+                            authorInfo = data.authorInfo;
+                            
+                            // Encontrar el ID más alto
+                            if (articles.length > 0) {
+                                currentArticleId = Math.max(...articles.map(a => a.id));
+                            }
+                            
+                            saveToLocalStorage();
+                            
+                            // Actualizar vistas
+                            document.getElementById('author-name').textContent = authorInfo.name;
+                            document.getElementById('author-photo').src = authorInfo.photo;
+                            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+                            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+                            
+                            if (currentSection === 'inicio') {
+                                renderArticles();
+                            }
+                            
+                            updateAdminArticleList();
+                            
+                            showNotification('Datos importados correctamente', 'success');
+                        }
+                    } catch (error) {
+                        showNotification('Error al importar datos: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+                
+                // Limpiar input
+                e.target.value = '';
+            });
+            
+            // Búsqueda en tiempo real en panel admin
+            document.getElementById('search-articles').addEventListener('input', updateAdminArticleList);
+            
+            // Búsqueda en el header
+            document.getElementById('search-button').addEventListener('click', performSearch);
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Selectores de color
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Admin toolbar
+            document.getElementById('admin-toolbar-button').addEventListener('click', toggleAdminToolbar);
+            
+            // Cerrar toolbar al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                const toolbar = document.getElementById('admin-toolbar');
+                const toolbarButton = document.getElementById('admin-toolbar-button');
+                const toolbarMenu = document.getElementById('admin-toolbar-menu');
+                
+                if (!toolbar.contains(e.target) && toolbarMenu.classList.contains('show')) {
+                    toolbarMenu.classList.remove('show');
+                }
+            });
+            
+            // Mostrar mensaje de bienvenida
+            setTimeout(() => {
+                if (!isAdmin) {
+                    showNotification('Bienvenido a Lado C - Un medio de opinión política catamarqueño', 'info');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
