@@ -1495,250 +1495,6 @@
     }
 }
 
-            // SISTEMA DE EXPORTACIÓN/IMPORTACIÓN
-function exportData() {
-    const data = {
-        articles: articles,
-        author: authorInfo,
-        exported: new Date().toISOString(),
-        version: "2.0.1"
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `lado-c-datos-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showNotification('Datos exportados correctamente. Guarda este archivo .json', 'success');
-}
-
-function importData() {
-    document.getElementById('import-file').click();
-}
-
-function handleFileImport(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const data = JSON.parse(e.target.result);
-            
-            if (confirm(`¿Está seguro de importar estos datos?\nSe cargarán ${data.articles.length} artículos.`)) {
-                if (data.articles) {
-                    articles = data.articles;
-                    // Actualizar el ID máximo
-                    if (articles.length > 0) {
-                        currentArticleId = Math.max(...articles.map(a => a.id));
-                    }
-                }
-                if (data.author) {
-                    authorInfo = data.author;
-                }
-                
-                saveToLocalStorage();
-                
-                // Actualizar la vista
-                if (currentSection === 'inicio') {
-                    renderArticles();
-                } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-                    renderCategoryArticles(currentSection);
-                } else if (currentSection === 'archivo') {
-                    renderFullArchive();
-                }
-                
-                // Actualizar el autor en la barra lateral
-                document.getElementById('author-name').textContent = authorInfo.name;
-                document.getElementById('author-photo').src = authorInfo.photo;
-                document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-                document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-                
-                updateAdminArticleList();
-                updateStatistics();
-                
-                showNotification('Datos importados correctamente', 'success');
-            }
-        } catch (error) {
-            showNotification('Error al importar: archivo inválido', 'error');
-            console.error('Error importing data:', error);
-        }
-    };
-    reader.readAsText(file);
-    
-    // Resetear el input
-    event.target.value = '';
-}
-
-// CARGAR DATOS DESDE URL EXTERNA
-function loadExternalData() {
-    const url = document.getElementById('data-url-input').value.trim();
-    if (!url) {
-        showNotification('Por favor ingresa una URL válida', 'error');
-        return;
-    }
-    
-    showNotification('Cargando datos desde URL...', 'info');
-    
-    // Usar CORS proxy para evitar problemas de Same-Origin Policy
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    
-    fetch(proxyUrl)
-        .then(response => response.json())
-        .then(data => {
-            try {
-                const jsonData = JSON.parse(data.contents);
-                
-                if (jsonData.articles) {
-                    articles = jsonData.articles;
-                    currentArticleId = Math.max(...articles.map(a => a.id));
-                }
-                if (jsonData.author) {
-                    authorInfo = jsonData.author;
-                }
-                
-                saveToLocalStorage();
-                
-                // Recargar página para aplicar cambios
-                location.reload();
-                
-                showNotification('Datos cargados correctamente desde la URL', 'success');
-            } catch (error) {
-                showNotification('Error al procesar los datos de la URL', 'error');
-            }
-        })
-        .catch(error => {
-            showNotification('Error al cargar desde la URL: ' + error.message, 'error');
-        });
-}
-
-// GENERAR HTML ESTÁTICO CON TUS DATOS
-function generateStaticSite() {
-    // Crear un objeto con todos los datos
-    const siteData = {
-        articles: articles,
-        author: authorInfo,
-        generated: new Date().toISOString()
-    };
-    
-    // Crear HTML para cada artículo
-    let articlesHTML = '';
-    articles.forEach(article => {
-        articlesHTML += `
-        <div class="article-card">
-            <img src="${article.image}" alt="${article.title}" class="article-img">
-            <div class="article-content">
-                <h3 class="article-title">${article.title}</h3>
-                <div class="article-meta">
-                    <span>${article.date}</span>
-                    <span>${article.category}</span>
-                    <span>${article.views} lecturas</span>
-                </div>
-                <p class="article-excerpt">${article.summary}</p>
-                <button class="read-more" onclick="alert('En un sitio estático, este enlace llevaría a la página del artículo')">Leer más</button>
-            </div>
-        </div>
-        `;
-    });
-    
-    // Crear el HTML completo
-    const fullHTML = `<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lado C - Sitio Estático</title>
-    <style>
-        /* Copia aquí todos los estilos del CSS original */
-        ${document.querySelector('style').innerHTML}
-    </style>
-</head>
-<body>
-    <header>
-        <div class="container header-container">
-            <a href="#" class="logo">Lado <span>C</span></a>
-            <nav>
-                <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#author">Autor</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    
-    <div class="container main-content">
-        <div class="content">
-            <h2 class="section-title">Todos los Editoriales</h2>
-            <div class="articles-grid">
-                ${articlesHTML}
-            </div>
-        </div>
-        
-        <aside class="sidebar">
-            <div class="author-info">
-                <img src="${authorInfo.photo}" alt="Foto del autor" class="author-photo">
-                <h3 class="author-name">${authorInfo.name}</h3>
-                <p class="author-quote">"${authorInfo.quote}"</p>
-                <div class="author-bio">
-                    <p>${authorInfo.bio}</p>
-                </div>
-            </div>
-        </aside>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>Lado C – Sitio estático generado el ${new Date().toLocaleDateString('es-ES')}</p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>`;
-    
-    // Descargar el HTML
-    const blob = new Blob([fullHTML], {type: 'text/html'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'lado-c-sitio-estatico.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showNotification('Sitio estático generado y descargado', 'success');
-}
-            
-            const categoryName = categoryMap[category];
-            const containerId = `${category}-container`;
-            const container = document.getElementById(containerId);
-            
-            if (!container) return;
-            
-            // Filtrar artículos por categoría
-            const categoryArticles = articles.filter(article => article.category === categoryName);
-            
-            // Ordenar por fecha (más recientes primero)
-            categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            container.innerHTML = '';
-            
-            if (categoryArticles.length > 0) {
-                categoryArticles.forEach(article => {
-                    const articleElement = createArticleElement(article, article.featured);
-                    container.appendChild(articleElement);
-                });
-            } else {
-                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
-            }
-        }
-
         function renderFullArchive() {
             const container = document.getElementById('full-archive-container');
             
@@ -1902,22 +1658,6 @@ function generateStaticSite() {
                 updateAdminUI();
             }
         }
-
-        // Exportar datos
-document.getElementById('export-data').addEventListener('click', exportData);
-
-// Importar datos
-document.getElementById('import-data').addEventListener('click', importData);
-document.getElementById('import-file').addEventListener('change', handleFileImport);
-
-// Toggle data URL
-document.getElementById('toggle-data-url').addEventListener('click', function() {
-    const container = document.getElementById('data-url-container');
-    container.style.display = container.style.display === 'none' ? 'block' : 'none';
-});
-
-// Load external data
-document.getElementById('load-external-data').addEventListener('click', loadExternalData);
 
         function updateAdminUI() {
             const adminIndicator = document.getElementById('admin-indicator');
@@ -2377,46 +2117,230 @@ document.getElementById('load-external-data').addEventListener('click', loadExte
             showNotification('Mensaje enviado correctamente. Nos pondremos en contacto pronto.', 'success');
         }
 
+        // SISTEMA DE EXPORTACIÓN/IMPORTACIÓN
+        function exportData() {
+            const data = {
+                articles: articles,
+                author: authorInfo,
+                exported: new Date().toISOString(),
+                version: "2.0.1"
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lado-c-datos-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Datos exportados correctamente. Guarda este archivo .json', 'success');
+        }
+
+        function importData() {
+            document.getElementById('import-file').click();
+        }
+
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (confirm(`¿Está seguro de importar estos datos?\nSe cargarán ${data.articles.length} artículos.`)) {
+                        if (data.articles) {
+                            articles = data.articles;
+                            // Actualizar el ID máximo
+                            if (articles.length > 0) {
+                                currentArticleId = Math.max(...articles.map(a => a.id));
+                            }
+                        }
+                        if (data.author) {
+                            authorInfo = data.author;
+                        }
+                        
+                        saveToLocalStorage();
+                        
+                        // Actualizar la vista
+                        if (currentSection === 'inicio') {
+                            renderArticles();
+                        } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                            renderCategoryArticles(currentSection);
+                        } else if (currentSection === 'archivo') {
+                            renderFullArchive();
+                        }
+                        
+                        // Actualizar el autor en la barra lateral
+                        document.getElementById('author-name').textContent = authorInfo.name;
+                        document.getElementById('author-photo').src = authorInfo.photo;
+                        document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+                        document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+                        
+                        updateAdminArticleList();
+                        updateStatistics();
+                        
+                        showNotification('Datos importados correctamente', 'success');
+                    }
+                } catch (error) {
+                    showNotification('Error al importar: archivo inválido', 'error');
+                    console.error('Error importing data:', error);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Resetear el input
+            event.target.value = '';
+        }
+
+        // CARGAR DATOS DESDE URL EXTERNA
+        function loadExternalData() {
+            const url = document.getElementById('data-url-input').value.trim();
+            if (!url) {
+                showNotification('Por favor ingresa una URL válida', 'error');
+                return;
+            }
+            
+            showNotification('Cargando datos desde URL...', 'info');
+            
+            // Usar CORS proxy para evitar problemas de Same-Origin Policy
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+            
+            fetch(proxyUrl)
+                .then(response => response.json())
+                .then(data => {
+                    try {
+                        const jsonData = JSON.parse(data.contents);
+                        
+                        if (jsonData.articles) {
+                            articles = jsonData.articles;
+                            currentArticleId = Math.max(...articles.map(a => a.id));
+                        }
+                        if (jsonData.author) {
+                            authorInfo = jsonData.author;
+                        }
+                        
+                        saveToLocalStorage();
+                        
+                        // Recargar página para aplicar cambios
+                        location.reload();
+                        
+                        showNotification('Datos cargados correctamente desde la URL', 'success');
+                    } catch (error) {
+                        showNotification('Error al procesar los datos de la URL', 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification('Error al cargar desde la URL: ' + error.message, 'error');
+                });
+        }
+
+        // GENERAR HTML ESTÁTICO CON TUS DATOS
+        function generateStaticSite() {
+            // Crear un objeto con todos los datos
+            const siteData = {
+                articles: articles,
+                author: authorInfo,
+                generated: new Date().toISOString()
+            };
+            
+            // Crear HTML para cada artículo
+            let articlesHTML = '';
+            articles.forEach(article => {
+                articlesHTML += `
+                <div class="article-card">
+                    <img src="${article.image}" alt="${article.title}" class="article-img">
+                    <div class="article-content">
+                        <h3 class="article-title">${article.title}</h3>
+                        <div class="article-meta">
+                            <span>${article.date}</span>
+                            <span>${article.category}</span>
+                            <span>${article.views} lecturas</span>
+                        </div>
+                        <p class="article-excerpt">${article.summary}</p>
+                        <button class="read-more" onclick="alert('En un sitio estático, este enlace llevaría a la página del artículo')">Leer más</button>
+                    </div>
+                </div>
+                `;
+            });
+            
+            // Crear el HTML completo
+            const fullHTML = `<!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Lado C - Sitio Estático</title>
+            <style>
+                /* Copia aquí todos los estilos del CSS original */
+                ${document.querySelector('style').innerHTML}
+            </style>
+        </head>
+        <body>
+            <header>
+                <div class="container header-container">
+                    <a href="#" class="logo">Lado <span>C</span></a>
+                    <nav>
+                        <ul>
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#author">Autor</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+            
+            <div class="container main-content">
+                <div class="content">
+                    <h2 class="section-title">Todos los Editoriales</h2>
+                    <div class="articles-grid">
+                        ${articlesHTML}
+                    </div>
+                </div>
+                
+                <aside class="sidebar">
+                    <div class="author-info">
+                        <img src="${authorInfo.photo}" alt="Foto del autor" class="author-photo">
+                        <h3 class="author-name">${authorInfo.name}</h3>
+                        <p class="author-quote">"${authorInfo.quote}"</p>
+                        <div class="author-bio">
+                            <p>${authorInfo.bio}</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+            
+            <footer>
+                <div class="container">
+                    <div class="footer-bottom">
+                        <p>Lado C – Sitio estático generado el ${new Date().toLocaleDateString('es-ES')}</p>
+                    </div>
+                </div>
+            </footer>
+        </body>
+        </html>`;
+            
+            // Descargar el HTML
+            const blob = new Blob([fullHTML], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lado-c-sitio-estatico.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Sitio estático generado y descargado', 'success');
+        }
+
         // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
             // Verificar autenticación
             checkAuth();
-
-            // En la función de inicialización, agrega estos event listeners:
-
-// Exportar datos
-document.getElementById('export-data').addEventListener('click', exportData);
-
-// Importar datos
-document.getElementById('import-data').addEventListener('click', importData);
-document.getElementById('import-file').addEventListener('change', handleFileImport);
-
-// Toggle data URL
-document.getElementById('toggle-data-url').addEventListener('click', function() {
-    const container = document.getElementById('data-url-container');
-    container.style.display = container.style.display === 'none' ? 'block' : 'none';
-});
-
-// Load external data
-document.getElementById('load-external-data').addEventListener('click', loadExternalData);
-
-// Agrega también un botón para generar sitio estático
-document.addEventListener('DOMContentLoaded', function() {
-    // ... código existente ...
-    
-    // Agrega un botón en el panel de admin
-    const actionsSection = document.querySelector('.admin-section:nth-child(5)');
-    if (actionsSection) {
-        const staticSiteBtn = document.createElement('button');
-        staticSiteBtn.className = 'admin-button';
-        staticSiteBtn.id = 'generate-static-site';
-        staticSiteBtn.textContent = 'Generar Sitio Estático';
-        staticSiteBtn.style.marginTop = '10px';
-        actionsSection.appendChild(staticSiteBtn);
-        
-        document.getElementById('generate-static-site').addEventListener('click', generateStaticSite);
-    }
-});
             
             // Inicializar información del autor en la barra lateral
             document.getElementById('author-name').textContent = authorInfo.name;
@@ -2609,6 +2533,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     toolbarMenu.classList.remove('show');
                 }
             });
+            
+            // Configurar event listeners para exportación/importación
+            document.getElementById('export-data').addEventListener('click', exportData);
+            document.getElementById('import-data').addEventListener('click', importData);
+            document.getElementById('import-file').addEventListener('change', handleFileImport);
+            
+            document.getElementById('toggle-data-url').addEventListener('click', function() {
+                const container = document.getElementById('data-url-container');
+                container.style.display = container.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            document.getElementById('load-external-data').addEventListener('click', loadExternalData);
+            
+            // Agregar botón para generar sitio estático
+            const actionsSection = document.querySelector('.admin-section:nth-child(5)');
+            if (actionsSection) {
+                const staticSiteBtn = document.createElement('button');
+                staticSiteBtn.className = 'admin-button';
+                staticSiteBtn.id = 'generate-static-site';
+                staticSiteBtn.textContent = 'Generar Sitio Estático';
+                staticSiteBtn.style.marginTop = '10px';
+                actionsSection.appendChild(staticSiteBtn);
+                
+                document.getElementById('generate-static-site').addEventListener('click', generateStaticSite);
+            }
             
             // Mostrar mensaje de bienvenida
             setTimeout(() => {
