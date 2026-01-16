@@ -1,23 +1,10 @@
 {
-  "articles": [
-    {
-      "id": 3,
-      "title": "Juventud y política: el desencanto y la esperanza",
-      "summary": "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
-      "content": "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
-      "category": "Sociedad",
-      "author": "Juan Pérez",
-      "date": "1 de noviembre, 2023",
-      "image": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      "views": 76,
-      "featured": false
-    }
-  ],
+  "articles": [],
   "author": {
     "name": "Alejandro Galindez",
     "photo": "https://scontent.ftuc1-1.fna.fbcdn.net/v/t1.6435-9/105577761_3266904459996219_3227178590537150204_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFvyFHNXvQ-PSRmTR4SvSmooEl6vr2FZVigSXq-vYVlWFJcE0NHRSoKsSEinToMgk4GA3fAhRAzxzd6-j7hGKxe&_nc_ohc=QQdVA0mSeIAQ7kNvwH9vhOm&_nc_oc=AdlkQ5EV0lvHStaHdyBjOrurl23F6h46Fk1GCyzEonB97uTODk6qB-Pgb601BG_oBJQ&_nc_zt=23&_nc_ht=scontent.ftuc1-1.fna&_nc_gid=RTtQd-ajBEKDJ8JfKCJiMQ&oh=00_Afo0mRejpWfqmHfsgxDbImsDJKxbb0x4JLliOBwKuXt01g&oe=6992237A",
     "quote": "Pensar distinto también es un acto de compromiso.",
     "bio": "DIREGENTE DEL PARTIDO SOCIALISTA - CATAMARCA"
   },
-  "lastUpdated": "2026-01-16T23:46:46.817Z"
+  "lastUpdated": "2026-01-16T23:46:50.169Z"
 }
