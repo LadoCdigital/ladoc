@@ -1275,6 +1275,19 @@
         Configurar URL de datos
     </button>
 </div>
+
+<div class="admin-section">
+    <h3>Sincronizar con GitHub</h3>
+    <p style="color: var(--color-gris-medio); margin-bottom: 15px;">
+        Recargar datos desde el archivo datos.json en GitHub
+    </p>
+    <button class="admin-button" id="reload-from-github">
+        <i class="fas fa-sync-alt"></i> Recargar desde GitHub
+    </button>
+    <p style="color: var(--color-gris-medio); font-size: 0.9rem; margin-top: 10px;">
+        Esto cargará los datos actualizados desde el archivo datos.json.
+    </p>
+</div>
             
             <!-- SECCIÓN: INFORMACIÓN DEL SISTEMA -->
             <div class="admin-section">
@@ -1284,8 +1297,6 @@
                         <p><strong>Total de editoriales:</strong> <span id="total-articles">0</span></p>
                         <p><strong>Destacados:</strong> <span id="featured-articles">0</span></p>
                         <p><strong>Visitas totales:</strong> <span id="total-views">0</span></p>
-                        <div style="margin-top: 15px;">
-    <button class="admin-button" onclick="reloadData()">Recargar datos desde archivo</button>
                     </div>
                     <div>
                         <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
@@ -1298,95 +1309,81 @@
     </div>
 
     <script>
-        // DATOS INICIALES
-      // DATOS INICIALES - Cargar desde archivo externo
-let articles = [];
-let authorInfo = {};
-let currentArticleId = 0;
+        // DATOS INICIALES - Cargar desde archivo JSON
+        let articles = [];
+        let authorInfo = {};
+        let currentArticleId = 0;
 
-// URL de tu archivo datos.json en GitHub
-const DATA_JSON_URL = 'datos.json';
+        // URL de tu archivo datos.json en GitHub (ajusta la ruta según tu repositorio)
+        const DATA_JSON_URL = 'datos.json';
 
-// Función para cargar datos desde el archivo JSON
-async function loadDataFromJson() {
-    try {
-        const response = await fetch(DATA_JSON_URL);
-        if (!response.ok) throw new Error('No se pudo cargar datos.json');
-        const data = await response.json();
-        
-        articles = data.articles || [];
-        authorInfo = data.author || {
-            name: "Juan Pérez",
-            photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-            quote: "Pensar distinto también es un acto de compromiso.",
-            bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
-        };
-
-        // Función para recargar datos desde el archivo JSON
-async function reloadData() {
-    const success = await loadDataFromJson();
-    if (success) {
-        // Actualizar vista
-        if (currentSection === 'inicio') {
-            renderArticles();
-        } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-            renderCategoryArticles(currentSection);
-        } else if (currentSection === 'archivo') {
-            renderFullArchive();
+        // FUNCIÓN PARA CARGAR DATOS DESDE EL ARCHIVO JSON
+        async function loadDataFromJson() {
+            try {
+                // Agregar timestamp para evitar caché
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${DATA_JSON_URL}?t=${timestamp}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error cargando datos.json:', error);
+                return null;
+            }
         }
-        
-        // Actualizar información del autor
-        document.getElementById('author-name').textContent = authorInfo.name;
-        document.getElementById('author-photo').src = authorInfo.photo;
-        document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-        document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-        
-        showNotification('Datos recargados desde archivo correctamente', 'success');
-        updateAdminArticleList();
-    } else {
-        showNotification('Error al recargar datos desde archivo', 'error');
-    }
-}
-        
-        // Actualizar el ID máximo
-        if (articles.length > 0) {
-            currentArticleId = Math.max(...articles.map(a => a.id));
-        }
-        
-        console.log('Datos cargados desde datos.json:', articles.length, 'artículos');
-        return true;
-    } catch (error) {
-        console.error('Error cargando datos.json:', error);
-        return false;
-    }
-}
 
-// Función para cargar datos (primero intenta desde JSON, luego localStorage, luego datos predeterminados)
-async function loadData() {
-    // 1. Primero intentar cargar desde datos.json
-    const jsonLoaded = await loadDataFromJson();
-    
-    if (!jsonLoaded) {
-        // 2. Si falla, intentar desde localStorage
-        const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
-        const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
-        
-        if (savedArticles && savedArticles.length > 0) {
-            articles = savedArticles;
-            authorInfo = savedAuthor || {
+        // FUNCIÓN PRINCIPAL PARA CARGAR DATOS
+        async function loadData() {
+            // 1. Primero intentar cargar desde datos.json
+            const jsonData = await loadDataFromJson();
+            
+            if (jsonData && jsonData.articles && jsonData.author) {
+                // Datos desde JSON
+                articles = jsonData.articles;
+                authorInfo = jsonData.author;
+                console.log('✓ Datos cargados desde datos.json:', articles.length, 'artículos');
+            } else {
+                // 2. Si falla, intentar desde localStorage
+                const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
+                const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
+                
+                if (savedArticles && savedArticles.length > 0) {
+                    articles = savedArticles;
+                    authorInfo = savedAuthor || getDefaultAuthor();
+                    console.log('⚠ Datos cargados desde localStorage (fallback):', articles.length, 'artículos');
+                } else {
+                    // 3. Si no hay nada, usar datos predeterminados
+                    articles = getDefaultArticles();
+                    authorInfo = getDefaultAuthor();
+                    console.log('⚠ Datos cargados desde predeterminados:', articles.length, 'artículos');
+                }
+            }
+            
+            // Actualizar el ID máximo
+            if (articles.length > 0) {
+                currentArticleId = Math.max(...articles.map(a => a.id));
+            }
+            
+            return articles.length > 0;
+        }
+
+        // FUNCIÓN PARA OBTENER DATOS PREDETERMINADOS DEL AUTOR
+        function getDefaultAuthor() {
+            return {
                 name: "Juan Pérez",
                 photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
                 quote: "Pensar distinto también es un acto de compromiso.",
                 bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
             };
-            
-            if (articles.length > 0) {
-                currentArticleId = Math.max(...articles.map(a => a.id));
-            }
-            console.log('Datos cargados desde localStorage:', articles.length, 'artículos');
-        } else {
-            // 3. Si no hay nada, usar datos predeterminados
-            articles = [
+        }
+
+        // FUNCIÓN PARA OBTENER ARTÍCULOS PREDETERMINADOS
+        function getDefaultArticles() {
+            return [
                 {
                     id: 1,
                     title: "El futuro del socialismo democrático en Catamarca",
@@ -1424,42 +1421,22 @@ async function loadData() {
                     featured: false
                 }
             ];
-            
-            currentArticleId = 3;
-            
-            authorInfo = {
-                name: "Juan Pérez",
-                photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-                quote: "Pensar distinto también es un acto de compromiso.",
-                bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
-            };
-            
-            console.log('Datos cargados desde predeterminados:', articles.length, 'artículos');
         }
-    }
-}
 
-// SISTEMA DE AUTENTICACIÓN
-let isAdmin = false;
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
+        // SISTEMA DE AUTENTICACIÓN
+        let isAdmin = false;
+        const ADMIN_USERNAME = "admin";
+        const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
 
         // VARIABLES DE ESTADO
         let currentSection = 'inicio';
         let currentArchiveFilter = 'all';
 
         // FUNCIONES DE UTILIDAD
-     function saveToLocalStorage() {
-    localStorage.setItem('ladoC-articles', JSON.stringify(articles));
-    localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
-    
-    // Nota: En una aplicación real con backend, aquí enviarías
-    // los datos al servidor para actualizar datos.json
-    // Por ahora, mostramos un mensaje para recordar actualizar el archivo
-    if (isAdmin) {
-        showNotification('Recuerda: Para que los cambios sean visibles para todos, actualiza el archivo datos.json en GitHub', 'info');
-    }
-}
+        function saveToLocalStorage() {
+            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
+            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
+        }
 
         function formatDate() {
             const now = new Date();
@@ -1769,7 +1746,6 @@ const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
                 adminIndicator.textContent = '✓';
                 adminToolbar.style.display = 'block';
                 document.body.classList.add('admin-mode');
-                showNotification('Modo administrador activo', 'success');
             } else {
                 adminIndicator.textContent = '';
                 adminToolbar.style.display = 'none';
@@ -2100,53 +2076,10 @@ const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
             }
             
             // Restaurar datos iniciales
-            articles = [
-                {
-                    id: 1,
-                    title: "El futuro del socialismo democrático en Catamarca",
-                    summary: "Un análisis sobre los desafíos y oportunidades del socialismo democrático en la provincia y su impacto en las políticas públicas locales.",
-                    content: "<p>En los últimos años, Catamarca ha experimentado transformaciones significativas en su escenario político. El socialismo democrático, como corriente de pensamiento y acción política, enfrenta el desafío de adaptarse a las particularidades de nuestra provincia mientras mantiene sus principios fundamentales.</p><p>La experiencia de gobiernos locales en la región muestra que es posible implementar políticas progresistas que mejoren la calidad de vida sin renunciar a los valores democráticos. Sin embargo, el camino está lleno de obstáculos, desde la resistencia de sectores conservadores hasta las limitaciones presupuestarias.</p><p>El verdadero cambio no vendrá de discursos vacíos, sino de la construcción de alternativas concretas que respondan a las necesidades reales de los catamarqueños. La participación ciudadana, la transparencia en la gestión y la defensa de los derechos sociales deben ser los pilares de cualquier proyecto político que se reclame del socialismo democrático.</p>",
-                    category: "Catamarca",
-                    author: "Juan Pérez",
-                    date: "15 de noviembre, 2023",
-                    image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-                    views: 142,
-                    featured: true
-                },
-                {
-                    id: 2,
-                    title: "La desigualdad regional en Argentina: un problema estructural",
-                    summary: "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
-                    content: "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
-                    category: "Política Nacional",
-                    author: "Juan Pérez",
-                    date: "8 de noviembre, 2023",
-                    image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
-                    views: 98,
-                    featured: true
-                },
-                {
-                    id: 3,
-                    title: "Juventud y política: el desencanto y la esperanza",
-                    summary: "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
-                    content: "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
-                    category: "Sociedad",
-                    author: "Juan Pérez",
-                    date: "1 de noviembre, 2023",
-                    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-                    views: 76,
-                    featured: false
-                }
-            ];
-            
+            articles = getDefaultArticles();
             currentArticleId = 3;
             
-            authorInfo = {
-                name: "Juan Pérez",
-                photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-                quote: "Pensar distinto también es un acto de compromiso.",
-                bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
-            };
+            authorInfo = getDefaultAuthor();
             
             saveToLocalStorage();
             
@@ -2299,162 +2232,64 @@ const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
             event.target.value = '';
         }
 
-        // CARGAR DATOS DESDE URL EXTERNA
-        function loadExternalData() {
-            const url = document.getElementById('data-url-input').value.trim();
-            if (!url) {
-                showNotification('Por favor ingresa una URL válida', 'error');
-                return;
+        // FUNCIÓN PARA RECARGAR DESDE GITHUB
+        async function reloadFromGitHub() {
+            showNotification('Recargando datos desde GitHub...', 'info');
+            
+            const jsonData = await loadDataFromJson();
+            
+            if (jsonData && jsonData.articles && jsonData.author) {
+                articles = jsonData.articles;
+                authorInfo = jsonData.author;
+                
+                // Actualizar el ID máximo
+                if (articles.length > 0) {
+                    currentArticleId = Math.max(...articles.map(a => a.id));
+                }
+                
+                saveToLocalStorage();
+                
+                // Actualizar vista
+                if (currentSection === 'inicio') {
+                    renderArticles();
+                } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                    renderCategoryArticles(currentSection);
+                } else if (currentSection === 'archivo') {
+                    renderFullArchive();
+                }
+                
+                // Actualizar información del autor
+                document.getElementById('author-name').textContent = authorInfo.name;
+                document.getElementById('author-photo').src = authorInfo.photo;
+                document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+                document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+                
+                updateAdminArticleList();
+                updateStatistics();
+                
+                showNotification('✓ Datos recargados desde GitHub correctamente', 'success');
+            } else {
+                showNotification('✗ Error al cargar datos desde GitHub', 'error');
             }
-            
-            showNotification('Cargando datos desde URL...', 'info');
-            
-            // Usar CORS proxy para evitar problemas de Same-Origin Policy
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-            
-            fetch(proxyUrl)
-                .then(response => response.json())
-                .then(data => {
-                    try {
-                        const jsonData = JSON.parse(data.contents);
-                        
-                        if (jsonData.articles) {
-                            articles = jsonData.articles;
-                            currentArticleId = Math.max(...articles.map(a => a.id));
-                        }
-                        if (jsonData.author) {
-                            authorInfo = jsonData.author;
-                        }
-                        
-                        saveToLocalStorage();
-                        
-                        // Recargar página para aplicar cambios
-                        location.reload();
-                        
-                        showNotification('Datos cargados correctamente desde la URL', 'success');
-                    } catch (error) {
-                        showNotification('Error al procesar los datos de la URL', 'error');
-                    }
-                })
-                .catch(error => {
-                    showNotification('Error al cargar desde la URL: ' + error.message, 'error');
-                });
         }
 
-        // GENERAR HTML ESTÁTICO CON TUS DATOS
-        function generateStaticSite() {
-            // Crear un objeto con todos los datos
-            const siteData = {
-                articles: articles,
-                author: authorInfo,
-                generated: new Date().toISOString()
-            };
-            
-            // Crear HTML para cada artículo
-            let articlesHTML = '';
-            articles.forEach(article => {
-                articlesHTML += `
-                <div class="article-card">
-                    <img src="${article.image}" alt="${article.title}" class="article-img">
-                    <div class="article-content">
-                        <h3 class="article-title">${article.title}</h3>
-                        <div class="article-meta">
-                            <span>${article.date}</span>
-                            <span>${article.category}</span>
-                            <span>${article.views} lecturas</span>
-                        </div>
-                        <p class="article-excerpt">${article.summary}</p>
-                        <button class="read-more" onclick="alert('En un sitio estático, este enlace llevaría a la página del artículo')">Leer más</button>
-                    </div>
-                </div>
-                `;
-            });
-            
-            // Crear el HTML completo
-            const fullHTML = `<!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Lado C - Sitio Estático</title>
-            <style>
-                /* Copia aquí todos los estilos del CSS original */
-                ${document.querySelector('style').innerHTML}
-            </style>
-        </head>
-        <body>
-            <header>
-                <div class="container header-container">
-                    <a href="#" class="logo">Lado <span>C</span></a>
-                    <nav>
-                        <ul>
-                            <li><a href="#">Inicio</a></li>
-                            <li><a href="#author">Autor</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-            
-            <div class="container main-content">
-                <div class="content">
-                    <h2 class="section-title">Todos los Editoriales</h2>
-                    <div class="articles-grid">
-                        ${articlesHTML}
-                    </div>
-                </div>
-                
-                <aside class="sidebar">
-                    <div class="author-info">
-                        <img src="${authorInfo.photo}" alt="Foto del autor" class="author-photo">
-                        <h3 class="author-name">${authorInfo.name}</h3>
-                        <p class="author-quote">"${authorInfo.quote}"</p>
-                        <div class="author-bio">
-                            <p>${authorInfo.bio}</p>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-            
-            <footer>
-                <div class="container">
-                    <div class="footer-bottom">
-                        <p>Lado C – Sitio estático generado el ${new Date().toLocaleDateString('es-ES')}</p>
-                    </div>
-                </div>
-            </footer>
-        </body>
-        </html>`;
-            
-            // Descargar el HTML
-            const blob = new Blob([fullHTML], {type: 'text/html'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'lado-c-sitio-estatico.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('Sitio estático generado y descargado', 'success');
-        }
         // INICIALIZACIÓN
-document.addEventListener('DOMContentLoaded', async function() {
-    // Cargar datos primero
-    await loadData();
-    
-    // Verificar autenticación
-    checkAuth();
-    
-    // Inicializar información del autor en la barra lateral
-    document.getElementById('author-name').textContent = authorInfo.name;
-    document.getElementById('author-photo').src = authorInfo.photo;
-    document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-    document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-    
-    // Renderizar artículos iniciales
-    renderArticles();
-});
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Verificar autenticación
+            checkAuth();
+            
+            // Cargar datos
+            await loadData();
+            
+            // Inicializar información del autor en la barra lateral
+            document.getElementById('author-name').textContent = authorInfo.name;
+            document.getElementById('author-photo').src = authorInfo.photo;
+            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+            
+            // Renderizar artículos iniciales
+            renderArticles();
+            
             // Configurar color guardado
             const savedColor = localStorage.getItem('ladoC-color');
             if (savedColor) {
@@ -2650,18 +2485,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             document.getElementById('load-external-data').addEventListener('click', loadExternalData);
             
-            // Agregar botón para generar sitio estático
-            const actionsSection = document.querySelector('.admin-section:nth-child(5)');
-            if (actionsSection) {
-                const staticSiteBtn = document.createElement('button');
-                staticSiteBtn.className = 'admin-button';
-                staticSiteBtn.id = 'generate-static-site';
-                staticSiteBtn.textContent = 'Generar Sitio Estático';
-                staticSiteBtn.style.marginTop = '10px';
-                actionsSection.appendChild(staticSiteBtn);
-                
-                document.getElementById('generate-static-site').addEventListener('click', generateStaticSite);
-            }
+            // Botón para recargar desde GitHub
+            document.getElementById('reload-from-github').addEventListener('click', reloadFromGitHub);
             
             // Mostrar mensaje de bienvenida
             setTimeout(() => {
