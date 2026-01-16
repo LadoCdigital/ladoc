@@ -1462,14 +1462,38 @@
         }
 
         function renderCategoryArticles(category) {
-            // Convertir el ID de categoría al nombre de categoría
-            const categoryMap = {
-                'opinion': 'Opinión',
-                'catamarca': 'Catamarca',
-                'politica-nacional': 'Política Nacional',
-                'sociedad': 'Sociedad',
-                'internacionales': 'Internacionales'
-            };
+    // Convertir el ID de categoría al nombre de categoría
+    const categoryMap = {
+        'opinion': 'Opinión',
+        'catamarca': 'Catamarca',
+        'politica-nacional': 'Política Nacional',
+        'sociedad': 'Sociedad',
+        'internacionales': 'Internacionales'
+    };
+    
+    const categoryName = categoryMap[category];
+    const containerId = `${category}-container`;
+    const container = document.getElementById(containerId);
+    
+    if (!container) return;
+    
+    // Filtrar artículos por categoría
+    const categoryArticles = articles.filter(article => article.category === categoryName);
+    
+    // Ordenar por fecha (más recientes primero)
+    categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    container.innerHTML = '';
+    
+    if (categoryArticles.length > 0) {
+        categoryArticles.forEach(article => {
+            const articleElement = createArticleElement(article, article.featured);
+            container.appendChild(articleElement);
+        });
+    } else {
+        container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
+    }
+}
 
             // SISTEMA DE EXPORTACIÓN/IMPORTACIÓN
 function exportData() {
@@ -1878,6 +1902,22 @@ function generateStaticSite() {
                 updateAdminUI();
             }
         }
+
+        // Exportar datos
+document.getElementById('export-data').addEventListener('click', exportData);
+
+// Importar datos
+document.getElementById('import-data').addEventListener('click', importData);
+document.getElementById('import-file').addEventListener('change', handleFileImport);
+
+// Toggle data URL
+document.getElementById('toggle-data-url').addEventListener('click', function() {
+    const container = document.getElementById('data-url-container');
+    container.style.display = container.style.display === 'none' ? 'block' : 'none';
+});
+
+// Load external data
+document.getElementById('load-external-data').addEventListener('click', loadExternalData);
 
         function updateAdminUI() {
             const adminIndicator = document.getElementById('admin-indicator');
