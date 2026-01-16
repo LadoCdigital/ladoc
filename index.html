@@ -1449,10 +1449,17 @@ const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
         let currentArchiveFilter = 'all';
 
         // FUNCIONES DE UTILIDAD
-        function saveToLocalStorage() {
-            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
-            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
-        }
+     function saveToLocalStorage() {
+    localStorage.setItem('ladoC-articles', JSON.stringify(articles));
+    localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
+    
+    // Nota: En una aplicación real con backend, aquí enviarías
+    // los datos al servidor para actualizar datos.json
+    // Por ahora, mostramos un mensaje para recordar actualizar el archivo
+    if (isAdmin) {
+        showNotification('Recuerda: Para que los cambios sean visibles para todos, actualiza el archivo datos.json en GitHub', 'info');
+    }
+}
 
         function formatDate() {
             const now = new Date();
