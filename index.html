@@ -1245,49 +1245,69 @@
                 <button class="admin-button success" id="save-site">Guardar Configuración</button>
             </div>
             
+            <!-- SECCIÓN: CONFIGURACIÓN DE GITHUB (NUEVA) -->
+            <div class="admin-section">
+                <h3>Sincronización con GitHub</h3>
+                <p style="color: var(--color-gris-medio); margin-bottom: 15px;">
+                    Configura tu repositorio para que los cambios se guarden en GitHub y estén disponibles para todos.
+                </p>
+                
+                <div class="form-group">
+                    <label for="github-token">Token de acceso personal (GitHub):</label>
+                    <input type="password" id="github-token" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                    <small style="color: var(--color-gris-medio);">
+                        <a href="https://docs.github.com/es/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank">Cómo crear un token</a>. 
+                        Solo necesario para guardar cambios. El token se guarda localmente en tu navegador.
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="github-repo">Repositorio (usuario/repo):</label>
+                    <input type="text" id="github-repo" class="form-control" placeholder="tuusuario/ladoc">
+                    <small style="color: var(--color-gris-medio);">
+                        Formato: nombreusuario/nombre-repositorio. 
+                        <strong>IMPORTANTE:</strong> Cambia "tuusuario/ladoc" por tu usuario y repositorio real.
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="github-branch">Rama:</label>
+                    <input type="text" id="github-branch" class="form-control" placeholder="main">
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="admin-button" id="test-github">Probar Conexión</button>
+                    <button class="admin-button success" id="save-github-config">Guardar Configuración</button>
+                    <button class="admin-button secondary" id="reload-from-github">
+                        <i class="fas fa-sync-alt"></i> Recargar desde GitHub
+                    </button>
+                </div>
+                
+                <div id="github-status" style="margin-top: 15px; display: none;">
+                    <p><strong>Estado:</strong> <span id="github-status-text"></span></p>
+                </div>
+            </div>
+            
             <!-- SECCIÓN: ACCIONES PELIGROSAS -->
             <div class="admin-section">
                 <h3>Acciones Peligrosas</h3>
                 <button class="admin-button danger" id="reset-data">Restablecer Datos de Ejemplo</button>
                 <p style="color: var(--color-gris-medio); font-size: 0.9rem; margin-top: 10px;">Nota: Esta acción eliminará todos los editoriales y restaurará los datos originales. Solo use en caso necesario.</p>
             </div>
-
-            <!-- Agrega esta sección en el admin-panel -->
-<div class="admin-section">
-    <h3>Exportar e Importar Datos</h3>
-    <p style="color: var(--color-gris-medio); margin-bottom: 15px;">
-        Exporta tus datos para respaldarlos o importa datos existentes.
-    </p>
-    
-    <div style="display: flex; gap: 15px; margin-bottom: 10px;">
-        <button class="admin-button success" id="export-data">Exportar Datos</button>
-        <button class="admin-button secondary" id="import-data">Importar Datos</button>
-        <input type="file" id="import-file" accept=".json" style="display: none;">
-    </div>
-    
-    <div id="data-url-container" style="margin-top: 15px; display: none;">
-        <p style="margin-bottom: 10px;"><strong>URL de datos públicos:</strong></p>
-        <input type="text" id="data-url-input" class="form-control" placeholder="https://tuservidor.com/datos.json">
-        <button class="admin-button" id="load-external-data" style="margin-top: 10px;">Cargar desde URL</button>
-    </div>
-    
-    <button class="admin-button warning" id="toggle-data-url" style="margin-top: 10px;">
-        Configurar URL de datos
-    </button>
-</div>
-
-<div class="admin-section">
-    <h3>Sincronizar con GitHub</h3>
-    <p style="color: var(--color-gris-medio); margin-bottom: 15px;">
-        Recargar datos desde el archivo datos.json en GitHub
-    </p>
-    <button class="admin-button" id="reload-from-github">
-        <i class="fas fa-sync-alt"></i> Recargar desde GitHub
-    </button>
-    <p style="color: var(--color-gris-medio); font-size: 0.9rem; margin-top: 10px;">
-        Esto cargará los datos actualizados desde el archivo datos.json.
-    </p>
-</div>
+            
+            <!-- SECCIÓN: EXPORTAR/IMPORTAR -->
+            <div class="admin-section">
+                <h3>Exportar e Importar Datos</h3>
+                <p style="color: var(--color-gris-medio); margin-bottom: 15px;">
+                    Exporta tus datos para respaldarlos o importa datos existentes.
+                </p>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+                    <button class="admin-button success" id="export-data">Exportar Datos</button>
+                    <button class="admin-button secondary" id="import-data">Importar Datos</button>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                </div>
+            </div>
             
             <!-- SECCIÓN: INFORMACIÓN DEL SISTEMA -->
             <div class="admin-section">
@@ -1301,7 +1321,7 @@
                     <div>
                         <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
                         <p><strong>Sesión activa:</strong> <span id="session-status">No activa</span></p>
-                        <p><strong>Versión:</strong> 2.0.1</p>
+                        <p><strong>Versión:</strong> 2.0.2 (GitHub Sync)</p>
                     </div>
                 </div>
             </div>
@@ -1309,57 +1329,207 @@
     </div>
 
     <script>
-        // DATOS INICIALES - Cargar desde archivo JSON
+        // ===== CONFIGURACIÓN GLOBAL =====
+        // 📝 REEMPLAZA ESTOS VALORES CON TU INFORMACIÓN REAL:
+        const DEFAULT_GITHUB_REPO = "tuusuario/ladoc"; // CAMBIA: tu usuario/repositorio
+        const DEFAULT_GITHUB_BRANCH = "main"; // Cambia si usas otra rama
+        
+        // ===== VARIABLES DEL SISTEMA =====
         let articles = [];
         let authorInfo = {};
         let currentArticleId = 0;
-
-        // URL de tu archivo datos.json en GitHub (ajusta la ruta según tu repositorio)
-        const DATA_JSON_URL = 'datos.json';
-
-        // FUNCIÓN PARA CARGAR DATOS DESDE EL ARCHIVO JSON
-        async function loadDataFromJson() {
+        let isAdmin = false;
+        let currentSection = 'inicio';
+        let currentArchiveFilter = 'all';
+        
+        // ===== CONFIGURACIÓN GITHUB =====
+        let githubConfig = {
+            token: "",
+            repo: DEFAULT_GITHUB_REPO,
+            branch: DEFAULT_GITHUB_BRANCH
+        };
+        
+        // ===== AUTENTICACIÓN =====
+        const ADMIN_USERNAME = "admin";
+        const ADMIN_PASSWORD = "ladoc2023";
+        
+        // ===== FUNCIONES DE UTILIDAD =====
+        function saveToLocalStorage() {
+            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
+            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
+        }
+        
+        function formatDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return now.toLocaleDateString('es-ES', options);
+        }
+        
+        function showNotification(message, type = "info") {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // ===== FUNCIONES DE CONFIGURACIÓN GITHUB =====
+        function loadGitHubConfig() {
+            const savedConfig = localStorage.getItem('ladoC-github-config');
+            if (savedConfig) {
+                githubConfig = JSON.parse(savedConfig);
+            }
+            
+            // Actualizar campos en el panel si existen
+            if (document.getElementById('github-token')) {
+                document.getElementById('github-token').value = githubConfig.token || '';
+                document.getElementById('github-repo').value = githubConfig.repo || DEFAULT_GITHUB_REPO;
+                document.getElementById('github-branch').value = githubConfig.branch || DEFAULT_GITHUB_BRANCH;
+            }
+            
+            return githubConfig;
+        }
+        
+        function saveGitHubConfig() {
+            if (document.getElementById('github-token')) {
+                githubConfig.token = document.getElementById('github-token').value;
+                githubConfig.repo = document.getElementById('github-repo').value;
+                githubConfig.branch = document.getElementById('github-branch').value;
+                
+                localStorage.setItem('ladoC-github-config', JSON.stringify(githubConfig));
+                showNotification('Configuración de GitHub guardada', 'success');
+            }
+        }
+        
+        function getGitHubDataURL() {
+            return `https://raw.githubusercontent.com/${githubConfig.repo}/${githubConfig.branch}/datos.json`;
+        }
+        
+        // ===== CARGA DE DATOS DESDE GITHUB =====
+        async function loadDataFromGitHub() {
+            const dataUrl = getGitHubDataURL();
+            
             try {
                 // Agregar timestamp para evitar caché
                 const timestamp = new Date().getTime();
-                const response = await fetch(`${DATA_JSON_URL}?t=${timestamp}`);
+                const response = await fetch(`${dataUrl}?t=${timestamp}`);
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`Error HTTP ${response.status}`);
                 }
                 
                 const data = await response.json();
+                console.log('✓ Datos cargados desde GitHub:', data.articles?.length || 0, 'artículos');
                 return data;
             } catch (error) {
-                console.error('Error cargando datos.json:', error);
+                console.error('✗ Error cargando datos desde GitHub:', error);
                 return null;
             }
         }
-
-        // FUNCIÓN PRINCIPAL PARA CARGAR DATOS
-        async function loadData() {
-            // 1. Primero intentar cargar desde datos.json
-            const jsonData = await loadDataFromJson();
+        
+        // ===== GUARDADO DE DATOS EN GITHUB =====
+        async function saveDataToGitHub(commitMessage = "Actualización automática desde Lado C") {
+            if (!githubConfig.token) {
+                console.warn('⚠ No hay token de GitHub configurado. Los cambios solo se guardarán localmente.');
+                showNotification('No hay token de GitHub. Los cambios son locales.', 'warning');
+                return false;
+            }
             
-            if (jsonData && jsonData.articles && jsonData.author) {
-                // Datos desde JSON
-                articles = jsonData.articles;
-                authorInfo = jsonData.author;
-                console.log('✓ Datos cargados desde datos.json:', articles.length, 'artículos');
+            try {
+                // 1. Preparar datos para guardar
+                const dataToSave = {
+                    articles: articles,
+                    author: authorInfo,
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                const content = JSON.stringify(dataToSave, null, 2);
+                const encodedContent = btoa(unescape(encodeURIComponent(content)));
+                
+                // 2. Obtener el SHA del archivo actual (si existe)
+                const apiUrl = `https://api.github.com/repos/${githubConfig.repo}/contents/datos.json`;
+                let sha = null;
+                
+                const getResponse = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `token ${githubConfig.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (getResponse.ok) {
+                    const fileInfo = await getResponse.json();
+                    sha = fileInfo.sha;
+                } else if (getResponse.status !== 404) {
+                    throw new Error(`Error obteniendo archivo: ${getResponse.status}`);
+                }
+                
+                // 3. Subir cambios
+                const body = {
+                    message: commitMessage,
+                    content: encodedContent,
+                    branch: githubConfig.branch,
+                    sha: sha
+                };
+                
+                const putResponse = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubConfig.token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify(body)
+                });
+                
+                if (!putResponse.ok) {
+                    const errorData = await putResponse.json();
+                    throw new Error(`Error GitHub API: ${errorData.message || putResponse.status}`);
+                }
+                
+                console.log('✓ Datos guardados en GitHub');
+                return true;
+                
+            } catch (error) {
+                console.error('✗ Error guardando en GitHub:', error);
+                showNotification(`Error sincronizando con GitHub: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        // ===== FUNCIÓN PRINCIPAL DE CARGA DE DATOS =====
+        async function loadData() {
+            // 1. Cargar configuración de GitHub
+            loadGitHubConfig();
+            
+            // 2. Intentar cargar desde GitHub
+            const githubData = await loadDataFromGitHub();
+            
+            if (githubData && githubData.articles && githubData.author) {
+                // Datos desde GitHub exitosos
+                articles = githubData.articles;
+                authorInfo = githubData.author;
+                console.log('✓ Usando datos de GitHub');
+                showNotification('Datos cargados desde GitHub', 'success');
             } else {
-                // 2. Si falla, intentar desde localStorage
+                // 3. Fallback a localStorage
                 const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
                 const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
                 
                 if (savedArticles && savedArticles.length > 0) {
                     articles = savedArticles;
                     authorInfo = savedAuthor || getDefaultAuthor();
-                    console.log('⚠ Datos cargados desde localStorage (fallback):', articles.length, 'artículos');
+                    console.log('⚠ Usando datos locales (fallback)');
+                    showNotification('Usando datos locales (GitHub no disponible)', 'warning');
                 } else {
-                    // 3. Si no hay nada, usar datos predeterminados
+                    // 4. Datos predeterminados
                     articles = getDefaultArticles();
                     authorInfo = getDefaultAuthor();
-                    console.log('⚠ Datos cargados desde predeterminados:', articles.length, 'artículos');
+                    console.log('⚠ Usando datos predeterminados');
+                    showNotification('Usando datos predeterminados', 'info');
                 }
             }
             
@@ -1370,8 +1540,8 @@
             
             return articles.length > 0;
         }
-
-        // FUNCIÓN PARA OBTENER DATOS PREDETERMINADOS DEL AUTOR
+        
+        // ===== DATOS PREDETERMINADOS =====
         function getDefaultAuthor() {
             return {
                 name: "Juan Pérez",
@@ -1380,8 +1550,7 @@
                 bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
             };
         }
-
-        // FUNCIÓN PARA OBTENER ARTÍCULOS PREDETERMINADOS
+        
         function getDefaultArticles() {
             return [
                 {
@@ -1422,40 +1591,8 @@
                 }
             ];
         }
-
-        // SISTEMA DE AUTENTICACIÓN
-        let isAdmin = false;
-        const ADMIN_USERNAME = "admin";
-        const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
-
-        // VARIABLES DE ESTADO
-        let currentSection = 'inicio';
-        let currentArchiveFilter = 'all';
-
-        // FUNCIONES DE UTILIDAD
-        function saveToLocalStorage() {
-            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
-            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
-        }
-
-        function formatDate() {
-            const now = new Date();
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            return now.toLocaleDateString('es-ES', options);
-        }
-
-        function showNotification(message, type = "info") {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // NAVEGACIÓN
+        
+        // ===== NAVEGACIÓN Y RENDERIZADO =====
         function showSection(sectionId) {
             // Ocultar todas las secciones
             document.getElementById('inicio-section').style.display = 'none';
@@ -1499,8 +1636,7 @@
             // Scroll al inicio de la página
             window.scrollTo(0, 0);
         }
-
-        // RENDERIZAR ARTÍCULOS POR SECCIÓN
+        
         function renderArticles() {
             const articlesContainer = document.getElementById('articles-container');
             const archiveContainer = document.getElementById('archive-container');
@@ -1539,41 +1675,40 @@
             // Actualizar estadísticas
             updateStatistics();
         }
-
+        
         function renderCategoryArticles(category) {
-    // Convertir el ID de categoría al nombre de categoría
-    const categoryMap = {
-        'opinion': 'Opinión',
-        'catamarca': 'Catamarca',
-        'politica-nacional': 'Política Nacional',
-        'sociedad': 'Sociedad',
-        'internacionales': 'Internacionales'
-    };
-    
-    const categoryName = categoryMap[category];
-    const containerId = `${category}-container`;
-    const container = document.getElementById(containerId);
-    
-    if (!container) return;
-    
-    // Filtrar artículos por categoría
-    const categoryArticles = articles.filter(article => article.category === categoryName);
-    
-    // Ordenar por fecha (más recientes primero)
-    categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    container.innerHTML = '';
-    
-    if (categoryArticles.length > 0) {
-        categoryArticles.forEach(article => {
-            const articleElement = createArticleElement(article, article.featured);
-            container.appendChild(articleElement);
-        });
-    } else {
-        container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
-    }
-}
-
+            const categoryMap = {
+                'opinion': 'Opinión',
+                'catamarca': 'Catamarca',
+                'politica-nacional': 'Política Nacional',
+                'sociedad': 'Sociedad',
+                'internacionales': 'Internacionales'
+            };
+            
+            const categoryName = categoryMap[category];
+            const containerId = `${category}-container`;
+            const container = document.getElementById(containerId);
+            
+            if (!container) return;
+            
+            // Filtrar artículos por categoría
+            const categoryArticles = articles.filter(article => article.category === categoryName);
+            
+            // Ordenar por fecha (más recientes primero)
+            categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = '';
+            
+            if (categoryArticles.length > 0) {
+                categoryArticles.forEach(article => {
+                    const articleElement = createArticleElement(article, article.featured);
+                    container.appendChild(articleElement);
+                });
+            } else {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
+            }
+        }
+        
         function renderFullArchive() {
             const container = document.getElementById('full-archive-container');
             
@@ -1598,7 +1733,7 @@
                 container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales con este filtro.</p>';
             }
         }
-
+        
         function createArticleElement(article, isFeatured) {
             const articleElement = document.createElement('div');
             articleElement.className = `article-card ${isFeatured ? 'highlighted' : ''}`;
@@ -1625,8 +1760,8 @@
             
             return articleElement;
         }
-
-        // VISTA DE ARTÍCULO COMPLETO
+        
+        // ===== VISTA DE ARTÍCULO COMPLETO =====
         function viewArticle(id) {
             const article = articles.find(a => a.id === id);
             if (!article) return;
@@ -1677,7 +1812,7 @@
             // Scroll al inicio del artículo
             window.scrollTo(0, 0);
         }
-
+        
         function getSectionName(sectionId) {
             const sectionNames = {
                 'inicio': 'Inicio',
@@ -1692,7 +1827,7 @@
             
             return sectionNames[sectionId] || 'Inicio';
         }
-
+        
         function goBack() {
             const articleFullView = document.getElementById('article-full-view');
             const mainContent = document.querySelector('.main-content');
@@ -1709,8 +1844,8 @@
                 renderFullArchive();
             }
         }
-
-        // SISTEMA DE AUTENTICACIÓN
+        
+        // ===== AUTENTICACIÓN =====
         function login(username, password) {
             if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 isAdmin = true;
@@ -1721,7 +1856,7 @@
             }
             return false;
         }
-
+        
         function logout() {
             isAdmin = false;
             localStorage.removeItem('ladoC-admin');
@@ -1729,7 +1864,7 @@
             showNotification('Sesión cerrada correctamente', 'info');
             showSection('inicio');
         }
-
+        
         function checkAuth() {
             const savedAuth = localStorage.getItem('ladoC-admin');
             if (savedAuth === 'true') {
@@ -1737,7 +1872,7 @@
                 updateAdminUI();
             }
         }
-
+        
         function updateAdminUI() {
             const adminIndicator = document.getElementById('admin-indicator');
             const adminToolbar = document.getElementById('admin-toolbar');
@@ -1761,8 +1896,8 @@
                 renderFullArchive();
             }
         }
-
-        // PANEL DE ADMINISTRACIÓN
+        
+        // ===== PANEL DE ADMINISTRACIÓN =====
         function openAdminPanel() {
             if (!isAdmin) {
                 showLoginModal();
@@ -1792,12 +1927,12 @@
             // Guardar fecha de acceso actual
             localStorage.setItem('ladoC-last-access', new Date().toLocaleString());
         }
-
+        
         function closeAdminPanel() {
             document.getElementById('admin-panel').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-
+        
         function updateAdminArticleList() {
             const adminArticleList = document.getElementById('admin-article-list');
             const searchTerm = document.getElementById('search-articles').value.toLowerCase();
@@ -1841,9 +1976,9 @@
             // Actualizar contador
             document.getElementById('articles-count').textContent = `(${filteredArticles.length} editoriales)`;
         }
-
-        // FUNCIONES DE GESTIÓN DE EDITORIALES
-        function saveArticle() {
+        
+        // ===== GESTIÓN DE EDITORIALES (CON GITHUB) =====
+        async function saveArticle() {
             const title = document.getElementById('article-title').value;
             const summary = document.getElementById('article-summary').value;
             const content = document.getElementById('article-content').value;
@@ -1858,8 +1993,8 @@
                 return;
             }
             
-            // Si no hay imagen, usar una por defecto
             const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80';
+            let commitMessage = '';
             
             if (editingId) {
                 // Actualizar artículo existente
@@ -1877,11 +2012,10 @@
                     };
                 }
                 
-                // Limpiar modo edición
                 document.getElementById('editing-article-id').value = '';
                 document.getElementById('save-article').textContent = 'Guardar Editorial';
-                
-                showNotification('Editorial actualizado correctamente', 'success');
+                commitMessage = `Actualizado: "${title}"`;
+                showNotification('Editorial actualizado localmente', 'info');
             } else {
                 // Crear nuevo artículo
                 currentArticleId++;
@@ -1899,12 +2033,96 @@
                 };
                 
                 articles.unshift(newArticle);
-                showNotification('Editorial creado correctamente', 'success');
+                commitMessage = `Nuevo editorial: "${title}"`;
+                showNotification('Editorial creado localmente', 'info');
             }
             
+            // Guardar en localStorage (como respaldo)
             saveToLocalStorage();
             
-            // Actualizar vista actual
+            // Intentar guardar en GitHub
+            const githubSuccess = await saveDataToGitHub(commitMessage);
+            
+            if (githubSuccess) {
+                showNotification('Editorial sincronizado con GitHub ✓', 'success');
+            } else {
+                showNotification('Editorial guardado localmente (GitHub falló)', 'warning');
+            }
+            
+            // Actualizar vista
+            updateViewAfterChange();
+            
+            // Limpiar formulario
+            if (!editingId) {
+                document.getElementById('article-title').value = '';
+                document.getElementById('article-summary').value = '';
+                document.getElementById('article-content').value = '';
+                document.getElementById('article-image').value = '';
+                document.getElementById('article-author').value = '';
+            }
+        }
+        
+        async function deleteArticle(id) {
+            if (!isAdmin) {
+                showNotification('Debe iniciar sesión como administrador', 'error');
+                return;
+            }
+            
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            if (!confirm(`¿Eliminar "${article.title}"? Esta acción sincronizará con GitHub.`)) {
+                return;
+            }
+            
+            articles = articles.filter(a => a.id !== id);
+            
+            // Guardar en localStorage
+            saveToLocalStorage();
+            
+            // Intentar guardar en GitHub
+            const githubSuccess = await saveDataToGitHub(`Eliminado: "${article.title}"`);
+            
+            if (githubSuccess) {
+                showNotification('Editorial eliminado y sincronizado con GitHub', 'success');
+            } else {
+                showNotification('Editorial eliminado localmente (GitHub falló)', 'warning');
+            }
+            
+            updateViewAfterChange();
+        }
+        
+        async function saveAuthor() {
+            const name = document.getElementById('author-name-input').value;
+            const photo = document.getElementById('author-photo-input').value;
+            const quote = document.getElementById('author-quote-input').value;
+            const bio = document.getElementById('author-bio-input').value;
+            
+            authorInfo = { name, photo, quote, bio };
+            
+            // Guardar en localStorage
+            saveToLocalStorage();
+            
+            // Actualizar vista pública
+            document.getElementById('author-name').textContent = name;
+            document.getElementById('author-photo').src = photo;
+            document.getElementById('author-quote').textContent = `"${quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
+            
+            // Actualizar campo de autor en formulario
+            document.getElementById('article-author').value = name;
+            
+            // Intentar guardar en GitHub
+            const githubSuccess = await saveDataToGitHub(`Actualizado autor: ${name}`);
+            
+            if (githubSuccess) {
+                showNotification('Autor actualizado y sincronizado con GitHub', 'success');
+            } else {
+                showNotification('Autor actualizado localmente (GitHub falló)', 'warning');
+            }
+        }
+        
+        function updateViewAfterChange() {
             if (currentSection === 'inicio') {
                 renderArticles();
             } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
@@ -1914,17 +2132,10 @@
             }
             
             updateAdminArticleList();
-            
-            // Limpiar formulario
-            document.getElementById('article-title').value = '';
-            document.getElementById('article-summary').value = '';
-            document.getElementById('article-content').value = '';
-            document.getElementById('article-image').value = '';
-            document.getElementById('article-author').value = '';
-            document.getElementById('article-category').value = 'Opinión';
-            document.getElementById('article-featured').value = '0';
+            updateStatistics();
         }
-
+        
+        // ===== FUNCIONES AUXILIARES =====
         function editArticle(id) {
             if (!isAdmin) {
                 showNotification('Debe iniciar sesión como administrador para editar editoriales', 'error');
@@ -1955,34 +2166,7 @@
             
             showNotification(`Editando: "${article.title}"`, 'info');
         }
-
-        function deleteArticle(id) {
-            if (!isAdmin) {
-                showNotification('Debe iniciar sesión como administrador para eliminar editoriales', 'error');
-                return;
-            }
-            
-            if (!confirm("¿Está seguro de que desea eliminar este editorial? Esta acción no se puede deshacer.")) {
-                return;
-            }
-            
-            articles = articles.filter(a => a.id !== id);
-            saveToLocalStorage();
-            
-            // Actualizar vista actual
-            if (currentSection === 'inicio') {
-                renderArticles();
-            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-                renderCategoryArticles(currentSection);
-            } else if (currentSection === 'archivo') {
-                renderFullArchive();
-            }
-            
-            updateAdminArticleList();
-            
-            showNotification('Editorial eliminado correctamente', 'success');
-        }
-
+        
         function newArticle() {
             // Limpiar formulario
             document.getElementById('article-title').value = '';
@@ -1999,7 +2183,7 @@
             
             showNotification('Creando nuevo editorial', 'info');
         }
-
+        
         function showNewArticleForm() {
             if (!isAdmin) {
                 showLoginModal();
@@ -2009,7 +2193,7 @@
             openAdminPanel();
             newArticle();
         }
-
+        
         function previewArticle() {
             const title = document.getElementById('article-title').value;
             const content = document.getElementById('article-content').value;
@@ -2019,40 +2203,10 @@
                 return;
             }
             
-            // Crear una vista previa simple
-            const preview = `
-                <h2>Vista Previa: ${title}</h2>
-                <div style="margin-top: 20px; padding: 20px; border: 1px solid var(--color-azul-claro); border-radius: var(--border-radius);">
-                    ${content}
-                </div>
-                <p style="margin-top: 15px; color: var(--color-gris-medio); font-size: 0.9rem;">Esta es solo una vista previa. Para ver el formato final, guarde el editorial y ábralo desde la vista pública.</p>
-            `;
-            
-            alert("Vista previa del editorial (use el botón Aceptar para continuar)");
             // En un sistema más avanzado, podríamos abrir un modal con la vista previa
+            alert("Vista previa del editorial (use el botón Aceptar para continuar)");
         }
-
-        function saveAuthor() {
-            const name = document.getElementById('author-name-input').value;
-            const photo = document.getElementById('author-photo-input').value;
-            const quote = document.getElementById('author-quote-input').value;
-            const bio = document.getElementById('author-bio-input').value;
-            
-            authorInfo = { name, photo, quote, bio };
-            saveToLocalStorage();
-            
-            // Actualizar vista pública
-            document.getElementById('author-name').textContent = name;
-            document.getElementById('author-photo').src = photo;
-            document.getElementById('author-quote').textContent = `"${quote}"`;
-            document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
-            
-            // Actualizar también el campo de autor en el formulario de artículos
-            document.getElementById('article-author').value = name;
-            
-            showNotification('Información del autor actualizada correctamente', 'success');
-        }
-
+        
         function saveSite() {
             const selectedColor = document.querySelector('.color-option.active').dataset.color;
             const siteTitle = document.getElementById('site-title').value;
@@ -2069,7 +2223,7 @@
             
             showNotification('Configuración del sitio guardada correctamente', 'success');
         }
-
+        
         function resetData() {
             if (!confirm("¿Está seguro de que desea restablecer los datos de ejemplo? Se perderán todos los editoriales actuales. Esta acción no se puede deshacer.")) {
                 return;
@@ -2090,19 +2244,11 @@
             document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
             
             // Actualizar vista actual
-            if (currentSection === 'inicio') {
-                renderArticles();
-            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-                renderCategoryArticles(currentSection);
-            } else if (currentSection === 'archivo') {
-                renderFullArchive();
-            }
-            
-            updateAdminArticleList();
+            updateViewAfterChange();
             
             showNotification('Datos restablecidos correctamente', 'success');
         }
-
+        
         function updateStatistics() {
             const totalArticles = articles.length;
             const featuredArticles = articles.filter(a => a.featured).length;
@@ -2112,135 +2258,62 @@
             document.getElementById('featured-articles').textContent = featuredArticles;
             document.getElementById('total-views').textContent = totalViews;
         }
-
-        // LOGIN MODAL
-        function showLoginModal() {
-            document.getElementById('login-modal').style.display = 'flex';
-        }
-
-        function hideLoginModal() {
-            document.getElementById('login-modal').style.display = 'none';
-            document.getElementById('login-error').style.display = 'none';
-            document.getElementById('password').value = '';
-        }
-
-        // ADMIN TOOLBAR
-        function toggleAdminToolbar() {
-            const menu = document.getElementById('admin-toolbar-menu');
-            menu.classList.toggle('show');
-        }
-
-        // FUNCIONES DE CONTACTO
-        function sendContactMessage() {
-            const name = document.getElementById('contact-name').value;
-            const email = document.getElementById('contact-email').value;
-            const message = document.getElementById('contact-message').value;
+        
+        // ===== GITHUB CONNECTION TEST =====
+        async function testGitHubConnection() {
+            const token = document.getElementById('github-token').value;
+            const repo = document.getElementById('github-repo').value;
+            const branch = document.getElementById('github-branch').value;
             
-            if (!name || !email || !message) {
-                showNotification('Por favor complete todos los campos del formulario', 'error');
+            if (!token || !repo || !branch) {
+                showNotification('Ingresa token, repositorio y rama', 'error');
                 return;
             }
             
-            // En un sistema real, aquí enviaríamos el mensaje al servidor
-            // Por ahora, simulamos el envío
+            showNotification('Probando conexión con GitHub...', 'info');
             
-            // Limpiar formulario
-            document.getElementById('contact-name').value = '';
-            document.getElementById('contact-email').value = '';
-            document.getElementById('contact-message').value = '';
-            
-            showNotification('Mensaje enviado correctamente. Nos pondremos en contacto pronto.', 'success');
-        }
-
-        // SISTEMA DE EXPORTACIÓN/IMPORTACIÓN
-        function exportData() {
-            const data = {
-                articles: articles,
-                author: authorInfo,
-                exported: new Date().toISOString(),
-                version: "2.0.1"
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `lado-c-datos-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('Datos exportados correctamente. Guarda este archivo .json', 'success');
-        }
-
-        function importData() {
-            document.getElementById('import-file').click();
-        }
-
-        function handleFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (confirm(`¿Está seguro de importar estos datos?\nSe cargarán ${data.articles.length} artículos.`)) {
-                        if (data.articles) {
-                            articles = data.articles;
-                            // Actualizar el ID máximo
-                            if (articles.length > 0) {
-                                currentArticleId = Math.max(...articles.map(a => a.id));
-                            }
-                        }
-                        if (data.author) {
-                            authorInfo = data.author;
-                        }
-                        
-                        saveToLocalStorage();
-                        
-                        // Actualizar la vista
-                        if (currentSection === 'inicio') {
-                            renderArticles();
-                        } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-                            renderCategoryArticles(currentSection);
-                        } else if (currentSection === 'archivo') {
-                            renderFullArchive();
-                        }
-                        
-                        // Actualizar el autor en la barra lateral
-                        document.getElementById('author-name').textContent = authorInfo.name;
-                        document.getElementById('author-photo').src = authorInfo.photo;
-                        document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-                        document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-                        
-                        updateAdminArticleList();
-                        updateStatistics();
-                        
-                        showNotification('Datos importados correctamente', 'success');
+            try {
+                const apiUrl = `https://api.github.com/repos/${repo}/contents/datos.json`;
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
-                } catch (error) {
-                    showNotification('Error al importar: archivo inválido', 'error');
-                    console.error('Error importing data:', error);
+                });
+                
+                const statusDiv = document.getElementById('github-status');
+                const statusText = document.getElementById('github-status-text');
+                
+                if (response.ok) {
+                    statusText.textContent = '✅ Conexión exitosa';
+                    statusText.style.color = 'var(--color-success)';
+                    statusDiv.style.display = 'block';
+                    showNotification('Conexión a GitHub exitosa', 'success');
+                } else if (response.status === 404) {
+                    statusText.textContent = '⚠ Archivo datos.json no encontrado (se creará al guardar)';
+                    statusText.style.color = 'var(--color-warning)';
+                    statusDiv.style.display = 'block';
+                    showNotification('Archivo no encontrado - se creará al guardar', 'warning');
+                } else {
+                    const errorData = await response.json();
+                    statusText.textContent = `❌ Error: ${errorData.message || response.status}`;
+                    statusText.style.color = 'var(--color-danger)';
+                    statusDiv.style.display = 'block';
+                    showNotification(`Error GitHub: ${errorData.message}`, 'error');
                 }
-            };
-            reader.readAsText(file);
-            
-            // Resetear el input
-            event.target.value = '';
+            } catch (error) {
+                showNotification(`Error de conexión: ${error.message}`, 'error');
+            }
         }
-
-        // FUNCIÓN PARA RECARGAR DESDE GITHUB
+        
         async function reloadFromGitHub() {
             showNotification('Recargando datos desde GitHub...', 'info');
             
-            const jsonData = await loadDataFromJson();
+            const githubData = await loadDataFromGitHub();
             
-            if (jsonData && jsonData.articles && jsonData.author) {
-                articles = jsonData.articles;
-                authorInfo = jsonData.author;
+            if (githubData && githubData.articles && githubData.author) {
+                articles = githubData.articles;
+                authorInfo = githubData.author;
                 
                 // Actualizar el ID máximo
                 if (articles.length > 0) {
@@ -2272,22 +2345,137 @@
                 showNotification('✗ Error al cargar datos desde GitHub', 'error');
             }
         }
-
-        // INICIALIZACIÓN
+        
+        // ===== FUNCIONES DE LOGIN MODAL =====
+        function showLoginModal() {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+        
+        function hideLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('password').value = '';
+        }
+        
+        // ===== ADMIN TOOLBAR =====
+        function toggleAdminToolbar() {
+            const menu = document.getElementById('admin-toolbar-menu');
+            menu.classList.toggle('show');
+        }
+        
+        // ===== FUNCIONES DE CONTACTO =====
+        function sendContactMessage() {
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            
+            if (!name || !email || !message) {
+                showNotification('Por favor complete todos los campos del formulario', 'error');
+                return;
+            }
+            
+            // En un sistema real, aquí enviaríamos el mensaje al servidor
+            // Por ahora, simulamos el envío
+            
+            // Limpiar formulario
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-message').value = '';
+            
+            showNotification('Mensaje enviado correctamente. Nos pondremos en contacto pronto.', 'success');
+        }
+        
+        // ===== EXPORTACIÓN/IMPORTACIÓN =====
+        function exportData() {
+            const data = {
+                articles: articles,
+                author: authorInfo,
+                exported: new Date().toISOString(),
+                version: "2.0.2"
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lado-c-datos-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Datos exportados correctamente. Guarda este archivo .json', 'success');
+        }
+        
+        function importData() {
+            document.getElementById('import-file').click();
+        }
+        
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (confirm(`¿Está seguro de importar estos datos?\nSe cargarán ${data.articles.length} artículos.`)) {
+                        if (data.articles) {
+                            articles = data.articles;
+                            // Actualizar el ID máximo
+                            if (articles.length > 0) {
+                                currentArticleId = Math.max(...articles.map(a => a.id));
+                            }
+                        }
+                        if (data.author) {
+                            authorInfo = data.author;
+                        }
+                        
+                        saveToLocalStorage();
+                        
+                        // Actualizar la vista
+                        updateViewAfterChange();
+                        
+                        // Actualizar el autor en la barra lateral
+                        document.getElementById('author-name').textContent = authorInfo.name;
+                        document.getElementById('author-photo').src = authorInfo.photo;
+                        document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+                        document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+                        
+                        updateStatistics();
+                        
+                        showNotification('Datos importados correctamente', 'success');
+                    }
+                } catch (error) {
+                    showNotification('Error al importar: archivo inválido', 'error');
+                    console.error('Error importing data:', error);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Resetear el input
+            event.target.value = '';
+        }
+        
+        // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', async function() {
             // Verificar autenticación
             checkAuth();
             
-            // Cargar datos
+            // Cargar configuración de GitHub
+            loadGitHubConfig();
+            
+            // Cargar datos (primero desde GitHub)
             await loadData();
             
-            // Inicializar información del autor en la barra lateral
+            // Inicializar información del autor
             document.getElementById('author-name').textContent = authorInfo.name;
             document.getElementById('author-photo').src = authorInfo.photo;
             document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
             document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
             
-            // Renderizar artículos iniciales
+            // Renderizar artículos
             renderArticles();
             
             // Configurar color guardado
@@ -2311,7 +2499,8 @@
                 document.getElementById('site-title').value = savedTitle;
             }
             
-            // CONFIGURAR NAVEGACIÓN
+            // ===== CONFIGURAR EVENT LISTENERS =====
+            
             // Logo - Inicio
             document.getElementById('logo').addEventListener('click', function(e) {
                 e.preventDefault();
@@ -2448,6 +2637,11 @@
             document.getElementById('refresh-articles').addEventListener('click', updateAdminArticleList);
             document.getElementById('send-message').addEventListener('click', sendContactMessage);
             
+            // GitHub configuration buttons
+            document.getElementById('save-github-config').addEventListener('click', saveGitHubConfig);
+            document.getElementById('test-github').addEventListener('click', testGitHubConnection);
+            document.getElementById('reload-from-github').addEventListener('click', reloadFromGitHub);
+            
             // Búsqueda en tiempo real
             document.getElementById('search-articles').addEventListener('input', updateAdminArticleList);
             
@@ -2477,16 +2671,6 @@
             document.getElementById('export-data').addEventListener('click', exportData);
             document.getElementById('import-data').addEventListener('click', importData);
             document.getElementById('import-file').addEventListener('change', handleFileImport);
-            
-            document.getElementById('toggle-data-url').addEventListener('click', function() {
-                const container = document.getElementById('data-url-container');
-                container.style.display = container.style.display === 'none' ? 'block' : 'none';
-            });
-            
-            document.getElementById('load-external-data').addEventListener('click', loadExternalData);
-            
-            // Botón para recargar desde GitHub
-            document.getElementById('reload-from-github').addEventListener('click', reloadFromGitHub);
             
             // Mostrar mensaje de bienvenida
             setTimeout(() => {
