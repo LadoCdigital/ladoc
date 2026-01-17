@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* TODOS LOS ESTILOS ORIGINALES SE MANTIENEN IGUAL */
         :root {
             --color-bordo: #9B1C1C;
             --color-blanco: #FFFFFF;
@@ -1246,50 +1245,39 @@
                 <button class="admin-button success" id="save-site">Guardar Configuración</button>
             </div>
             
-            <!-- SECCIÓN: SINCRONIZACIÓN CON GITHUB (NUEVA Y SIMPLE) -->
+            <!-- SECCIÓN: CONFIGURACIÓN DE GITHUB (NUEVA) -->
             <div class="admin-section">
-                <h3>🔄 Sincronización Automática con GitHub</h3>
-                <p style="color: var(--color-gris-medio); margin-bottom: 20px;">
-                    <strong>Configura esto UNA VEZ</strong> y todos tus cambios se guardarán automáticamente en GitHub.
-                    Los visitantes verán las actualizaciones en tiempo real.
+                <h3>Sincronización con GitHub</h3>
+                <p style="color: var(--color-gris-medio); margin-bottom: 15px;">
+                    Configura tu repositorio para que los cambios se guarden en GitHub y estén disponibles para todos.
                 </p>
                 
                 <div class="form-group">
-                    <label for="github-repo">Tu repositorio GitHub:</label>
-                    <input type="text" id="github-repo" class="form-control" placeholder="Ej: miUsuario/lado-c">
+                    <label for="github-token">Token de acceso personal (GitHub):</label>
+                    <input type="password" id="github-token" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
                     <small style="color: var(--color-gris-medio);">
-                        📍 Formato: <strong>nombreUsuario/nombreRepositorio</strong><br>
-                        Ejemplo: si tu URL es <code>https://github.com/juanperez/lado-c</code>, escribe: <strong>juanperez/lado-c</strong>
+                        <a href="https://docs.github.com/es/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank">Cómo crear un token</a>. 
+                        Solo necesario para guardar cambios. El token se guarda localmente en tu navegador.
                     </small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="github-token">🔐 Token de GitHub (solo para admins):</label>
-                    <input type="password" id="github-token" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                    <label for="github-repo">Repositorio (usuario/repo):</label>
+                    <input type="text" id="github-repo" class="form-control" placeholder="tuusuario/ladoc">
                     <small style="color: var(--color-gris-medio);">
-                        <a href="crear-token-github.html" target="_blank" style="color: var(--color-bordo); text-decoration: underline;">
-                            📖 Haz clic aquí para crear tu token (guía paso a paso)
-                        </a>
+                        Formato: nombreusuario/nombre-repositorio. 
+                        <strong>IMPORTANTE:</strong> Cambia "tuusuario/ladoc" por tu usuario y repositorio real.
                     </small>
                 </div>
                 
-                <div style="background-color: var(--color-gris-claro); padding: 15px; border-radius: var(--border-radius); margin: 20px 0;">
-                    <h4 style="margin-bottom: 10px; color: var(--color-bordo);">✅ ¿Cómo funciona?</h4>
-                    <ol style="margin-left: 20px; color: var(--color-gris-medio);">
-                        <li><strong>Tú guardas:</strong> Creas/editas un artículo, autor o color</li>
-                        <li><strong>Se sincroniza:</strong> Automáticamente se guarda en GitHub</li>
-                        <li><strong>Ellos ven:</strong> Los visitantes ven los cambios al instante</li>
-                        <li><strong>Privacidad:</strong> Solo tú puedes hacer cambios con tu token</li>
-                    </ol>
+                <div class="form-group">
+                    <label for="github-branch">Rama:</label>
+                    <input type="text" id="github-branch" class="form-control" placeholder="main">
                 </div>
                 
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button class="admin-button success" id="save-github-config">
-                        <i class="fas fa-save"></i> Guardar Configuración
-                    </button>
-                    <button class="admin-button" id="test-github">
-                        <i class="fas fa-plug"></i> Probar Conexión
-                    </button>
+                    <button class="admin-button" id="test-github">Probar Conexión</button>
+                    <button class="admin-button success" id="save-github-config">Guardar Configuración</button>
                     <button class="admin-button secondary" id="reload-from-github">
                         <i class="fas fa-sync-alt"></i> Recargar desde GitHub
                     </button>
@@ -1298,13 +1286,6 @@
                 <div id="github-status" style="margin-top: 15px; display: none;">
                     <p><strong>Estado:</strong> <span id="github-status-text"></span></p>
                 </div>
-                
-                <div style="background-color: #e8f4fd; border-left: 4px solid #2196F3; padding: 12px; margin-top: 20px; border-radius: var(--border-radius);">
-                    <p style="color: #0d47a1; margin: 0;">
-                        <strong>💡 No te preocupes por la privacidad:</strong> Tu token <strong>solo se guarda en tu navegador</strong>.
-                        Los visitantes normales <strong>NO</strong> pueden verlo ni usarlo.
-                    </p>
-                </div>
             </div>
             
             <!-- SECCIÓN: ACCIONES PELIGROSAS -->
@@ -1312,6 +1293,20 @@
                 <h3>Acciones Peligrosas</h3>
                 <button class="admin-button danger" id="reset-data">Restablecer Datos de Ejemplo</button>
                 <p style="color: var(--color-gris-medio); font-size: 0.9rem; margin-top: 10px;">Nota: Esta acción eliminará todos los editoriales y restaurará los datos originales. Solo use en caso necesario.</p>
+            </div>
+            
+            <!-- SECCIÓN: EXPORTAR/IMPORTAR -->
+            <div class="admin-section">
+                <h3>Exportar e Importar Datos</h3>
+                <p style="color: var(--color-gris-medio); margin-bottom: 15px;">
+                    Exporta tus datos para respaldarlos o importa datos existentes.
+                </p>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+                    <button class="admin-button success" id="export-data">Exportar Datos</button>
+                    <button class="admin-button secondary" id="import-data">Importar Datos</button>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                </div>
             </div>
             
             <!-- SECCIÓN: INFORMACIÓN DEL SISTEMA -->
@@ -1326,7 +1321,7 @@
                     <div>
                         <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
                         <p><strong>Sesión activa:</strong> <span id="session-status">No activa</span></p>
-                        <p><strong>Versión:</strong> 3.0 (GitHub Sync Automático)</p>
+                        <p><strong>Versión:</strong> 2.0.2 (GitHub Sync)</p>
                     </div>
                 </div>
             </div>
@@ -1335,9 +1330,9 @@
 
     <script>
         // ===== CONFIGURACIÓN GLOBAL =====
-        // 📝 CAMBIA ESTO CON TU INFORMACIÓN:
-        const DEFAULT_GITHUB_REPO = "TU_USUARIO_GITHUB/TU_REPOSITORIO"; // Ej: "juanperez/lado-c"
-        const DEFAULT_GITHUB_BRANCH = "main";
+        // 📝 REEMPLAZA ESTOS VALORES CON TU INFORMACIÓN REAL:
+        const DEFAULT_GITHUB_REPO = "tuusuario/ladoc"; // CAMBIA: tu usuario/repositorio
+        const DEFAULT_GITHUB_BRANCH = "main"; // Cambia si usas otra rama
         
         // ===== VARIABLES DEL SISTEMA =====
         let articles = [];
@@ -1381,16 +1376,18 @@
             }, 3000);
         }
         
-        // ===== CONFIGURACIÓN GITHUB SIMPLIFICADA =====
+        // ===== FUNCIONES DE CONFIGURACIÓN GITHUB =====
         function loadGitHubConfig() {
             const savedConfig = localStorage.getItem('ladoC-github-config');
             if (savedConfig) {
                 githubConfig = JSON.parse(savedConfig);
             }
             
+            // Actualizar campos en el panel si existen
             if (document.getElementById('github-token')) {
                 document.getElementById('github-token').value = githubConfig.token || '';
                 document.getElementById('github-repo').value = githubConfig.repo || DEFAULT_GITHUB_REPO;
+                document.getElementById('github-branch').value = githubConfig.branch || DEFAULT_GITHUB_BRANCH;
             }
             
             return githubConfig;
@@ -1400,9 +1397,10 @@
             if (document.getElementById('github-token')) {
                 githubConfig.token = document.getElementById('github-token').value;
                 githubConfig.repo = document.getElementById('github-repo').value;
+                githubConfig.branch = document.getElementById('github-branch').value;
                 
                 localStorage.setItem('ladoC-github-config', JSON.stringify(githubConfig));
-                showNotification('✅ Configuración de GitHub guardada', 'success');
+                showNotification('Configuración de GitHub guardada', 'success');
             }
         }
         
@@ -1410,48 +1408,51 @@
             return `https://raw.githubusercontent.com/${githubConfig.repo}/${githubConfig.branch}/datos.json`;
         }
         
-        // ===== CARGA DE DATOS DESDE GITHUB (PARA TODOS) =====
+        // ===== CARGA DE DATOS DESDE GITHUB =====
         async function loadDataFromGitHub() {
             const dataUrl = getGitHubDataURL();
             
             try {
+                // Agregar timestamp para evitar caché
                 const timestamp = new Date().getTime();
                 const response = await fetch(`${dataUrl}?t=${timestamp}`);
                 
                 if (!response.ok) {
-                    throw new Error(`Error ${response.status}`);
+                    throw new Error(`Error HTTP ${response.status}`);
                 }
                 
                 const data = await response.json();
+                console.log('✓ Datos cargados desde GitHub:', data.articles?.length || 0, 'artículos');
                 return data;
             } catch (error) {
-                console.error('Error cargando desde GitHub:', error);
+                console.error('✗ Error cargando datos desde GitHub:', error);
                 return null;
             }
         }
         
-        // ===== GUARDADO AUTOMÁTICO EN GITHUB (SOLO ADMINS) =====
+        // ===== GUARDADO DE DATOS EN GITHUB =====
         async function saveDataToGitHub(commitMessage = "Actualización automática desde Lado C") {
             if (!githubConfig.token) {
-                console.log('⚠ Sin token: guardando solo localmente');
+                console.warn('⚠ No hay token de GitHub configurado. Los cambios solo se guardarán localmente.');
+                showNotification('No hay token de GitHub. Los cambios son locales.', 'warning');
                 return false;
             }
             
             try {
+                // 1. Preparar datos para guardar
                 const dataToSave = {
                     articles: articles,
                     author: authorInfo,
-                    lastUpdated: new Date().toISOString(),
-                    syncVersion: "3.0"
+                    lastUpdated: new Date().toISOString()
                 };
                 
                 const content = JSON.stringify(dataToSave, null, 2);
                 const encodedContent = btoa(unescape(encodeURIComponent(content)));
                 
+                // 2. Obtener el SHA del archivo actual (si existe)
                 const apiUrl = `https://api.github.com/repos/${githubConfig.repo}/contents/datos.json`;
                 let sha = null;
                 
-                // Obtener SHA del archivo existente
                 const getResponse = await fetch(apiUrl, {
                     headers: {
                         'Authorization': `token ${githubConfig.token}`,
@@ -1466,7 +1467,7 @@
                     throw new Error(`Error obteniendo archivo: ${getResponse.status}`);
                 }
                 
-                // Subir cambios
+                // 3. Subir cambios
                 const body = {
                     message: commitMessage,
                     content: encodedContent,
@@ -1486,48 +1487,53 @@
                 
                 if (!putResponse.ok) {
                     const errorData = await putResponse.json();
-                    throw new Error(`Error GitHub: ${errorData.message}`);
+                    throw new Error(`Error GitHub API: ${errorData.message || putResponse.status}`);
                 }
                 
-                console.log('✅ Datos guardados en GitHub');
+                console.log('✓ Datos guardados en GitHub');
                 return true;
                 
             } catch (error) {
-                console.error('❌ Error guardando en GitHub:', error);
+                console.error('✗ Error guardando en GitHub:', error);
+                showNotification(`Error sincronizando con GitHub: ${error.message}`, 'error');
                 return false;
             }
         }
         
-        // ===== CARGA PRINCIPAL INTELIGENTE =====
+        // ===== FUNCIÓN PRINCIPAL DE CARGA DE DATOS =====
         async function loadData() {
-            showNotification('Cargando datos...', 'info');
-            
+            // 1. Cargar configuración de GitHub
             loadGitHubConfig();
             
-            // 1. Intentar desde GitHub
+            // 2. Intentar cargar desde GitHub
             const githubData = await loadDataFromGitHub();
             
             if (githubData && githubData.articles && githubData.author) {
+                // Datos desde GitHub exitosos
                 articles = githubData.articles;
                 authorInfo = githubData.author;
-                showNotification('✅ Datos cargados desde GitHub', 'success');
+                console.log('✓ Usando datos de GitHub');
+                showNotification('Datos cargados desde GitHub', 'success');
             } else {
-                // 2. Fallback a localStorage
+                // 3. Fallback a localStorage
                 const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
                 const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
                 
                 if (savedArticles && savedArticles.length > 0) {
                     articles = savedArticles;
                     authorInfo = savedAuthor || getDefaultAuthor();
-                    showNotification('⚠ Usando datos locales', 'warning');
+                    console.log('⚠ Usando datos locales (fallback)');
+                    showNotification('Usando datos locales (GitHub no disponible)', 'warning');
                 } else {
-                    // 3. Datos predeterminados
+                    // 4. Datos predeterminados
                     articles = getDefaultArticles();
                     authorInfo = getDefaultAuthor();
-                    showNotification('ℹ️ Usando datos de ejemplo', 'info');
+                    console.log('⚠ Usando datos predeterminados');
+                    showNotification('Usando datos predeterminados', 'info');
                 }
             }
             
+            // Actualizar el ID máximo
             if (articles.length > 0) {
                 currentArticleId = Math.max(...articles.map(a => a.id));
             }
@@ -1541,7 +1547,7 @@
                 name: "Juan Pérez",
                 photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
                 quote: "Pensar distinto también es un acto de compromiso.",
-                bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales."
+                bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
             };
         }
         
@@ -1549,20 +1555,429 @@
             return [
                 {
                     id: 1,
-                    title: "Bienvenido a Lado C",
-                    summary: "Un medio de opinión política con enfoque en Catamarca y la visión del socialismo democrático.",
-                    content: "<p>Bienvenido a Lado C, un espacio para el análisis político serio y comprometido.</p><p>Aquí encontrarás editoriales, opiniones y análisis sobre la realidad política de Catamarca, Argentina y el mundo.</p><p>¡Crea tu primer editorial desde el panel de administración!</p>",
+                    title: "El futuro del socialismo democrático en Catamarca",
+                    summary: "Un análisis sobre los desafíos y oportunidades del socialismo democrático en la provincia y su impacto en las políticas públicas locales.",
+                    content: "<p>En los últimos años, Catamarca ha experimentado transformaciones significativas en su escenario político. El socialismo democrático, como corriente de pensamiento y acción política, enfrenta el desafío de adaptarse a las particularidades de nuestra provincia mientras mantiene sus principios fundamentales.</p><p>La experiencia de gobiernos locales en la región muestra que es posible implementar políticas progresistas que mejoren la calidad de vida sin renunciar a los valores democráticos. Sin embargo, el camino está lleno de obstáculos, desde la resistencia de sectores conservadores hasta las limitaciones presupuestarias.</p><p>El verdadero cambio no vendrá de discursos vacíos, sino de la construcción de alternativas concretas que respondan a las necesidades reales de los catamarqueños. La participación ciudadana, la transparencia en la gestión y la defensa de los derechos sociales deben ser los pilares de cualquier proyecto político que se reclame del socialismo democrático.</p>",
                     category: "Catamarca",
                     author: "Juan Pérez",
-                    date: formatDate(),
-                    image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
-                    views: 1,
+                    date: "15 de noviembre, 2023",
+                    image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                    views: 142,
                     featured: true
+                },
+                {
+                    id: 2,
+                    title: "La desigualdad regional en Argentina: un problema estructural",
+                    summary: "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
+                    content: "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
+                    category: "Política Nacional",
+                    author: "Juan Pérez",
+                    date: "8 de noviembre, 2023",
+                    image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
+                    views: 98,
+                    featured: true
+                },
+                {
+                    id: 3,
+                    title: "Juventud y política: el desencanto y la esperanza",
+                    summary: "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
+                    content: "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
+                    category: "Sociedad",
+                    author: "Juan Pérez",
+                    date: "1 de noviembre, 2023",
+                    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                    views: 76,
+                    featured: false
                 }
             ];
         }
         
-        // ===== FUNCIONES PRINCIPALES (CON SINCRONIZACIÓN AUTOMÁTICA) =====
+        // ===== NAVEGACIÓN Y RENDERIZADO =====
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.getElementById('inicio-section').style.display = 'none';
+            document.querySelectorAll('.category-section').forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            });
+            document.getElementById('archivo-section').style.display = 'none';
+            document.getElementById('archivo-section').classList.remove('active');
+            document.getElementById('contacto-section').style.display = 'none';
+            document.getElementById('contacto-section').classList.remove('active');
+            
+            // Ocultar vista de artículo si está abierta
+            const articleFullView = document.getElementById('article-full-view');
+            const mainContent = document.querySelector('.main-content');
+            if (!articleFullView.classList.contains('hidden')) {
+                articleFullView.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+            }
+            
+            // Mostrar la sección solicitada
+            currentSection = sectionId;
+            
+            if (sectionId === 'inicio') {
+                document.getElementById('inicio-section').style.display = 'block';
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(sectionId)) {
+                const sectionElement = document.getElementById(`${sectionId}-section`);
+                sectionElement.style.display = 'block';
+                sectionElement.classList.add('active');
+                renderCategoryArticles(sectionId);
+            } else if (sectionId === 'archivo') {
+                document.getElementById('archivo-section').style.display = 'block';
+                document.getElementById('archivo-section').classList.add('active');
+                renderFullArchive();
+            } else if (sectionId === 'contacto') {
+                document.getElementById('contacto-section').style.display = 'block';
+                document.getElementById('contacto-section').classList.add('active');
+            }
+            
+            // Scroll al inicio de la página
+            window.scrollTo(0, 0);
+        }
+        
+        function renderArticles() {
+            const articlesContainer = document.getElementById('articles-container');
+            const archiveContainer = document.getElementById('archive-container');
+            
+            // Separar artículos destacados y no destacados
+            const featuredArticles = articles.filter(article => article.featured);
+            const otherArticles = articles.filter(article => !article.featured);
+            
+            // Ordenar por fecha (más recientes primero)
+            featuredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            otherArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            articlesContainer.innerHTML = '';
+            archiveContainer.innerHTML = '';
+            
+            // Renderizar destacados
+            if (featuredArticles.length > 0) {
+                featuredArticles.forEach(article => {
+                    const articleElement = createArticleElement(article, true);
+                    articlesContainer.appendChild(articleElement);
+                });
+            } else {
+                articlesContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales destacados aún.</p>';
+            }
+            
+            // Renderizar archivo
+            if (otherArticles.length > 0) {
+                otherArticles.forEach(article => {
+                    const articleElement = createArticleElement(article, false);
+                    archiveContainer.appendChild(articleElement);
+                });
+            } else {
+                archiveContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en el archivo.</p>';
+            }
+            
+            // Actualizar estadísticas
+            updateStatistics();
+        }
+        
+        function renderCategoryArticles(category) {
+            const categoryMap = {
+                'opinion': 'Opinión',
+                'catamarca': 'Catamarca',
+                'politica-nacional': 'Política Nacional',
+                'sociedad': 'Sociedad',
+                'internacionales': 'Internacionales'
+            };
+            
+            const categoryName = categoryMap[category];
+            const containerId = `${category}-container`;
+            const container = document.getElementById(containerId);
+            
+            if (!container) return;
+            
+            // Filtrar artículos por categoría
+            const categoryArticles = articles.filter(article => article.category === categoryName);
+            
+            // Ordenar por fecha (más recientes primero)
+            categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = '';
+            
+            if (categoryArticles.length > 0) {
+                categoryArticles.forEach(article => {
+                    const articleElement = createArticleElement(article, article.featured);
+                    container.appendChild(articleElement);
+                });
+            } else {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
+            }
+        }
+        
+        function renderFullArchive() {
+            const container = document.getElementById('full-archive-container');
+            
+            let filteredArticles = articles;
+            
+            // Aplicar filtro si no es "all"
+            if (currentArchiveFilter !== 'all') {
+                filteredArticles = articles.filter(article => article.category === currentArchiveFilter);
+            }
+            
+            // Ordenar por fecha (más recientes primero)
+            filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = '';
+            
+            if (filteredArticles.length > 0) {
+                filteredArticles.forEach(article => {
+                    const articleElement = createArticleElement(article, article.featured);
+                    container.appendChild(articleElement);
+                });
+            } else {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales con este filtro.</p>';
+            }
+        }
+        
+        function createArticleElement(article, isFeatured) {
+            const articleElement = document.createElement('div');
+            articleElement.className = `article-card ${isFeatured ? 'highlighted' : ''}`;
+            articleElement.dataset.id = article.id;
+            
+            articleElement.innerHTML = `
+                ${isAdmin ? '<div class="admin-badge">Admin</div>' : ''}
+                <img src="${article.image}" alt="${article.title}" class="article-img">
+                <div class="article-content">
+                    <h3 class="article-title">${article.title}</h3>
+                    <div class="article-meta">
+                        <span>${article.date}</span>
+                        <span>${article.category}</span>
+                        <span>${article.views} lecturas</span>
+                    </div>
+                    <p class="article-excerpt">${article.summary}</p>
+                    <button class="read-more" onclick="viewArticle(${article.id})">Leer más</button>
+                    ${isAdmin ? `<div style="margin-top: 10px; display: flex; gap: 10px;">
+                        <button class="admin-button warning" style="padding: 5px 10px; font-size: 0.8rem;" onclick="editArticle(${article.id}); event.stopPropagation()">Editar</button>
+                        <button class="admin-button danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="deleteArticle(${article.id}); event.stopPropagation()">Eliminar</button>
+                    </div>` : ''}
+                </div>
+            `;
+            
+            return articleElement;
+        }
+        
+        // ===== VISTA DE ARTÍCULO COMPLETO =====
+        function viewArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            // Incrementar contador de vistas
+            article.views++;
+            saveToLocalStorage();
+            
+            // Mostrar artículo completo
+            const articleFullView = document.getElementById('article-full-view');
+            const mainContent = document.querySelector('.main-content');
+            
+            articleFullView.innerHTML = `
+                <div class="article-full">
+                    <button class="back-button" onclick="goBack()">&larr; Volver a ${getSectionName(currentSection)}</button>
+                    
+                    <div class="article-header">
+                        <h1 class="article-full-title">${article.title}</h1>
+                        <div class="article-full-meta">
+                            <span>${article.date}</span>
+                            <span>${article.category}</span>
+                            <span>Por ${article.author || authorInfo.name}</span>
+                            <span>${article.views} lecturas</span>
+                        </div>
+                    </div>
+                    
+                    <img src="${article.image}" alt="${article.title}" class="article-full-img">
+                    
+                    <div class="article-body">
+                        ${article.content}
+                    </div>
+                    
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-azul-claro);">
+                        ${isAdmin ? `
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <button class="admin-button warning" onclick="editArticle(${article.id})">Editar este editorial</button>
+                            <button class="admin-button danger" onclick="deleteArticle(${article.id})">Eliminar este editorial</button>
+                        </div>
+                        ` : ''}
+                        <button class="back-button" onclick="goBack()">&larr; Volver a ${getSectionName(currentSection)}</button>
+                    </div>
+                </div>
+            `;
+            
+            mainContent.classList.add('hidden');
+            articleFullView.classList.remove('hidden');
+            
+            // Scroll al inicio del artículo
+            window.scrollTo(0, 0);
+        }
+        
+        function getSectionName(sectionId) {
+            const sectionNames = {
+                'inicio': 'Inicio',
+                'opinion': 'Opinión',
+                'catamarca': 'Catamarca',
+                'politica-nacional': 'Política Nacional',
+                'sociedad': 'Sociedad',
+                'internacionales': 'Internacionales',
+                'archivo': 'Archivo',
+                'contacto': 'Contacto'
+            };
+            
+            return sectionNames[sectionId] || 'Inicio';
+        }
+        
+        function goBack() {
+            const articleFullView = document.getElementById('article-full-view');
+            const mainContent = document.querySelector('.main-content');
+            
+            articleFullView.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            
+            // Recargar artículos para actualizar vistas
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            }
+        }
+        
+        // ===== AUTENTICACIÓN =====
+        function login(username, password) {
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                localStorage.setItem('ladoC-admin', 'true');
+                updateAdminUI();
+                showNotification('Sesión iniciada correctamente', 'success');
+                return true;
+            }
+            return false;
+        }
+        
+        function logout() {
+            isAdmin = false;
+            localStorage.removeItem('ladoC-admin');
+            updateAdminUI();
+            showNotification('Sesión cerrada correctamente', 'info');
+            showSection('inicio');
+        }
+        
+        function checkAuth() {
+            const savedAuth = localStorage.getItem('ladoC-admin');
+            if (savedAuth === 'true') {
+                isAdmin = true;
+                updateAdminUI();
+            }
+        }
+        
+        function updateAdminUI() {
+            const adminIndicator = document.getElementById('admin-indicator');
+            const adminToolbar = document.getElementById('admin-toolbar');
+            
+            if (isAdmin) {
+                adminIndicator.textContent = '✓';
+                adminToolbar.style.display = 'block';
+                document.body.classList.add('admin-mode');
+            } else {
+                adminIndicator.textContent = '';
+                adminToolbar.style.display = 'none';
+                document.body.classList.remove('admin-mode');
+            }
+            
+            // Actualizar vista de artículos
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            }
+        }
+        
+        // ===== PANEL DE ADMINISTRACIÓN =====
+        function openAdminPanel() {
+            if (!isAdmin) {
+                showLoginModal();
+                return;
+            }
+            
+            document.getElementById('admin-panel').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Cargar datos actuales en el formulario
+            document.getElementById('author-name-input').value = authorInfo.name;
+            document.getElementById('author-photo-input').value = authorInfo.photo;
+            document.getElementById('author-quote-input').value = authorInfo.quote;
+            document.getElementById('author-bio-input').value = authorInfo.bio;
+            
+            // Actualizar lista de artículos
+            updateAdminArticleList();
+            
+            // Actualizar estadísticas
+            updateStatistics();
+            
+            // Cargar última fecha de acceso
+            const lastAccess = localStorage.getItem('ladoC-last-access') || 'Nunca';
+            document.getElementById('last-access').textContent = lastAccess;
+            document.getElementById('session-status').textContent = isAdmin ? 'Activa' : 'No activa';
+            
+            // Guardar fecha de acceso actual
+            localStorage.setItem('ladoC-last-access', new Date().toLocaleString());
+        }
+        
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function updateAdminArticleList() {
+            const adminArticleList = document.getElementById('admin-article-list');
+            const searchTerm = document.getElementById('search-articles').value.toLowerCase();
+            
+            adminArticleList.innerHTML = '';
+            
+            let filteredArticles = articles;
+            
+            // Aplicar filtro de búsqueda si existe
+            if (searchTerm) {
+                filteredArticles = articles.filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) || 
+                    article.summary.toLowerCase().includes(searchTerm) ||
+                    article.category.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Ordenar por fecha (más recientes primero)
+            filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filteredArticles.length === 0) {
+                adminArticleList.innerHTML = '<li class="article-list-item" style="justify-content: center; color: var(--color-gris-medio);">No se encontraron editoriales</li>';
+            } else {
+                filteredArticles.forEach(article => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'article-list-item';
+                    listItem.innerHTML = `
+                        <div class="article-list-info">
+                            <div class="article-list-title">${article.title} ${article.featured ? '<span style="color: var(--color-bordo); font-size: 0.8rem;">[Destacado]</span>' : ''}</div>
+                            <div class="article-list-meta">${article.date} - ${article.category} - ${article.views} lecturas</div>
+                        </div>
+                        <div class="article-list-actions">
+                            <button class="admin-button warning" onclick="editArticle(${article.id})">Editar</button>
+                            <button class="admin-button danger" onclick="deleteArticle(${article.id})">Eliminar</button>
+                        </div>
+                    `;
+                    adminArticleList.appendChild(listItem);
+                });
+            }
+            
+            // Actualizar contador
+            document.getElementById('articles-count').textContent = `(${filteredArticles.length} editoriales)`;
+        }
+        
+        // ===== GESTIÓN DE EDITORIALES (CON GITHUB) =====
         async function saveArticle() {
             const title = document.getElementById('article-title').value;
             const summary = document.getElementById('article-summary').value;
@@ -1574,14 +1989,15 @@
             const editingId = document.getElementById('editing-article-id').value;
             
             if (!title || !summary || !content) {
-                showNotification('Completa todos los campos', 'error');
+                showNotification('Por favor complete todos los campos obligatorios', 'error');
                 return;
             }
             
-            const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80';
+            const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80';
             let commitMessage = '';
             
             if (editingId) {
+                // Actualizar artículo existente
                 const articleIndex = articles.findIndex(a => a.id === parseInt(editingId));
                 if (articleIndex !== -1) {
                     articles[articleIndex] = {
@@ -1598,8 +2014,10 @@
                 
                 document.getElementById('editing-article-id').value = '';
                 document.getElementById('save-article').textContent = 'Guardar Editorial';
-                commitMessage = `Editado: "${title}"`;
+                commitMessage = `Actualizado: "${title}"`;
+                showNotification('Editorial actualizado localmente', 'info');
             } else {
+                // Crear nuevo artículo
                 currentArticleId++;
                 const newArticle = {
                     id: currentArticleId,
@@ -1615,22 +2033,26 @@
                 };
                 
                 articles.unshift(newArticle);
-                commitMessage = `Nuevo: "${title}"`;
+                commitMessage = `Nuevo editorial: "${title}"`;
+                showNotification('Editorial creado localmente', 'info');
             }
             
+            // Guardar en localStorage (como respaldo)
             saveToLocalStorage();
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON GITHUB
+            // Intentar guardar en GitHub
             const githubSuccess = await saveDataToGitHub(commitMessage);
             
             if (githubSuccess) {
-                showNotification('✅ Editorial guardado y sincronizado', 'success');
+                showNotification('Editorial sincronizado con GitHub ✓', 'success');
             } else {
-                showNotification('⚠ Editorial guardado localmente', 'warning');
+                showNotification('Editorial guardado localmente (GitHub falló)', 'warning');
             }
             
+            // Actualizar vista
             updateViewAfterChange();
             
+            // Limpiar formulario
             if (!editingId) {
                 document.getElementById('article-title').value = '';
                 document.getElementById('article-summary').value = '';
@@ -1642,25 +2064,29 @@
         
         async function deleteArticle(id) {
             if (!isAdmin) {
-                showNotification('Debes iniciar sesión', 'error');
+                showNotification('Debe iniciar sesión como administrador', 'error');
                 return;
             }
             
             const article = articles.find(a => a.id === id);
             if (!article) return;
             
-            if (!confirm(`¿Eliminar "${article.title}"?`)) return;
+            if (!confirm(`¿Eliminar "${article.title}"? Esta acción sincronizará con GitHub.`)) {
+                return;
+            }
             
             articles = articles.filter(a => a.id !== id);
+            
+            // Guardar en localStorage
             saveToLocalStorage();
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA
+            // Intentar guardar en GitHub
             const githubSuccess = await saveDataToGitHub(`Eliminado: "${article.title}"`);
             
             if (githubSuccess) {
-                showNotification('✅ Editorial eliminado y sincronizado', 'success');
+                showNotification('Editorial eliminado y sincronizado con GitHub', 'success');
             } else {
-                showNotification('⚠ Editorial eliminado localmente', 'warning');
+                showNotification('Editorial eliminado localmente (GitHub falló)', 'warning');
             }
             
             updateViewAfterChange();
@@ -1673,55 +2099,178 @@
             const bio = document.getElementById('author-bio-input').value;
             
             authorInfo = { name, photo, quote, bio };
+            
+            // Guardar en localStorage
             saveToLocalStorage();
             
+            // Actualizar vista pública
             document.getElementById('author-name').textContent = name;
             document.getElementById('author-photo').src = photo;
             document.getElementById('author-quote').textContent = `"${quote}"`;
             document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
+            
+            // Actualizar campo de autor en formulario
             document.getElementById('article-author').value = name;
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA
-            const githubSuccess = await saveDataToGitHub(`Autor actualizado: ${name}`);
+            // Intentar guardar en GitHub
+            const githubSuccess = await saveDataToGitHub(`Actualizado autor: ${name}`);
             
             if (githubSuccess) {
-                showNotification('✅ Autor actualizado y sincronizado', 'success');
+                showNotification('Autor actualizado y sincronizado con GitHub', 'success');
             } else {
-                showNotification('⚠ Autor actualizado localmente', 'warning');
+                showNotification('Autor actualizado localmente (GitHub falló)', 'warning');
             }
         }
         
-        async function saveSite() {
-            const selectedColor = document.querySelector('.color-option.active').dataset.color;
-            const siteTitle = document.getElementById('site-title').value;
-            
-            document.documentElement.style.setProperty('--color-bordo', selectedColor);
-            document.title = siteTitle;
-            
-            localStorage.setItem('ladoC-color', selectedColor);
-            localStorage.setItem('ladoC-site-title', siteTitle);
-            
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA
-            const githubSuccess = await saveDataToGitHub(`Configuración del sitio actualizada`);
-            
-            if (githubSuccess) {
-                showNotification('✅ Configuración guardada y sincronizada', 'success');
-            } else {
-                showNotification('✅ Configuración guardada', 'info');
+        function updateViewAfterChange() {
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
             }
+            
+            updateAdminArticleList();
+            updateStatistics();
         }
         
-        // ===== FUNCIONES DE GITHUB =====
-        async function testGitHubConnection() {
-            const token = document.getElementById('github-token').value;
-            const repo = document.getElementById('github-repo').value;
-            
-            if (!token || !repo) {
-                showNotification('Completa token y repositorio', 'error');
+        // ===== FUNCIONES AUXILIARES =====
+        function editArticle(id) {
+            if (!isAdmin) {
+                showNotification('Debe iniciar sesión como administrador para editar editoriales', 'error');
                 return;
             }
             
-            showNotification('Probando conexión...', 'info');
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            // Cargar datos en el formulario
+            document.getElementById('article-title').value = article.title;
+            document.getElementById('article-summary').value = article.summary;
+            document.getElementById('article-content').value = article.content;
+            document.getElementById('article-category').value = article.category;
+            document.getElementById('article-image').value = article.image;
+            document.getElementById('article-author').value = article.author;
+            document.getElementById('article-featured').value = article.featured ? '1' : '0';
+            document.getElementById('editing-article-id').value = article.id;
+            
+            // Cambiar botón a modo edición
+            document.getElementById('save-article').textContent = 'Actualizar Editorial';
+            
+            // Abrir panel de administración si no está abierto
+            openAdminPanel();
+            
+            // Scroll al formulario
+            document.querySelector('.admin-container').scrollTop = 0;
+            
+            showNotification(`Editando: "${article.title}"`, 'info');
+        }
+        
+        function newArticle() {
+            // Limpiar formulario
+            document.getElementById('article-title').value = '';
+            document.getElementById('article-summary').value = '';
+            document.getElementById('article-content').value = '';
+            document.getElementById('article-image').value = '';
+            document.getElementById('article-author').value = '';
+            document.getElementById('article-category').value = 'Opinión';
+            document.getElementById('article-featured').value = '0';
+            document.getElementById('editing-article-id').value = '';
+            
+            // Cambiar botón a modo creación
+            document.getElementById('save-article').textContent = 'Guardar Editorial';
+            
+            showNotification('Creando nuevo editorial', 'info');
+        }
+        
+        function showNewArticleForm() {
+            if (!isAdmin) {
+                showLoginModal();
+                return;
+            }
+            
+            openAdminPanel();
+            newArticle();
+        }
+        
+        function previewArticle() {
+            const title = document.getElementById('article-title').value;
+            const content = document.getElementById('article-content').value;
+            
+            if (!title || !content) {
+                showNotification('Complete título y contenido para ver la vista previa', 'error');
+                return;
+            }
+            
+            // En un sistema más avanzado, podríamos abrir un modal con la vista previa
+            alert("Vista previa del editorial (use el botón Aceptar para continuar)");
+        }
+        
+        function saveSite() {
+            const selectedColor = document.querySelector('.color-option.active').dataset.color;
+            const siteTitle = document.getElementById('site-title').value;
+            
+            // Aplicar nuevo color
+            document.documentElement.style.setProperty('--color-bordo', selectedColor);
+            
+            // Actualizar título del sitio
+            document.title = siteTitle;
+            
+            // Guardar en localStorage
+            localStorage.setItem('ladoC-color', selectedColor);
+            localStorage.setItem('ladoC-site-title', siteTitle);
+            
+            showNotification('Configuración del sitio guardada correctamente', 'success');
+        }
+        
+        function resetData() {
+            if (!confirm("¿Está seguro de que desea restablecer los datos de ejemplo? Se perderán todos los editoriales actuales. Esta acción no se puede deshacer.")) {
+                return;
+            }
+            
+            // Restaurar datos iniciales
+            articles = getDefaultArticles();
+            currentArticleId = 3;
+            
+            authorInfo = getDefaultAuthor();
+            
+            saveToLocalStorage();
+            
+            // Actualizar vista de autor
+            document.getElementById('author-name').textContent = authorInfo.name;
+            document.getElementById('author-photo').src = authorInfo.photo;
+            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+            
+            // Actualizar vista actual
+            updateViewAfterChange();
+            
+            showNotification('Datos restablecidos correctamente', 'success');
+        }
+        
+        function updateStatistics() {
+            const totalArticles = articles.length;
+            const featuredArticles = articles.filter(a => a.featured).length;
+            const totalViews = articles.reduce((sum, article) => sum + article.views, 0);
+            
+            document.getElementById('total-articles').textContent = totalArticles;
+            document.getElementById('featured-articles').textContent = featuredArticles;
+            document.getElementById('total-views').textContent = totalViews;
+        }
+        
+        // ===== GITHUB CONNECTION TEST =====
+        async function testGitHubConnection() {
+            const token = document.getElementById('github-token').value;
+            const repo = document.getElementById('github-repo').value;
+            const branch = document.getElementById('github-branch').value;
+            
+            if (!token || !repo || !branch) {
+                showNotification('Ingresa token, repositorio y rama', 'error');
+                return;
+            }
+            
+            showNotification('Probando conexión con GitHub...', 'info');
             
             try {
                 const apiUrl = `https://api.github.com/repos/${repo}/contents/datos.json`;
@@ -1739,26 +2288,26 @@
                     statusText.textContent = '✅ Conexión exitosa';
                     statusText.style.color = 'var(--color-success)';
                     statusDiv.style.display = 'block';
-                    showNotification('✅ Conexión a GitHub exitosa', 'success');
+                    showNotification('Conexión a GitHub exitosa', 'success');
                 } else if (response.status === 404) {
-                    statusText.textContent = '⚠ Archivo no encontrado (se creará al guardar)';
+                    statusText.textContent = '⚠ Archivo datos.json no encontrado (se creará al guardar)';
                     statusText.style.color = 'var(--color-warning)';
                     statusDiv.style.display = 'block';
-                    showNotification('⚠ Archivo no encontrado - se creará automáticamente', 'warning');
+                    showNotification('Archivo no encontrado - se creará al guardar', 'warning');
                 } else {
                     const errorData = await response.json();
                     statusText.textContent = `❌ Error: ${errorData.message || response.status}`;
                     statusText.style.color = 'var(--color-danger)';
                     statusDiv.style.display = 'block';
-                    showNotification(`❌ Error: ${errorData.message}`, 'error');
+                    showNotification(`Error GitHub: ${errorData.message}`, 'error');
                 }
             } catch (error) {
-                showNotification(`❌ Error de conexión: ${error.message}`, 'error');
+                showNotification(`Error de conexión: ${error.message}`, 'error');
             }
         }
         
         async function reloadFromGitHub() {
-            showNotification('Recargando desde GitHub...', 'info');
+            showNotification('Recargando datos desde GitHub...', 'info');
             
             const githubData = await loadDataFromGitHub();
             
@@ -1766,17 +2315,23 @@
                 articles = githubData.articles;
                 authorInfo = githubData.author;
                 
+                // Actualizar el ID máximo
                 if (articles.length > 0) {
                     currentArticleId = Math.max(...articles.map(a => a.id));
                 }
                 
                 saveToLocalStorage();
                 
-                if (currentSection === 'inicio') renderArticles();
-                else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                // Actualizar vista
+                if (currentSection === 'inicio') {
+                    renderArticles();
+                } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
                     renderCategoryArticles(currentSection);
-                } else if (currentSection === 'archivo') renderFullArchive();
+                } else if (currentSection === 'archivo') {
+                    renderFullArchive();
+                }
                 
+                // Actualizar información del autor
                 document.getElementById('author-name').textContent = authorInfo.name;
                 document.getElementById('author-photo').src = authorInfo.photo;
                 document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
@@ -1785,53 +2340,150 @@
                 updateAdminArticleList();
                 updateStatistics();
                 
-                showNotification('✅ Datos recargados desde GitHub', 'success');
+                showNotification('✓ Datos recargados desde GitHub correctamente', 'success');
             } else {
-                showNotification('❌ Error al recargar desde GitHub', 'error');
+                showNotification('✗ Error al cargar datos desde GitHub', 'error');
             }
         }
         
-        // ===== FUNCIONES RESTANTES (IGUAL QUE ANTES) =====
-        function updateViewAfterChange() {
-            if (currentSection === 'inicio') renderArticles();
-            else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-                renderCategoryArticles(currentSection);
-            } else if (currentSection === 'archivo') renderFullArchive();
-            
-            updateAdminArticleList();
-            updateStatistics();
+        // ===== FUNCIONES DE LOGIN MODAL =====
+        function showLoginModal() {
+            document.getElementById('login-modal').style.display = 'flex';
         }
         
-        function updateStatistics() {
-            const totalArticles = articles.length;
-            const featuredArticles = articles.filter(a => a.featured).length;
-            const totalViews = articles.reduce((sum, article) => sum + article.views, 0);
-            
-            document.getElementById('total-articles').textContent = totalArticles;
-            document.getElementById('featured-articles').textContent = featuredArticles;
-            document.getElementById('total-views').textContent = totalViews;
+        function hideLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('password').value = '';
         }
         
-        // ... (TODAS LAS DEMÁS FUNCIONES SE MANTIENEN IGUAL) ...
-        // [Aquí irían las funciones restantes que no cambian: showSection, renderArticles, etc.]
-        // Para ahorrar espacio, no las repito porque son idénticas a tu versión original
+        // ===== ADMIN TOOLBAR =====
+        function toggleAdminToolbar() {
+            const menu = document.getElementById('admin-toolbar-menu');
+            menu.classList.toggle('show');
+        }
+        
+        // ===== FUNCIONES DE CONTACTO =====
+        function sendContactMessage() {
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            
+            if (!name || !email || !message) {
+                showNotification('Por favor complete todos los campos del formulario', 'error');
+                return;
+            }
+            
+            // En un sistema real, aquí enviaríamos el mensaje al servidor
+            // Por ahora, simulamos el envío
+            
+            // Limpiar formulario
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-message').value = '';
+            
+            showNotification('Mensaje enviado correctamente. Nos pondremos en contacto pronto.', 'success');
+        }
+        
+        // ===== EXPORTACIÓN/IMPORTACIÓN =====
+        function exportData() {
+            const data = {
+                articles: articles,
+                author: authorInfo,
+                exported: new Date().toISOString(),
+                version: "2.0.2"
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lado-c-datos-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Datos exportados correctamente. Guarda este archivo .json', 'success');
+        }
+        
+        function importData() {
+            document.getElementById('import-file').click();
+        }
+        
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (confirm(`¿Está seguro de importar estos datos?\nSe cargarán ${data.articles.length} artículos.`)) {
+                        if (data.articles) {
+                            articles = data.articles;
+                            // Actualizar el ID máximo
+                            if (articles.length > 0) {
+                                currentArticleId = Math.max(...articles.map(a => a.id));
+                            }
+                        }
+                        if (data.author) {
+                            authorInfo = data.author;
+                        }
+                        
+                        saveToLocalStorage();
+                        
+                        // Actualizar la vista
+                        updateViewAfterChange();
+                        
+                        // Actualizar el autor en la barra lateral
+                        document.getElementById('author-name').textContent = authorInfo.name;
+                        document.getElementById('author-photo').src = authorInfo.photo;
+                        document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+                        document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+                        
+                        updateStatistics();
+                        
+                        showNotification('Datos importados correctamente', 'success');
+                    }
+                } catch (error) {
+                    showNotification('Error al importar: archivo inválido', 'error');
+                    console.error('Error importing data:', error);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Resetear el input
+            event.target.value = '';
+        }
         
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', async function() {
+            // Verificar autenticación
             checkAuth();
+            
+            // Cargar configuración de GitHub
             loadGitHubConfig();
+            
+            // Cargar datos (primero desde GitHub)
             await loadData();
             
+            // Inicializar información del autor
             document.getElementById('author-name').textContent = authorInfo.name;
             document.getElementById('author-photo').src = authorInfo.photo;
             document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
             document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
             
+            // Renderizar artículos
             renderArticles();
             
+            // Configurar color guardado
             const savedColor = localStorage.getItem('ladoC-color');
             if (savedColor) {
                 document.documentElement.style.setProperty('--color-bordo', savedColor);
+                
+                // Marcar color activo en el panel
                 document.querySelectorAll('.color-option').forEach(option => {
                     option.classList.remove('active');
                     if (option.dataset.color === savedColor) {
@@ -1840,43 +2492,190 @@
                 });
             }
             
+            // Configurar título del sitio guardado
             const savedTitle = localStorage.getItem('ladoC-site-title');
             if (savedTitle) {
                 document.title = savedTitle;
                 document.getElementById('site-title').value = savedTitle;
             }
             
-            // Event listeners
+            // ===== CONFIGURAR EVENT LISTENERS =====
+            
+            // Logo - Inicio
             document.getElementById('logo').addEventListener('click', function(e) {
-                e.preventDefault(); showSection('inicio');
+                e.preventDefault();
+                showSection('inicio');
             });
             
-            const sections = ['inicio', 'opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales', 'archivo', 'contacto'];
-            sections.forEach(section => {
-                document.getElementById(`nav-${section}`).addEventListener('click', function(e) {
-                    e.preventDefault(); showSection(section);
+            // Menú principal
+            document.getElementById('nav-inicio').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('inicio');
+            });
+            
+            document.getElementById('nav-opinion').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('opinion');
+            });
+            
+            document.getElementById('nav-catamarca').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('catamarca');
+            });
+            
+            document.getElementById('nav-politica-nacional').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('politica-nacional');
+            });
+            
+            document.getElementById('nav-sociedad').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('sociedad');
+            });
+            
+            document.getElementById('nav-internacionales').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('internacionales');
+            });
+            
+            document.getElementById('nav-archivo').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('archivo');
+            });
+            
+            document.getElementById('nav-contacto').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('contacto');
+            });
+            
+            // Administración
+            document.getElementById('nav-admin').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (isAdmin) {
+                    openAdminPanel();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Footer navigation
+            document.querySelectorAll('#footer-section a[id^="footer-"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.id.replace('footer-', '');
+                    showSection(sectionId);
                 });
             });
             
-            document.getElementById('nav-admin').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (isAdmin) openAdminPanel();
-                else showLoginModal();
+            // Filtros de archivo
+            document.querySelectorAll('.archive-filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remover clase active de todos los botones
+                    document.querySelectorAll('.archive-filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    
+                    // Agregar clase active al botón clickeado
+                    this.classList.add('active');
+                    
+                    // Actualizar filtro y renderizar
+                    currentArchiveFilter = this.dataset.filter;
+                    renderFullArchive();
+                });
             });
             
-            // GitHub
+            // Formulario de login
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (login(username, password)) {
+                    hideLoginModal();
+                    openAdminPanel();
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            });
+            
+            // Cerrar modal de login al hacer clic fuera
+            document.getElementById('login-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideLoginModal();
+                }
+            });
+            
+            // Botón de abrir panel admin desde sidebar
+            document.getElementById('open-admin').addEventListener('click', function() {
+                if (isAdmin) {
+                    openAdminPanel();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Botón de nuevo artículo desde sidebar
+            document.getElementById('new-article-button').addEventListener('click', function() {
+                if (isAdmin) {
+                    openAdminPanel();
+                    newArticle();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Cerrar panel admin
+            document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+            
+            // Botones del panel de administración
+            document.getElementById('save-article').addEventListener('click', saveArticle);
+            document.getElementById('new-article').addEventListener('click', newArticle);
+            document.getElementById('preview-article').addEventListener('click', previewArticle);
+            document.getElementById('save-author').addEventListener('click', saveAuthor);
+            document.getElementById('save-site').addEventListener('click', saveSite);
+            document.getElementById('reset-data').addEventListener('click', resetData);
+            document.getElementById('refresh-articles').addEventListener('click', updateAdminArticleList);
+            document.getElementById('send-message').addEventListener('click', sendContactMessage);
+            
+            // GitHub configuration buttons
             document.getElementById('save-github-config').addEventListener('click', saveGitHubConfig);
             document.getElementById('test-github').addEventListener('click', testGitHubConnection);
             document.getElementById('reload-from-github').addEventListener('click', reloadFromGitHub);
             
-            // Admin
-            document.getElementById('save-article').addEventListener('click', saveArticle);
-            document.getElementById('save-author').addEventListener('click', saveAuthor);
-            document.getElementById('save-site').addEventListener('click', saveSite);
+            // Búsqueda en tiempo real
+            document.getElementById('search-articles').addEventListener('input', updateAdminArticleList);
             
+            // Selectores de color
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Admin toolbar
+            document.getElementById('admin-toolbar-button').addEventListener('click', toggleAdminToolbar);
+            
+            // Cerrar toolbar al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                const toolbar = document.getElementById('admin-toolbar');
+                const toolbarButton = document.getElementById('admin-toolbar-button');
+                const toolbarMenu = document.getElementById('admin-toolbar-menu');
+                
+                if (!toolbar.contains(e.target) && toolbarMenu.classList.contains('show')) {
+                    toolbarMenu.classList.remove('show');
+                }
+            });
+            
+            // Configurar event listeners para exportación/importación
+            document.getElementById('export-data').addEventListener('click', exportData);
+            document.getElementById('import-data').addEventListener('click', importData);
+            document.getElementById('import-file').addEventListener('change', handleFileImport);
+            
+            // Mostrar mensaje de bienvenida
             setTimeout(() => {
                 if (!isAdmin) {
-                    showNotification('Bienvenido a Lado C - Medio de opinión política', 'info');
+                    showNotification('Bienvenido a Lado C - Un medio de opinión política catamarqueño', 'info');
                 }
             }, 1000);
         });
