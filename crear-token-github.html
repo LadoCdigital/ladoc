@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía para Crear Token de GitHub - Lado C</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #24292e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .step {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        
+        .step h2 {
+            display: inline-block;
+            font-size: 1.5rem;
+            color: #24292e;
+            margin-bottom: 15px;
+        }
+        
+        .step-content {
+            margin-left: 55px;
+        }
+        
+        .screenshot {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .screenshot img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .code-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .token-display {
+            background: #24292e;
+            color: #39d353;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 1px;
+            margin: 15px 0;
+            word-break: break-all;
+        }
+        
+        .button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .button.blue {
+            background: #2196F3;
+        }
+        
+        .button.blue:hover {
+            background: #0b7dda;
+        }
+        
+        .actions {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .step {
+                padding: 20px;
+            }
+            
+            .step-content {
+                margin-left: 0;
+            }
+            
+            .step-number {
+                display: block;
+                margin-bottom: 10px;
+            }
+            
+            .step h2 {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Guía para Crear Token de GitHub</h1>
+            <p>Para que Lado C se sincronice automáticamente con GitHub</p>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <h2>Ve a GitHub</h2>
+            <div class="step-content">
+                <p>Abre GitHub e inicia sesión con tu cuenta.</p>
+                <div class="actions">
+                    <a href="https://github.com/login" target="_blank" class="button blue">
+                        🔗 Ir a GitHub.com
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <h2>Configuración de tu cuenta</h2>
+            <div class="step-content">
+                <p>Haz clic en tu <span class="highlight">foto de perfil</span> (esquina superior derecha).</p>
+                <p>Selecciona <span class="highlight">"Settings"</span> (Configuración).</p>
+                <div class="screenshot">
+                    <p>📷 <strong>Así se ve:</strong></p>
+                    <img src="https://docs.github.com/assets/cb-20344/images/help/settings/userbar-account-settings.png" alt="Menú de GitHub">
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <h2>Configuración de desarrollador</h2>
+            <div class="step-content">
+                <p>En el menú lateral izquierdo, baja hasta el final.</p>
+                <p>Haz clic en <span class="highlight">"Developer settings"</span> (Configuración del desarrollador).</p>
+                <div class="screenshot">
+                    <p>📷 <strong>Ubicación:</strong></p>
+                    <img src="https://docs.github.com/assets/cb-20344/images/help/settings/developer-settings.png" alt="Developer settings">
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">4</span>
+            <h2>Tokens de acceso</h2>
+            <div class="step-content">
+                <p>Haz clic en <span class="highlight">"Personal access tokens"</span> (Tokens de acceso personal).</p>
+                <p>Luego en <span class="highlight">"Tokens (classic)"</span> (Tokens clásicos).</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">5</span>
+            <h2>Generar nuevo token</h2>
+            <div class="step-content">
+                <p>Haz clic en el botón <span class="highlight">"Generate new token"</span> (Generar nuevo token).</p>
+                <p>Selecciona <span class="highlight">"Generate new token (classic)"</span>.</p>
+                <div class="screenshot">
+                    <p>📷 <strong>Botón importante:</strong></p>
+                    <img src="https://docs.github.com/assets/cb-20344/images/help/settings/generate-new-token.png" alt="Generate new token">
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">6</span>
+            <h2>Configura el token (IMPORTANTE)</h2>
+            <div class="step-content">
+                <div class="code-box">
+                    <strong>Note:</strong> Lado C - Mi sitio web<br>
+                    <strong>Expiration:</strong> No expiration (Sin expiración)<br>
+                    <strong>Select scopes:</strong> ✅ repo (FULL CONTROL)
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠ ATENCIÓN:</strong> Marca <span class="highlight">SOLO</span> la opción <strong>"repo"</strong>.<br>
+                    No necesitas marcar nada más.
+                </div>
+                
+                <p><strong>Explicación sencilla:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Note:</strong> Pon "Lado C - Mi sitio"</li>
+                    <li><strong>Expiration:</strong> Elige "No expiration"</li>
+                    <li><strong>Select scopes:</strong> Marca SOLO <strong>✅ repo</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">7</span>
+            <h2>¡Genera y COPIA!</h2>
+            <div class="step-content">
+                <p>Haz clic en <span class="highlight">"Generate token"</span> (Generar token).</p>
+                
+                <div class="warning">
+                    <strong>🚨 ¡IMPORTANTE! COPIA EL TOKEN AHORA</strong><br>
+                    GitHub te mostrará el token <strong>UNA SOLA VEZ</strong>.<br>
+                    Se verá así: <code>ghp_AbCdEfGhIjKlMnOpQrStUvWxYz1234567890</code>
+                </div>
+                
+                <div class="token-display">
+                    ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                </div>
+                
+                <div class="success">
+                    <strong>💡 CONSEJO:</strong> Pega el token en un bloc de notas o documento temporal.<br>
+                    Lo necesitarás para el siguiente paso.
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <span class="step-number">8</span>
+            <h2>Configurar en Lado C</h2>
+            <div class="step-content">
+                <p>Ahora ve a tu sitio Lado C:</p>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li>Inicia sesión como admin (usuario: <code>admin</code>, contraseña: <code>ladoc2023</code>)</li>
+                    <li>Abre el <strong>Panel de Administración</strong></li>
+                    <li>Ve a la sección <strong>"Sincronización con GitHub"</strong></li>
+                    <li>Pega tu token en <strong>"Token de GitHub"</strong></li>
+                    <li>Escribe tu repositorio (ej: <code>tuUsuario/lado-c</code>)</li>
+                    <li>Haz clic en <strong>"Guardar Configuración"</strong></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <h2>🎉 ¡Listo para empezar!</h2>
+            <p>Una vez configurado, todos tus cambios se sincronizarán automáticamente.</p>
+            
+            <div style="margin-top: 30px;">
+                <a href="#" onclick="window.close()" class="button">
+                    ✅ Cerrar esta guía
+                </a>
+                <button onclick="window.print()" class="button blue">
+                    🖨️ Imprimir guía
+                </button>
+            </div>
+            
+            <div class="success" style="margin-top: 30px; text-align: left;">
+                <strong>📞 ¿Problemas?</strong><br>
+                1. Asegúrate de que tu repositorio existe<br>
+                2. Verifica que el token tenga permiso "repo"<br>
+                3. El token debe comenzar con <code>ghp_</code><br>
+                4. Si falla, crea un nuevo token
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Guardar progreso en localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            localStorage.setItem('github-token-guide-viewed', 'true');
+        });
+    </script>
+</body>
+</html>
