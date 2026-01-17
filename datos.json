@@ -1,18 +1,6 @@
 {
   "articles": [
     {
-      "id": 2,
-      "title": "La desigualdad regional en Argentina: un problema estructural",
-      "summary": "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
-      "content": "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
-      "category": "Política Nacional",
-      "author": "Juan Pérez",
-      "date": "8 de noviembre, 2023",
-      "image": "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
-      "views": 98,
-      "featured": true
-    },
-    {
       "id": 3,
       "title": "Juventud y política: el desencanto y la esperanza",
       "summary": "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
@@ -31,6 +19,6 @@
     "quote": "Pensar distinto también es un acto de compromiso.",
     "bio": "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
   },
-  "lastUpdated": "2026-01-17T01:05:54.874Z",
+  "lastUpdated": "2026-01-17T01:05:57.758Z",
   "syncVersion": "3.0"
 }
