@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --color-bordo: #9B1C1C;
@@ -1245,29 +1246,28 @@
                 <button class="admin-button success" id="save-site">Guardar Configuración</button>
             </div>
             
-            <!-- SECCIÓN: SINCRONIZACIÓN CON GITHUB (NUEVA Y SIMPLE) -->
+            <!-- SECCIÓN: BASE DE DATOS SUPABASE -->
             <div class="admin-section">
-                <h3>🔄 Sincronización Automática con GitHub</h3>
+                <h3>🛢️ Base de Datos Supabase</h3>
                 <p style="color: var(--color-gris-medio); margin-bottom: 20px;">
-                    <strong>Configura esto UNA VEZ</strong> y todos tus cambios se guardarán automáticamente en GitHub.
+                    <strong>Todos los cambios se guardan automáticamente</strong> en la base de datos segura de Supabase.
                     Los visitantes verán las actualizaciones en tiempo real.
                 </p>
                 
                 <div class="form-group">
-                    <label for="github-repo">Tu repositorio GitHub:</label>
-                    <input type="text" id="github-repo" class="form-control" value="LadoCdigital/ladoc">
+                    <label for="supabase-url">URL de Supabase:</label>
+                    <input type="text" id="supabase-url" class="form-control" placeholder="https://tu-proyecto.supabase.co">
                     <small style="color: var(--color-gris-medio);">
-                        📍 Formato: <strong>nombreUsuario/nombreRepositorio</strong><br>
-                        Tu repositorio actual es: <strong>LadoCdigital/ladoc</strong>
+                        📍 Obtén esto desde Project Settings > API en Supabase
                     </small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="github-token">🔐 Token de GitHub (solo para admins):</label>
-                    <input type="password" id="github-token" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                    <label for="supabase-key">Clave anónima (anon/public key):</label>
+                    <input type="password" id="supabase-key" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
                     <small style="color: var(--color-gris-medio);">
-                        <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--color-bordo); text-decoration: underline;">
-                            📖 Haz clic aquí para crear tu token en GitHub
+                        <a href="https://app.supabase.com/project/_/settings/api" target="_blank" style="color: var(--color-bordo); text-decoration: underline;">
+                            📖 Haz clic aquí para ver tu clave en Supabase
                         </a>
                     </small>
                 </div>
@@ -1276,32 +1276,32 @@
                     <h4 style="margin-bottom: 10px; color: var(--color-bordo);">✅ ¿Cómo funciona?</h4>
                     <ol style="margin-left: 20px; color: var(--color-gris-medio);">
                         <li><strong>Tú guardas:</strong> Creas/editas un artículo, autor o color</li>
-                        <li><strong>Se sincroniza:</strong> Automáticamente se guarda en GitHub</li>
+                        <li><strong>Se sincroniza:</strong> Automáticamente se guarda en Supabase</li>
                         <li><strong>Ellos ven:</strong> Los visitantes ven los cambios al instante</li>
-                        <li><strong>Privacidad:</strong> Solo tú puedes hacer cambios con tu token</li>
+                        <li><strong>Privacidad:</strong> Solo tú puedes hacer cambios con tu clave</li>
                     </ol>
                 </div>
                 
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button class="admin-button success" id="save-github-config">
+                    <button class="admin-button success" id="save-supabase-config">
                         <i class="fas fa-save"></i> Guardar Configuración
                     </button>
-                    <button class="admin-button" id="test-github">
+                    <button class="admin-button" id="test-supabase">
                         <i class="fas fa-plug"></i> Probar Conexión
                     </button>
-                    <button class="admin-button secondary" id="reload-from-github">
-                        <i class="fas fa-sync-alt"></i> Recargar desde GitHub
+                    <button class="admin-button secondary" id="reload-from-supabase">
+                        <i class="fas fa-sync-alt"></i> Recargar desde Supabase
                     </button>
                 </div>
                 
-                <div id="github-status" style="margin-top: 15px; display: none;">
-                    <p><strong>Estado:</strong> <span id="github-status-text"></span></p>
+                <div id="supabase-status" style="margin-top: 15px; display: none;">
+                    <p><strong>Estado:</strong> <span id="supabase-status-text"></span></p>
                 </div>
                 
                 <div style="background-color: #e8f4fd; border-left: 4px solid #2196F3; padding: 12px; margin-top: 20px; border-radius: var(--border-radius);">
                     <p style="color: #0d47a1; margin: 0;">
-                        <strong>💡 No te preocupes por la privacidad:</strong> Tu token <strong>solo se guarda en tu navegador</strong>.
-                        Los visitantes normales <strong>NO</strong> pueden verlo ni usarlo.
+                        <strong>💡 No te preocupes por la privacidad:</strong> Tus claves <strong>solo se guardan en tu navegador</strong>.
+                        Los visitantes normales <strong>NO</strong> pueden verlas ni usarlas.
                     </p>
                 </div>
             </div>
@@ -1325,7 +1325,7 @@
                     <div>
                         <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
                         <p><strong>Sesión activa:</strong> <span id="session-status">No activa</span></p>
-                        <p><strong>Versión:</strong> 3.0 (GitHub Sync Automático)</p>
+                        <p><strong>Versión:</strong> 4.0 (Supabase Sync)</p>
                     </div>
                 </div>
             </div>
@@ -1333,10 +1333,13 @@
     </div>
 
     <script>
-        // ===== CONFIGURACIÓN GLOBAL =====
-        // ✅ YA CONFIGURADO CON TU REPOSITORIO
-        const DEFAULT_GITHUB_REPO = "LadoCdigital/ladoc";
-        const DEFAULT_GITHUB_BRANCH = "main";
+        // ===== CONFIGURACIÓN SUPABASE =====
+        let supabaseConfig = {
+            url: "",
+            key: ""
+        };
+        
+        let supabaseClient = null;
         
         // ===== VARIABLES DEL SISTEMA =====
         let articles = [];
@@ -1345,13 +1348,6 @@
         let isAdmin = false;
         let currentSection = 'inicio';
         let currentArchiveFilter = 'all';
-        
-        // ===== CONFIGURACIÓN GITHUB =====
-        let githubConfig = {
-            token: "",
-            repo: DEFAULT_GITHUB_REPO,
-            branch: DEFAULT_GITHUB_BRANCH
-        };
         
         // ===== AUTENTICACIÓN =====
         const ADMIN_USERNAME = "admin";
@@ -1380,119 +1376,191 @@
             }, 3000);
         }
         
-        // ===== CONFIGURACIÓN GITHUB SIMPLIFICADA =====
-        function loadGitHubConfig() {
-            const savedConfig = localStorage.getItem('ladoC-github-config');
+        // ===== CONFIGURACIÓN SUPABASE =====
+        function loadSupabaseConfig() {
+            const savedConfig = localStorage.getItem('ladoC-supabase-config');
             if (savedConfig) {
-                githubConfig = JSON.parse(savedConfig);
+                supabaseConfig = JSON.parse(savedConfig);
             }
             
-            if (document.getElementById('github-token')) {
-                document.getElementById('github-token').value = githubConfig.token || '';
-                document.getElementById('github-repo').value = githubConfig.repo || DEFAULT_GITHUB_REPO;
+            if (document.getElementById('supabase-url')) {
+                document.getElementById('supabase-url').value = supabaseConfig.url || '';
+                document.getElementById('supabase-key').value = supabaseConfig.key || '';
             }
             
-            return githubConfig;
+            return supabaseConfig;
         }
         
-        function saveGitHubConfig() {
-            if (document.getElementById('github-token')) {
-                githubConfig.token = document.getElementById('github-token').value;
-                githubConfig.repo = document.getElementById('github-repo').value;
+        function saveSupabaseConfig() {
+            if (document.getElementById('supabase-url')) {
+                supabaseConfig.url = document.getElementById('supabase-url').value;
+                supabaseConfig.key = document.getElementById('supabase-key').value;
                 
-                localStorage.setItem('ladoC-github-config', JSON.stringify(githubConfig));
-                showNotification('✅ Configuración de GitHub guardada', 'success');
+                localStorage.setItem('ladoC-supabase-config', JSON.stringify(supabaseConfig));
+                showNotification('✅ Configuración de Supabase guardada', 'success');
+                
+                // Inicializar Supabase con la nueva configuración
+                initSupabase();
             }
         }
         
-        function getGitHubDataURL() {
-            return `https://raw.githubusercontent.com/${githubConfig.repo}/${githubConfig.branch}/datos.json`;
+        function initSupabase() {
+            if (supabaseConfig.url && supabaseConfig.key) {
+                supabaseClient = window.supabase.createClient(supabaseConfig.url, supabaseConfig.key);
+                console.log('Supabase inicializado');
+                return true;
+            } else {
+                console.log('No hay configuración de Supabase');
+                return false;
+            }
         }
         
-        // ===== CARGA DE DATOS DESDE GITHUB (PARA TODOS) =====
-        async function loadDataFromGitHub() {
-            const dataUrl = getGitHubDataURL();
+        // ===== CARGA DE DATOS DESDE SUPABASE =====
+        async function loadDataFromSupabase() {
+            if (!supabaseClient) {
+                console.log('Supabase no inicializado');
+                return null;
+            }
             
             try {
-                const timestamp = new Date().getTime();
-                const response = await fetch(`${dataUrl}?t=${timestamp}`);
+                // Cargar artículos
+                const { data: articlesData, error: articlesError } = await supabaseClient
+                    .from('articles')
+                    .select('*');
                 
-                if (!response.ok) {
-                    throw new Error(`Error ${response.status}`);
+                if (articlesError) {
+                    throw articlesError;
                 }
                 
-                const data = await response.json();
-                return data;
+                // Cargar autor
+                const { data: authorData, error: authorError } = await supabaseClient
+                    .from('author')
+                    .select('*')
+                    .limit(1)
+                    .single();
+                
+                if (authorError) {
+                    throw authorError;
+                }
+                
+                return {
+                    articles: articlesData || [],
+                    author: authorData || getDefaultAuthor()
+                };
+                
             } catch (error) {
-                console.error('Error cargando desde GitHub:', error);
+                console.error('Error cargando desde Supabase:', error);
                 return null;
             }
         }
         
-        // ===== GUARDADO AUTOMÁTICO EN GITHUB (SOLO ADMINS) =====
-        async function saveDataToGitHub(commitMessage = "Actualización automática desde Lado C") {
-            if (!githubConfig.token) {
-                console.log('⚠ Sin token: guardando solo localmente');
+        // ===== GUARDADO AUTOMÁTICO EN SUPABASE =====
+        async function saveArticleToSupabase(article) {
+            if (!supabaseClient) {
+                console.log('Supabase no inicializado');
                 return false;
             }
             
             try {
-                const dataToSave = {
-                    articles: articles,
-                    author: authorInfo,
-                    lastUpdated: new Date().toISOString(),
-                    syncVersion: "3.0"
-                };
+                // Verificar si el artículo ya existe
+                const { data: existingArticle, error: fetchError } = await supabaseClient
+                    .from('articles')
+                    .select('id')
+                    .eq('id', article.id)
+                    .single();
                 
-                const content = JSON.stringify(dataToSave, null, 2);
-                const encodedContent = btoa(unescape(encodeURIComponent(content)));
-                
-                const apiUrl = `https://api.github.com/repos/${githubConfig.repo}/contents/datos.json`;
-                let sha = null;
-                
-                // Obtener SHA del archivo existente
-                const getResponse = await fetch(apiUrl, {
-                    headers: {
-                        'Authorization': `token ${githubConfig.token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (getResponse.ok) {
-                    const fileInfo = await getResponse.json();
-                    sha = fileInfo.sha;
-                } else if (getResponse.status !== 404) {
-                    throw new Error(`Error obteniendo archivo: ${getResponse.status}`);
+                if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no encontrado
+                    throw fetchError;
                 }
                 
-                // Subir cambios
-                const body = {
-                    message: commitMessage,
-                    content: encodedContent,
-                    branch: githubConfig.branch,
-                    sha: sha
-                };
-                
-                const putResponse = await fetch(apiUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${githubConfig.token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify(body)
-                });
-                
-                if (!putResponse.ok) {
-                    const errorData = await putResponse.json();
-                    throw new Error(`Error GitHub: ${errorData.message}`);
+                if (existingArticle) {
+                    // Actualizar artículo existente
+                    const { error: updateError } = await supabaseClient
+                        .from('articles')
+                        .update(article)
+                        .eq('id', article.id);
+                    
+                    if (updateError) throw updateError;
+                    console.log(`✅ Artículo ${article.id} actualizado en Supabase`);
+                } else {
+                    // Insertar nuevo artículo
+                    const { error: insertError } = await supabaseClient
+                        .from('articles')
+                        .insert([article]);
+                    
+                    if (insertError) throw insertError;
+                    console.log(`✅ Artículo ${article.id} insertado en Supabase`);
                 }
                 
-                console.log('✅ Datos guardados en GitHub');
                 return true;
                 
             } catch (error) {
-                console.error('❌ Error guardando en GitHub:', error);
+                console.error('❌ Error guardando artículo en Supabase:', error);
+                return false;
+            }
+        }
+        
+        async function deleteArticleFromSupabase(id) {
+            if (!supabaseClient) {
+                console.log('Supabase no inicializado');
+                return false;
+            }
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('articles')
+                    .delete()
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                console.log(`✅ Artículo ${id} eliminado de Supabase`);
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error eliminando artículo de Supabase:', error);
+                return false;
+            }
+        }
+        
+        async function saveAuthorToSupabase() {
+            if (!supabaseClient) {
+                console.log('Supabase no inicializado');
+                return false;
+            }
+            
+            try {
+                // Verificar si ya existe un autor
+                const { data: existingAuthor, error: fetchError } = await supabaseClient
+                    .from('author')
+                    .select('id')
+                    .limit(1);
+                
+                if (fetchError) throw fetchError;
+                
+                if (existingAuthor && existingAuthor.length > 0) {
+                    // Actualizar autor existente
+                    const { error: updateError } = await supabaseClient
+                        .from('author')
+                        .update(authorInfo)
+                        .eq('id', existingAuthor[0].id);
+                    
+                    if (updateError) throw updateError;
+                    console.log('✅ Autor actualizado en Supabase');
+                } else {
+                    // Insertar nuevo autor
+                    const { error: insertError } = await supabaseClient
+                        .from('author')
+                        .insert([authorInfo]);
+                    
+                    if (insertError) throw insertError;
+                    console.log('✅ Autor insertado en Supabase');
+                }
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error guardando autor en Supabase:', error);
                 return false;
             }
         }
@@ -1501,15 +1569,16 @@
         async function loadData() {
             showNotification('Cargando datos...', 'info');
             
-            loadGitHubConfig();
+            loadSupabaseConfig();
+            initSupabase();
             
-            // 1. Intentar desde GitHub
-            const githubData = await loadDataFromGitHub();
+            // 1. Intentar desde Supabase
+            const supabaseData = await loadDataFromSupabase();
             
-            if (githubData && githubData.articles && githubData.author) {
-                articles = githubData.articles;
-                authorInfo = githubData.author;
-                showNotification('✅ Datos cargados desde GitHub', 'success');
+            if (supabaseData && supabaseData.articles && supabaseData.author) {
+                articles = supabaseData.articles;
+                authorInfo = supabaseData.author;
+                showNotification('✅ Datos cargados desde Supabase', 'success');
             } else {
                 // 2. Fallback a localStorage
                 const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
@@ -1740,6 +1809,11 @@
             article.views++;
             saveToLocalStorage();
             
+            // Guardar cambio en Supabase
+            if (supabaseClient && isAdmin) {
+                saveArticleToSupabase(article);
+            }
+            
             // Mostrar artículo completo
             const articleFullView = document.getElementById('article-full-view');
             const mainContent = document.querySelector('.main-content');
@@ -1947,7 +2021,7 @@
             document.getElementById('articles-count').textContent = `(${filteredArticles.length} editoriales)`;
         }
         
-        // ===== GESTIÓN DE EDITORIALES (CON SINCRONIZACIÓN AUTOMÁTICA) =====
+        // ===== GESTIÓN DE EDITORIALES =====
         async function saveArticle() {
             const title = document.getElementById('article-title').value;
             const summary = document.getElementById('article-summary').value;
@@ -1964,7 +2038,6 @@
             }
             
             const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80';
-            let commitMessage = '';
             
             if (editingId) {
                 const articleIndex = articles.findIndex(a => a.id === parseInt(editingId));
@@ -1983,7 +2056,6 @@
                 
                 document.getElementById('editing-article-id').value = '';
                 document.getElementById('save-article').textContent = 'Guardar Editorial';
-                commitMessage = `Editado: "${title}"`;
             } else {
                 currentArticleId++;
                 const newArticle = {
@@ -2000,16 +2072,23 @@
                 };
                 
                 articles.unshift(newArticle);
-                commitMessage = `Nuevo: "${title}"`;
             }
             
             saveToLocalStorage();
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON GITHUB
-            const githubSuccess = await saveDataToGitHub(commitMessage);
-            
-            if (githubSuccess) {
-                showNotification('✅ Editorial guardado y sincronizado', 'success');
+            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON SUPABASE
+            if (supabaseClient) {
+                const articleToSave = editingId ? 
+                    articles.find(a => a.id === parseInt(editingId)) : 
+                    articles.find(a => a.id === currentArticleId);
+                
+                const supabaseSuccess = await saveArticleToSupabase(articleToSave);
+                
+                if (supabaseSuccess) {
+                    showNotification('✅ Editorial guardado en Supabase', 'success');
+                } else {
+                    showNotification('⚠ Editorial guardado localmente', 'warning');
+                }
             } else {
                 showNotification('⚠ Editorial guardado localmente', 'warning');
             }
@@ -2039,11 +2118,15 @@
             articles = articles.filter(a => a.id !== id);
             saveToLocalStorage();
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA
-            const githubSuccess = await saveDataToGitHub(`Eliminado: "${article.title}"`);
-            
-            if (githubSuccess) {
-                showNotification('✅ Editorial eliminado y sincronizado', 'success');
+            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON SUPABASE
+            if (supabaseClient) {
+                const supabaseSuccess = await deleteArticleFromSupabase(id);
+                
+                if (supabaseSuccess) {
+                    showNotification('✅ Editorial eliminado de Supabase', 'success');
+                } else {
+                    showNotification('⚠ Editorial eliminado localmente', 'warning');
+                }
             } else {
                 showNotification('⚠ Editorial eliminado localmente', 'warning');
             }
@@ -2066,11 +2149,15 @@
             document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
             document.getElementById('article-author').value = name;
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA
-            const githubSuccess = await saveDataToGitHub(`Autor actualizado: ${name}`);
-            
-            if (githubSuccess) {
-                showNotification('✅ Autor actualizado y sincronizado', 'success');
+            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON SUPABASE
+            if (supabaseClient) {
+                const supabaseSuccess = await saveAuthorToSupabase();
+                
+                if (supabaseSuccess) {
+                    showNotification('✅ Autor actualizado en Supabase', 'success');
+                } else {
+                    showNotification('⚠ Autor actualizado localmente', 'warning');
+                }
             } else {
                 showNotification('⚠ Autor actualizado localmente', 'warning');
             }
@@ -2086,14 +2173,7 @@
             localStorage.setItem('ladoC-color', selectedColor);
             localStorage.setItem('ladoC-site-title', siteTitle);
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA
-            const githubSuccess = await saveDataToGitHub(`Configuración del sitio actualizada`);
-            
-            if (githubSuccess) {
-                showNotification('✅ Configuración guardada y sincronizada', 'success');
-            } else {
-                showNotification('✅ Configuración guardada', 'info');
-            }
+            showNotification('✅ Configuración guardada', 'info');
         }
         
         function updateViewAfterChange() {
@@ -2215,60 +2295,54 @@
             showNotification('✅ Datos restablecidos correctamente', 'success');
         }
         
-        // ===== FUNCIONES DE GITHUB =====
-        async function testGitHubConnection() {
-            const token = document.getElementById('github-token').value;
-            const repo = document.getElementById('github-repo').value;
+        // ===== FUNCIONES DE SUPABASE =====
+        async function testSupabaseConnection() {
+            const url = document.getElementById('supabase-url').value;
+            const key = document.getElementById('supabase-key').value;
             
-            if (!token || !repo) {
-                showNotification('❌ Completa token y repositorio', 'error');
+            if (!url || !key) {
+                showNotification('❌ Completa URL y clave', 'error');
                 return;
             }
             
             showNotification('🔌 Probando conexión...', 'info');
             
             try {
-                const apiUrl = `https://api.github.com/repos/${repo}/contents/datos.json`;
-                const response = await fetch(apiUrl, {
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
+                // Inicializar cliente temporal
+                const tempClient = window.supabase.createClient(url, key);
                 
-                const statusDiv = document.getElementById('github-status');
-                const statusText = document.getElementById('github-status-text');
+                // Intentar obtener algún dato
+                const { data, error } = await tempClient
+                    .from('articles')
+                    .select('*', { count: 'exact', head: true });
                 
-                if (response.ok) {
+                const statusDiv = document.getElementById('supabase-status');
+                const statusText = document.getElementById('supabase-status-text');
+                
+                if (error) {
+                    statusText.textContent = `❌ Error: ${error.message}`;
+                    statusText.style.color = 'var(--color-danger)';
+                    statusDiv.style.display = 'block';
+                    showNotification(`❌ Error: ${error.message}`, 'error');
+                } else {
                     statusText.textContent = '✅ Conexión exitosa';
                     statusText.style.color = 'var(--color-success)';
                     statusDiv.style.display = 'block';
-                    showNotification('✅ Conexión a GitHub exitosa', 'success');
-                } else if (response.status === 404) {
-                    statusText.textContent = '⚠ Archivo no encontrado (se creará al guardar)';
-                    statusText.style.color = 'var(--color-warning)';
-                    statusDiv.style.display = 'block';
-                    showNotification('⚠ Archivo no encontrado - se creará automáticamente', 'warning');
-                } else {
-                    const errorData = await response.json();
-                    statusText.textContent = `❌ Error: ${errorData.message || response.status}`;
-                    statusText.style.color = 'var(--color-danger)';
-                    statusDiv.style.display = 'block';
-                    showNotification(`❌ Error: ${errorData.message}`, 'error');
+                    showNotification('✅ Conexión a Supabase exitosa', 'success');
                 }
             } catch (error) {
                 showNotification(`❌ Error de conexión: ${error.message}`, 'error');
             }
         }
         
-        async function reloadFromGitHub() {
-            showNotification('🔄 Recargando desde GitHub...', 'info');
+        async function reloadFromSupabase() {
+            showNotification('🔄 Recargando desde Supabase...', 'info');
             
-            const githubData = await loadDataFromGitHub();
+            const supabaseData = await loadDataFromSupabase();
             
-            if (githubData && githubData.articles && githubData.author) {
-                articles = githubData.articles;
-                authorInfo = githubData.author;
+            if (supabaseData && supabaseData.articles && supabaseData.author) {
+                articles = supabaseData.articles;
+                authorInfo = supabaseData.author;
                 
                 if (articles.length > 0) {
                     currentArticleId = Math.max(...articles.map(a => a.id));
@@ -2289,9 +2363,9 @@
                 updateAdminArticleList();
                 updateStatistics();
                 
-                showNotification('✅ Datos recargados desde GitHub', 'success');
+                showNotification('✅ Datos recargados desde Supabase', 'success');
             } else {
-                showNotification('❌ Error al recargar desde GitHub', 'error');
+                showNotification('❌ Error al recargar desde Supabase', 'error');
             }
         }
         
@@ -2334,7 +2408,6 @@
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', async function() {
             checkAuth();
-            loadGitHubConfig();
             await loadData();
             
             document.getElementById('author-name').textContent = authorInfo.name;
@@ -2450,10 +2523,10 @@
             document.getElementById('refresh-articles').addEventListener('click', updateAdminArticleList);
             document.getElementById('send-message').addEventListener('click', sendContactMessage);
             
-            // GitHub configuration buttons
-            document.getElementById('save-github-config').addEventListener('click', saveGitHubConfig);
-            document.getElementById('test-github').addEventListener('click', testGitHubConnection);
-            document.getElementById('reload-from-github').addEventListener('click', reloadFromGitHub);
+            // Supabase configuration buttons
+            document.getElementById('save-supabase-config').addEventListener('click', saveSupabaseConfig);
+            document.getElementById('test-supabase').addEventListener('click', testSupabaseConnection);
+            document.getElementById('reload-from-supabase').addEventListener('click', reloadFromSupabase);
             
             // Búsqueda en tiempo real
             document.getElementById('search-articles').addEventListener('input', updateAdminArticleList);
