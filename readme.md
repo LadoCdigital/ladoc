@@ -27,4 +27,30 @@
 
 ## 4. Estructura del Archivo datos.json
 
-El archivo debe estar en la raíz de tu repositorio:
+El archivo debe estar en la raíz de tu repositorio y tener la siguiente estructura:
+
+```json
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "Título del editorial",
+      "summary": "Resumen breve",
+      "content": "Contenido completo en HTML",
+      "category": "Categoría",
+      "author": "Autor",
+      "date": "Fecha",
+      "image": "URL de la imagen",
+      "views": 0,
+      "featured": false
+    }
+  ],
+  "author": {
+    "name": "Nombre del autor",
+    "photo": "URL de la foto",
+    "quote": "Frase del autor",
+    "bio": "Biografía del autor"
+  },
+  "lastUpdated": "Fecha de actualización",
+  "syncVersion": "3.0"
+}
