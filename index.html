@@ -1305,22 +1305,19 @@
     </div>
 
     <script>
-        // ===== CONFIGURACIÓN SUPABASE (OPCIONAL) =====
-        // Si quieres usar Supabase, descomenta las siguientes líneas y proporciona tus credenciales
-        /*
-        const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_Dja2vBRCFGNfiCqWFVtf7Q_wpjFXgnP';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        */
+        // ===== CONFIGURACIÓN SUPABASE =====
+const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co'; // <-- Pega tu URL aquí
+const SUPABASE_ANON_KEY = 'sb_publishable_lGuk6bGAwSi4TR6UzFnZzg_MB2x7TYU'; // <-- Pega tu Anon Key aquí
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ===== VARIABLES DEL SISTEMA =====
-        let articles = [];
-        let authorInfo = {};
-        let currentArticleId = 0;
-        let isAdmin = false;
-        let currentSection = 'inicio';
-        let currentArchiveFilter = 'all';
-        let useSupabase = false; // Cambia a true si configuras Supabase
+// ===== VARIABLES DEL SISTEMA =====
+let articles = [];
+let authorInfo = {};
+let currentArticleId = 0;
+let isAdmin = false;
+let currentSection = 'inicio';
+let currentArchiveFilter = 'all';
+let useSupabase = true; // 
         
         // ===== AUTENTICACIÓN =====
         const ADMIN_USERNAME = "admin";
