@@ -1333,19 +1333,18 @@
     </div>
 
     <script>
-     // ===== CONFIGURACIÓN SUPABASE - CREDENCIALES PÚBLICAS =====
-// REEMPLAZA ESTOS VALORES CON TUS PROPIAS CREDENCIALES DE SUPABASE
-const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';  // Tu URL real de Supabase
-const SUPABASE_ANON_KEY = 'sb_publishable_Dja2vBRCFGNfiCqWFVtf7Q_wpjFXgnP';  // Tu anon key real
+        // ===== CONFIGURACIÓN SUPABASE - CREDENCIALES PÚBLICAS =====
+        const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_Dja2vBRCFGNfiCqWFVtf7Q_wpjFXgnP';
 
-// ===== VARIABLES DEL SISTEMA =====
-let supabaseClient = null;
-let articles = [];
-let authorInfo = {};
-let currentArticleId = 0;
-let isAdmin = false;
-let currentSection = 'inicio';
-let currentArchiveFilter = 'all';
+        // ===== VARIABLES DEL SISTEMA =====
+        let supabaseClient = null;
+        let articles = [];
+        let authorInfo = {};
+        let currentArticleId = 0;
+        let isAdmin = false;
+        let currentSection = 'inicio';
+        let currentArchiveFilter = 'all';
         
         // ===== AUTENTICACIÓN =====
         const ADMIN_USERNAME = "admin";
@@ -1378,57 +1377,78 @@ let currentArchiveFilter = 'all';
         function loadSupabaseConfig() {
             const savedConfig = localStorage.getItem('ladoC-supabase-config');
             if (savedConfig) {
-                supabaseConfig = JSON.parse(savedConfig);
+                const config = JSON.parse(savedConfig);
+                if (document.getElementById('supabase-url')) {
+                    document.getElementById('supabase-url').value = config.url || '';
+                    document.getElementById('supabase-key').value = config.key || '';
+                }
+                return config;
             }
-            
-            if (document.getElementById('supabase-url')) {
-                document.getElementById('supabase-url').value = supabaseConfig.url || '';
-                document.getElementById('supabase-key').value = supabaseConfig.key || '';
-            }
-            
-            return supabaseConfig;
+            return null;
         }
         
         function saveSupabaseConfig() {
-            if (document.getElementById('supabase-url')) {
-                supabaseConfig.url = document.getElementById('supabase-url').value;
-                supabaseConfig.key = document.getElementById('supabase-key').value;
-                
-                localStorage.setItem('ladoC-supabase-config', JSON.stringify(supabaseConfig));
-                showNotification('✅ Configuración de Supabase guardada', 'success');
+            const url = document.getElementById('supabase-url').value;
+            const key = document.getElementById('supabase-key').value;
             
+            if (!url || !key) {
+                showNotification('❌ Completa ambos campos', 'error');
+                return;
+            }
+            
+            const config = { url, key };
+            localStorage.setItem('ladoC-supabase-config', JSON.stringify(config));
+            
+            initSupabase();
+            showNotification('✅ Configuración guardada', 'success');
+        }
+        
+        // ===== INICIALIZAR SUPABASE =====
+        function initSupabase() {
+            if (window.supabase) {
+                const config = loadSupabaseConfig();
+                const url = config?.url || SUPABASE_URL;
+                const key = config?.key || SUPABASE_ANON_KEY;
+                
+                if (url && key) {
+                    supabaseClient = window.supabase.createClient(url, key);
+                    console.log('✅ Supabase inicializado');
+                    return true;
+                }
+            }
+            console.error('❌ Error inicializando Supabase');
+            return false;
+        }
         
         // ===== CARGA DE DATOS DESDE SUPABASE =====
         async function loadDataFromSupabase() {
-            if (!supabaseClient) {
-                console.log('Supabase no inicializado');
-                return null;
-            }
+            if (!supabaseClient) return null;
             
             try {
-                // Cargar artículos
+                // 1. Cargar artículos
                 const { data: articlesData, error: articlesError } = await supabaseClient
                     .from('articles')
                     .select('*');
                 
                 if (articlesError) {
-                    throw articlesError;
+                    console.error('Error cargando artículos:', articlesError);
+                    return null;
                 }
                 
-                // Cargar autor
+                // 2. Cargar autor
                 const { data: authorData, error: authorError } = await supabaseClient
                     .from('author')
                     .select('*')
                     .limit(1)
                     .single();
                 
-                if (authorError) {
-                    throw authorError;
+                if (authorError && authorError.code !== 'PGRST116') { // PGRST116 = no encontrado
+                    console.error('Error cargando autor:', authorError);
                 }
                 
                 return {
                     articles: articlesData || [],
-                    author: authorData || getDefaultAuthor()
+                    author: authorData || null
                 };
                 
             } catch (error) {
@@ -1437,46 +1457,40 @@ let currentArchiveFilter = 'all';
             }
         }
         
-        // ===== GUARDADO AUTOMÁTICO EN SUPABASE =====
+        // ===== GUARDADO EN SUPABASE (SOLO ADMINS) =====
         async function saveArticleToSupabase(article) {
-            if (!supabaseClient) {
-                console.log('Supabase no inicializado');
-                return false;
-            }
+            if (!supabaseClient || !isAdmin) return false;
             
             try {
-                // Verificar si el artículo ya existe
-                const { data: existingArticle, error: fetchError } = await supabaseClient
+                // Verificar si existe
+                const { data: existing, error: fetchError } = await supabaseClient
                     .from('articles')
                     .select('id')
                     .eq('id', article.id)
-                    .single();
+                    .maybeSingle();
                 
-                if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no encontrado
-                    throw fetchError;
-                }
+                if (fetchError) throw fetchError;
                 
-                if (existingArticle) {
-                    // Actualizar artículo existente
-                    const { error: updateError } = await supabaseClient
+                if (existing) {
+                    // Actualizar
+                    const { error } = await supabaseClient
                         .from('articles')
                         .update(article)
                         .eq('id', article.id);
                     
-                    if (updateError) throw updateError;
+                    if (error) throw error;
                     console.log(`✅ Artículo ${article.id} actualizado en Supabase`);
                 } else {
-                    // Insertar nuevo artículo
-                    const { error: insertError } = await supabaseClient
+                    // Insertar
+                    const { error } = await supabaseClient
                         .from('articles')
                         .insert([article]);
                     
-                    if (insertError) throw insertError;
+                    if (error) throw error;
                     console.log(`✅ Artículo ${article.id} insertado en Supabase`);
                 }
                 
                 return true;
-                
             } catch (error) {
                 console.error('❌ Error guardando artículo en Supabase:', error);
                 return false;
@@ -1484,10 +1498,7 @@ let currentArchiveFilter = 'all';
         }
         
         async function deleteArticleFromSupabase(id) {
-            if (!supabaseClient) {
-                console.log('Supabase no inicializado');
-                return false;
-            }
+            if (!supabaseClient || !isAdmin) return false;
             
             try {
                 const { error } = await supabaseClient
@@ -1507,10 +1518,7 @@ let currentArchiveFilter = 'all';
         }
         
         async function saveAuthorToSupabase() {
-            if (!supabaseClient) {
-                console.log('Supabase no inicializado');
-                return false;
-            }
+            if (!supabaseClient || !isAdmin) return false;
             
             try {
                 // Verificar si ya existe un autor
@@ -1549,51 +1557,49 @@ let currentArchiveFilter = 'all';
         }
         
         // ===== CARGA PRINCIPAL INTELIGENTE =====
-async function loadData() {
-    showNotification('📡 Conectando con la base de datos...', 'info');
-    
-    // 1. Inicializar Supabase
-    initSupabase();
-    
-    // 2. Intentar cargar desde Supabase (para todos los usuarios)
-    const supabaseData = await loadDataFromSupabase();
-    
-    if (supabaseData && supabaseData.articles) {
-        // ✅ ÉXITO: Usar datos actualizados de Supabase
-        articles = supabaseData.articles || [];
-        authorInfo = supabaseData.author || getDefaultAuthor();
-        
-        if (articles.length > 0) {
-            currentArticleId = Math.max(...articles.map(a => a.id));
+        async function loadData() {
+            showNotification('📡 Conectando con la base de datos...', 'info');
+            
+            // Inicializar Supabase
+            initSupabase();
+            
+            // Intentar cargar desde Supabase
+            const supabaseData = await loadDataFromSupabase();
+            
+            if (supabaseData && supabaseData.articles) {
+                // ✅ ÉXITO: Usar datos de Supabase
+                articles = supabaseData.articles || [];
+                authorInfo = supabaseData.author || getDefaultAuthor();
+                
+                if (articles.length > 0) {
+                    currentArticleId = Math.max(...articles.map(a => a.id));
+                }
+                
+                saveToLocalStorage();
+                showNotification('✅ Datos actualizados cargados', 'success');
+            } else {
+                // Fallback a localStorage
+                const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
+                const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
+                
+                if (savedArticles && savedArticles.length > 0) {
+                    articles = savedArticles;
+                    authorInfo = savedAuthor || getDefaultAuthor();
+                    showNotification('⚠ Usando datos en caché', 'warning');
+                } else {
+                    // Datos predeterminados
+                    articles = getDefaultArticles();
+                    authorInfo = getDefaultAuthor();
+                    showNotification('ℹ️ Bienvenido a Lado C', 'info');
+                }
+                
+                if (articles.length > 0) {
+                    currentArticleId = Math.max(...articles.map(a => a.id));
+                }
+            }
+            
+            return articles.length > 0;
         }
-        
-        // Guardar en localStorage como caché
-        saveToLocalStorage();
-        
-        showNotification('✅ Datos actualizados cargados', 'success');
-    } else {
-        // 3. Fallback a localStorage
-        const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
-        const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
-        
-        if (savedArticles && savedArticles.length > 0) {
-            articles = savedArticles;
-            authorInfo = savedAuthor || getDefaultAuthor();
-            showNotification('⚠ Usando datos en caché', 'warning');
-        } else {
-            // 4. Datos predeterminados (solo si todo falla)
-            articles = getDefaultArticles();
-            authorInfo = getDefaultAuthor();
-            showNotification('ℹ️ Bienvenido a Lado C', 'info');
-        }
-        
-        if (articles.length > 0) {
-            currentArticleId = Math.max(...articles.map(a => a.id));
-        }
-    }
-    
-    return articles.length > 0;
-}
         
         // ===== DATOS PREDETERMINADOS =====
         function getDefaultAuthor() {
@@ -1900,142 +1906,7 @@ async function loadData() {
             showNotification('ℹ️ Sesión cerrada correctamente', 'info');
             showSection('inicio');
         }
-
-// ===== INICIALIZAR SUPABASE =====
-function initSupabase() {
-    if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log('✅ Supabase inicializado');
-        return true;
-    }
-    console.error('❌ Error inicializando Supabase');
-    return false;
-}
-
-// ===== CARGA DE DATOS DESDE SUPABASE =====
-async function loadDataFromSupabase() {
-    if (!supabaseClient) return null;
-    
-    try {
-        // 1. Cargar artículos
-        const { data: articlesData, error: articlesError } = await supabaseClient
-            .from('articles')
-            .select('*')
-            .order('created_at', { ascending: false });
         
-        if (articlesError) {
-            console.error('Error cargando artículos:', articlesError);
-        }
-        
-        // 2. Cargar autor
-        const { data: authorData, error: authorError } = await supabaseClient
-            .from('author')
-            .select('*')
-            .limit(1)
-            .single();
-        
-        if (authorError) {
-            console.error('Error cargando autor:', authorError);
-        }
-        
-        return {
-            articles: articlesData || [],
-            author: authorData || null
-        };
-        
-    } catch (error) {
-        console.error('Error cargando desde Supabase:', error);
-        return null;
-    }
-}
-
-// ===== GUARDADO EN SUPABASE (SOLO ADMINS) =====
-async function saveArticleToSupabase(article) {
-    if (!supabaseClient || !isAdmin) return false;
-    
-    try {
-        // Verificar si existe
-        const { data: existing } = await supabaseClient
-            .from('articles')
-            .select('id')
-            .eq('id', article.id)
-            .maybeSingle();
-        
-        if (existing) {
-            // Actualizar
-            const { error } = await supabaseClient
-                .from('articles')
-                .update(article)
-                .eq('id', article.id);
-            
-            if (error) throw error;
-        } else {
-            // Insertar
-            const { error } = await supabaseClient
-                .from('articles')
-                .insert([article]);
-            
-            if (error) throw error;
-        }
-        
-        return true;
-    } catch (error) {
-        console.error('Error guardando artículo en Supabase:', error);
-        return false;
-    }
-}
-
-async function deleteArticleFromSupabase(id) {
-    if (!supabaseClient || !isAdmin) return false;
-    
-    try {
-        const { error } = await supabaseClient
-            .from('articles')
-            .delete()
-            .eq('id', id);
-        
-        if (error) throw error;
-        return true;
-    } catch (error) {
-        console.error('Error eliminando artículo de Supabase:', error);
-        return false;
-    }
-}
-
-async function saveAuthorToSupabase() {
-    if (!supabaseClient || !isAdmin) return false;
-    
-    try {
-        // Verificar si existe autor
-        const { data: existing } = await supabaseClient
-            .from('author')
-            .select('id')
-            .limit(1)
-            .maybeSingle();
-        
-        if (existing) {
-            // Actualizar
-            const { error } = await supabaseClient
-                .from('author')
-                .update(authorInfo)
-                .eq('id', existing.id);
-            
-            if (error) throw error;
-        } else {
-            // Insertar
-            const { error } = await supabaseClient
-                .from('author')
-                .insert([authorInfo]);
-            
-            if (error) throw error;
-        }
-        
-        return true;
-    } catch (error) {
-        console.error('Error guardando autor en Supabase:', error);
-        return false;
-    }
-}        
         function checkAuth() {
             const savedAuth = localStorage.getItem('ladoC-admin');
             if (savedAuth === 'true') {
@@ -2149,107 +2020,79 @@ async function saveAuthorToSupabase() {
         }
         
         // ===== GESTIÓN DE EDITORIALES =====
-      async function saveArticle() {
-    if (!isAdmin) {
-        showNotification('❌ Debes iniciar sesión', 'error');
-        return;
-    }
-    
-    const title = document.getElementById('article-title').value;
-    const summary = document.getElementById('article-summary').value;
-    const content = document.getElementById('article-content').value;
-    const category = document.getElementById('article-category').value;
-    const image = document.getElementById('article-image').value;
-    const author = document.getElementById('article-author').value || authorInfo.name;
-    const featured = document.getElementById('article-featured').value === '1';
-    const editingId = document.getElementById('editing-article-id').value;
-    
-    if (!title || !summary || !content) {
-        showNotification('❌ Completa todos los campos', 'error');
-        return;
-    }
-    
-    const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80';
-    let articleToSave;
-    
-    if (editingId) {
-        const articleIndex = articles.findIndex(a => a.id === parseInt(editingId));
-        if (articleIndex !== -1) {
-            articles[articleIndex] = {
-                ...articles[articleIndex],
-                title,
-                summary,
-                content,
-                category,
-                image: finalImage,
-                author,
-                featured
-            };
-            articleToSave = articles[articleIndex];
-        }
-        
-        document.getElementById('editing-article-id').value = '';
-        document.getElementById('save-article').textContent = 'Guardar Editorial';
-    } else {
-        currentArticleId++;
-        articleToSave = {
-            id: currentArticleId,
-            title,
-            summary,
-            content,
-            category,
-            author,
-            date: formatDate(),
-            image: finalImage,
-            views: 0,
-            featured
-        };
-        
-        articles.unshift(articleToSave);
-    }
-    
-    // Guardar en localStorage
-    saveToLocalStorage();
-    
-    // Guardar en Supabase
-    if (supabaseClient) {
-        const supabaseSuccess = await saveArticleToSupabase(articleToSave);
-        
-        if (supabaseSuccess) {
-            showNotification('✅ Editorial guardado en la base de datos', 'success');
-        } else {
-            showNotification('⚠ Editorial guardado localmente', 'warning');
-        }
-    } else {
-        showNotification('✅ Editorial guardado localmente', 'info');
-    }
-    
-    updateViewAfterChange();
-    
-    if (!editingId) {
-        document.getElementById('article-title').value = '';
-        document.getElementById('article-summary').value = '';
-        document.getElementById('article-content').value = '';
-        document.getElementById('article-image').value = '';
-        document.getElementById('article-author').value = '';
-    }
-}
+        async function saveArticle() {
+            if (!isAdmin) {
+                showNotification('❌ Debes iniciar sesión', 'error');
+                return;
+            }
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON SUPABASE
-            if (supabaseClient) {
-                const articleToSave = editingId ? 
-                    articles.find(a => a.id === parseInt(editingId)) : 
-                    articles.find(a => a.id === currentArticleId);
+            const title = document.getElementById('article-title').value;
+            const summary = document.getElementById('article-summary').value;
+            const content = document.getElementById('article-content').value;
+            const category = document.getElementById('article-category').value;
+            const image = document.getElementById('article-image').value;
+            const author = document.getElementById('article-author').value || authorInfo.name;
+            const featured = document.getElementById('article-featured').value === '1';
+            const editingId = document.getElementById('editing-article-id').value;
+            
+            if (!title || !summary || !content) {
+                showNotification('❌ Completa todos los campos', 'error');
+                return;
+            }
+            
+            const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80';
+            let articleToSave;
+            
+            if (editingId) {
+                const articleIndex = articles.findIndex(a => a.id === parseInt(editingId));
+                if (articleIndex !== -1) {
+                    articles[articleIndex] = {
+                        ...articles[articleIndex],
+                        title,
+                        summary,
+                        content,
+                        category,
+                        image: finalImage,
+                        author,
+                        featured
+                    };
+                    articleToSave = articles[articleIndex];
+                }
                 
+                document.getElementById('editing-article-id').value = '';
+                document.getElementById('save-article').textContent = 'Guardar Editorial';
+            } else {
+                currentArticleId++;
+                articleToSave = {
+                    id: currentArticleId,
+                    title,
+                    summary,
+                    content,
+                    category,
+                    author,
+                    date: formatDate(),
+                    image: finalImage,
+                    views: 0,
+                    featured
+                };
+                
+                articles.unshift(articleToSave);
+            }
+            
+            // Guardar en localStorage
+            saveToLocalStorage();
+            
+            // Guardar en Supabase
+            if (supabaseClient) {
                 const supabaseSuccess = await saveArticleToSupabase(articleToSave);
                 
                 if (supabaseSuccess) {
-                    showNotification('✅ Editorial guardado en Supabase', 'success');
+                    showNotification('✅ Editorial guardado en la base de datos', 'success');
                 } else {
                     showNotification('⚠ Editorial guardado localmente', 'warning');
                 }
             } else {
-                showNotification('⚠ Editorial guardado localmente', 'warning');
+                showNotification('✅ Editorial guardado localmente', 'info');
             }
             
             updateViewAfterChange();
@@ -2263,42 +2106,29 @@ async function saveAuthorToSupabase() {
             }
         }
         
-      async function deleteArticle(id) {
-    if (!isAdmin) {
-        showNotification('❌ Debes iniciar sesión', 'error');
-        return;
-    }
-    
-    const article = articles.find(a => a.id === id);
-    if (!article) return;
-    
-    if (!confirm(`¿Eliminar "${article.title}"?`)) return;
-    
-    // 1. Eliminar localmente
-    articles = articles.filter(a => a.id !== id);
-    saveToLocalStorage();
-    
-    // 2. Eliminar de Supabase
-    const supabaseSuccess = await deleteArticleFromSupabase(id);
-    
-    if (supabaseSuccess) {
-        showNotification('✅ Editorial eliminado de la base de datos', 'success');
-    } else {
-        showNotification('⚠ Editorial eliminado localmente', 'warning');
-    }
-    
-    updateViewAfterChange();
-}
+        async function deleteArticle(id) {
+            if (!isAdmin) {
+                showNotification('❌ Debes iniciar sesión', 'error');
+                return;
+            }
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON SUPABASE
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            if (!confirm(`¿Eliminar "${article.title}"?`)) return;
+            
+            // 1. Eliminar localmente
+            articles = articles.filter(a => a.id !== id);
+            saveToLocalStorage();
+            
+            // 2. Eliminar de Supabase
+            let supabaseSuccess = false;
             if (supabaseClient) {
-                const supabaseSuccess = await deleteArticleFromSupabase(id);
-                
-                if (supabaseSuccess) {
-                    showNotification('✅ Editorial eliminado de Supabase', 'success');
-                } else {
-                    showNotification('⚠ Editorial eliminado localmente', 'warning');
-                }
+                supabaseSuccess = await deleteArticleFromSupabase(id);
+            }
+            
+            if (supabaseSuccess) {
+                showNotification('✅ Editorial eliminado de la base de datos', 'success');
             } else {
                 showNotification('⚠ Editorial eliminado localmente', 'warning');
             }
@@ -2307,45 +2137,31 @@ async function saveAuthorToSupabase() {
         }
         
         async function saveAuthor() {
-    const name = document.getElementById('author-name-input').value;
-    const photo = document.getElementById('author-photo-input').value;
-    const quote = document.getElementById('author-quote-input').value;
-    const bio = document.getElementById('author-bio-input').value;
-    
-    authorInfo = { name, photo, quote, bio };
-    saveToLocalStorage();
-    
-    document.getElementById('author-name').textContent = name;
-    document.getElementById('author-photo').src = photo;
-    document.getElementById('author-quote').textContent = `"${quote}"`;
-    document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
-    document.getElementById('article-author').value = name;
-    
-    // Guardar en Supabase (solo admins)
-    if (isAdmin) {
-        const supabaseSuccess = await saveAuthorToSupabase();
-        
-        if (supabaseSuccess) {
-            showNotification('✅ Autor actualizado en la base de datos', 'success');
-        } else {
-            showNotification('⚠ Autor actualizado localmente', 'warning');
-        }
-    } else {
-        showNotification('✅ Autor actualizado', 'success');
-    }
-}
+            const name = document.getElementById('author-name-input').value;
+            const photo = document.getElementById('author-photo-input').value;
+            const quote = document.getElementById('author-quote-input').value;
+            const bio = document.getElementById('author-bio-input').value;
             
-            // ⚡ SINCRONIZACIÓN AUTOMÁTICA CON SUPABASE
-            if (supabaseClient) {
+            authorInfo = { name, photo, quote, bio };
+            saveToLocalStorage();
+            
+            document.getElementById('author-name').textContent = name;
+            document.getElementById('author-photo').src = photo;
+            document.getElementById('author-quote').textContent = `"${quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
+            document.getElementById('article-author').value = name;
+            
+            // Guardar en Supabase (solo admins)
+            if (isAdmin && supabaseClient) {
                 const supabaseSuccess = await saveAuthorToSupabase();
                 
                 if (supabaseSuccess) {
-                    showNotification('✅ Autor actualizado en Supabase', 'success');
+                    showNotification('✅ Autor actualizado en la base de datos', 'success');
                 } else {
                     showNotification('⚠ Autor actualizado localmente', 'warning');
                 }
             } else {
-                showNotification('⚠ Autor actualizado localmente', 'warning');
+                showNotification('✅ Autor actualizado', 'success');
             }
         }
         
@@ -2483,73 +2299,10 @@ async function saveAuthorToSupabase() {
         
         // ===== FUNCIONES DE SUPABASE =====
         async function testSupabaseConnection() {
-    showNotification('🔌 Probando conexión con Supabase...', 'info');
-    
-    try {
-        const { data, error } = await supabaseClient
-            .from('articles')
-            .select('*', { count: 'exact', head: true });
-        
-        const statusDiv = document.getElementById('supabase-status');
-        const statusText = document.getElementById('supabase-status-text');
-        
-        if (error) {
-            statusText.textContent = `❌ Error: ${error.message}`;
-            statusText.style.color = 'var(--color-danger)';
-            statusDiv.style.display = 'block';
-            showNotification(`❌ Error: ${error.message}`, 'error');
-        } else {
-            statusText.textContent = '✅ Conexión exitosa';
-            statusText.style.color = 'var(--color-success)';
-            statusDiv.style.display = 'block';
-            showNotification('✅ Conexión a Supabase exitosa', 'success');
-        }
-    } catch (error) {
-        showNotification(`❌ Error de conexión: ${error.message}`, 'error');
-    }
-}
-
-async function reloadFromSupabase() {
-    showNotification('🔄 Recargando desde Supabase...', 'info');
-    
-    const supabaseData = await loadDataFromSupabase();
-    
-    if (supabaseData && supabaseData.articles) {
-        articles = supabaseData.articles || [];
-        authorInfo = supabaseData.author || getDefaultAuthor();
-        
-        if (articles.length > 0) {
-            currentArticleId = Math.max(...articles.map(a => a.id));
-        }
-        
-        saveToLocalStorage();
-        
-        // Actualizar UI
-        if (currentSection === 'inicio') renderArticles();
-        else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-            renderCategoryArticles(currentSection);
-        } else if (currentSection === 'archivo') renderFullArchive();
-        
-        document.getElementById('author-name').textContent = authorInfo.name;
-        document.getElementById('author-photo').src = authorInfo.photo;
-        document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-        document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-        
-        updateAdminArticleList();
-        updateStatistics();
-        
-        showNotification('✅ Datos recargados desde Supabase', 'success');
-    } else {
-        showNotification('❌ Error al recargar desde Supabase', 'error');
-    }
-}
+            showNotification('🔌 Probando conexión con Supabase...', 'info');
             
             try {
-                // Inicializar cliente temporal
-                const tempClient = window.supabase.createClient(url, key);
-                
-                // Intentar obtener algún dato
-                const { data, error } = await tempClient
+                const { data, error } = await supabaseClient
                     .from('articles')
                     .select('*', { count: 'exact', head: true });
                 
@@ -2571,7 +2324,41 @@ async function reloadFromSupabase() {
                 showNotification(`❌ Error de conexión: ${error.message}`, 'error');
             }
         }
-        
+
+        async function reloadFromSupabase() {
+            showNotification('🔄 Recargando desde Supabase...', 'info');
+            
+            const supabaseData = await loadDataFromSupabase();
+            
+            if (supabaseData && supabaseData.articles) {
+                articles = supabaseData.articles || [];
+                authorInfo = supabaseData.author || getDefaultAuthor();
+                
+                if (articles.length > 0) {
+                    currentArticleId = Math.max(...articles.map(a => a.id));
+                }
+                
+                saveToLocalStorage();
+                
+                // Actualizar UI
+                if (currentSection === 'inicio') renderArticles();
+                else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                    renderCategoryArticles(currentSection);
+                } else if (currentSection === 'archivo') renderFullArchive();
+                
+                document.getElementById('author-name').textContent = authorInfo.name;
+                document.getElementById('author-photo').src = authorInfo.photo;
+                document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+                document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+                
+                updateAdminArticleList();
+                updateStatistics();
+                
+                showNotification('✅ Datos recargados desde Supabase', 'success');
+            } else {
+                showNotification('❌ Error al recargar desde Supabase', 'error');
+            }
+        }
         
         // ===== FUNCIONES DE LOGIN MODAL =====
         function showLoginModal() {
@@ -2610,50 +2397,42 @@ async function reloadFromSupabase() {
         }
         
         // ===== INICIALIZACIÓN =====
-      // ===== CARGA PRINCIPAL INTELIGENTE =====
-async function loadData() {
-    showNotification('📡 Conectando con la base de datos...', 'info');
-    
-    // Inicializar Supabase
-    initSupabase();
-    
-    // Intentar cargar desde Supabase
-    const supabaseData = await loadDataFromSupabase();
-    
-    if (supabaseData && supabaseData.articles) {
-        // ✅ ÉXITO: Usar datos de Supabase
-        articles = supabaseData.articles || [];
-        authorInfo = supabaseData.author || getDefaultAuthor();
-        
-        if (articles.length > 0) {
-            currentArticleId = Math.max(...articles.map(a => a.id));
-        }
-        
-        saveToLocalStorage();
-        showNotification('✅ Datos actualizados cargados', 'success');
-    } else {
-        // Fallback a localStorage
-        const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
-        const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
-        
-        if (savedArticles && savedArticles.length > 0) {
-            articles = savedArticles;
-            authorInfo = savedAuthor || getDefaultAuthor();
-            showNotification('⚠ Usando datos en caché', 'warning');
-        } else {
-            // Datos predeterminados
-            articles = getDefaultArticles();
-            authorInfo = getDefaultAuthor();
-            showNotification('ℹ️ Bienvenido a Lado C', 'info');
-        }
-        
-        if (articles.length > 0) {
-            currentArticleId = Math.max(...articles.map(a => a.id));
-        }
-    }
-    
-    return articles.length > 0;
-}
+        document.addEventListener('DOMContentLoaded', async function() {
+            checkAuth();
+            
+            // Cargar configuración de Supabase
+            loadSupabaseConfig();
+            
+            // Inicializar Supabase
+            initSupabase();
+            
+            // Cargar datos
+            await loadData();
+            
+            document.getElementById('author-name').textContent = authorInfo.name;
+            document.getElementById('author-photo').src = authorInfo.photo;
+            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+            
+            renderArticles();
+            
+            const savedColor = localStorage.getItem('ladoC-color');
+            if (savedColor) {
+                document.documentElement.style.setProperty('--color-bordo', savedColor);
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('active');
+                    if (option.dataset.color === savedColor) {
+                        option.classList.add('active');
+                    }
+                });
+            }
+            
+            const savedTitle = localStorage.getItem('ladoC-site-title');
+            if (savedTitle) {
+                document.title = savedTitle;
+                document.getElementById('site-title').value = savedTitle;
+            }
+            
             // ===== EVENT LISTENERS =====
             
             // Logo - Inicio
@@ -2747,7 +2526,7 @@ async function loadData() {
             document.getElementById('save-supabase-config').addEventListener('click', saveSupabaseConfig);
             document.getElementById('test-supabase').addEventListener('click', testSupabaseConnection);
             document.getElementById('reload-from-supabase').addEventListener('click', reloadFromSupabase);
-           
+            
             // Búsqueda en tiempo real
             document.getElementById('search-articles').addEventListener('input', updateAdminArticleList);
             
