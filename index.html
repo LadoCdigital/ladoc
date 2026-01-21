@@ -1109,6 +1109,7 @@
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
+                </div>
             </div>
             
             <div class="footer-bottom">
@@ -1245,38 +1246,34 @@
                 <button class="admin-button success" id="save-site">Guardar Configuración</button>
             </div>
             
-            <!-- SECCIÓN: BASE DE DATOS SUPABASE -->
+            <!-- SECCIÓN: BASE DE DATOS COMPARTIDA -->
             <div class="admin-section">
-                <h3>🛢️ Base de Datos Supabase</h3>
+                <h3>🛢️ Base de Datos Compartida</h3>
                 <p style="color: var(--color-gris-medio); margin-bottom: 20px;">
-                    <strong>Este sistema usa Supabase para almacenamiento compartido.</strong> Todos los cambios se guardan en la nube y están disponibles para todos los usuarios.
+                    <strong>Este sistema usa LocalStorage por defecto.</strong> Para compartir datos entre usuarios, configura Supabase.
                 </p>
                 
                 <div style="background-color: var(--color-gris-claro); padding: 15px; border-radius: var(--border-radius); margin: 20px 0;">
-                    <h4 style="margin-bottom: 10px; color: var(--color-bordo);">✅ ¿Cómo funciona?</h4>
+                    <h4 style="margin-bottom: 10px; color: var(--color-bordo);">📋 Para configurar Supabase:</h4>
                     <ol style="margin-left: 20px; color: var(--color-gris-medio);">
-                        <li><strong>Tú guardas:</strong> Creas/editas un artículo o autor</li>
-                        <li><strong>Se guarda en la nube:</strong> Automáticamente se guarda en Supabase</li>
-                        <li><strong>Ellos ven:</strong> Todos los usuarios ven los cambios al instante</li>
-                        <li><strong>Sincronización:</strong> Datos compartidos entre todos los dispositivos</li>
+                        <li>Ve a <a href="https://supabase.com" target="_blank">supabase.com</a> y crea cuenta gratis</li>
+                        <li>Crea proyecto → Ve a SQL Editor</li>
+                        <li>Ejecuta el SQL de las tablas (ver instrucciones abajo)</li>
+                        <li>Copia tu URL y Anon Key</li>
+                        <li>Reemplázalos en el código JavaScript</li>
                     </ol>
                 </div>
                 
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button class="admin-button secondary" onclick="exportData()">
-                        <i class="fas fa-download"></i> Exportar Datos
-                    </button>
-                    <button class="admin-button secondary" onclick="importData()">
-                        <i class="fas fa-upload"></i> Importar Datos
-                    </button>
-                    <button class="admin-button warning" onclick="clearAllData()">
-                        <i class="fas fa-trash"></i> Limpiar Todo
-                    </button>
-                </div>
+                <button class="admin-button secondary" onclick="exportData()">
+                    <i class="fas fa-download"></i> Exportar Datos
+                </button>
+                <button class="admin-button secondary" onclick="importData()">
+                    <i class="fas fa-upload"></i> Importar Datos
+                </button>
                 
-                <div id="sync-status" style="background-color: #e8f4fd; border-left: 4px solid #2196F3; padding: 12px; margin-top: 20px; border-radius: var(--border-radius);">
+                <div style="background-color: #e8f4fd; border-left: 4px solid #2196F3; padding: 12px; margin-top: 20px; border-radius: var(--border-radius);">
                     <p style="color: #0d47a1; margin: 0;">
-                        <strong>Estado de sincronización:</strong> <span id="sync-status-text">Conectando...</span>
+                        <strong>💡 Sistema funcional:</strong> Tus datos se guardan en tu navegador. Puedes exportarlos e importarlos.
                     </p>
                 </div>
             </div>
@@ -1300,7 +1297,7 @@
                     <div>
                         <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
                         <p><strong>Sesión activa:</strong> <span id="session-status">No activa</span></p>
-                        <p><strong>Versión:</strong> 6.0 (Supabase Sync)</p>
+                        <p><strong>Versión:</strong> 1.0 (Local Storage)</p>
                     </div>
                 </div>
             </div>
@@ -1308,11 +1305,13 @@
     </div>
 
     <script>
-        // ===== CONFIGURACIÓN SUPABASE =====
-        // ¡IMPORTANTE! Reemplaza estas credenciales con las tuyas de Supabase
-        const SUPABASE_URL = 'https://tu-proyecto.supabase.co'; // Reemplaza con tu URL
-        const SUPABASE_ANON_KEY = 'tu-clave-anon-publica'; // Reemplaza con tu clave anónima
+        // ===== CONFIGURACIÓN SUPABASE (OPCIONAL) =====
+        // Descomenta y reemplaza con tus credenciales para usar Supabase
+        /*
+        const SUPABASE_URL = 'https://tu-proyecto.supabase.co';
+        const SUPABASE_ANON_KEY = 'tu-clave-anon-publica';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        */
 
         // ===== VARIABLES DEL SISTEMA =====
         let articles = [];
@@ -1321,13 +1320,19 @@
         let isAdmin = false;
         let currentSection = 'inicio';
         let currentArchiveFilter = 'all';
-        let isOnline = true;
+        let useSupabase = false; // Cambia a true si configuras Supabase
         
         // ===== AUTENTICACIÓN =====
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "ladoc2023";
         
         // ===== FUNCIONES DE UTILIDAD =====
+        function saveToLocalStorage() {
+            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
+            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
+            localStorage.setItem('ladoC-last-update', new Date().toISOString());
+        }
+        
         function formatDate() {
             const now = new Date();
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -1345,104 +1350,43 @@
             }, 3000);
         }
         
-        // ===== FUNCIONES DE SINCRONIZACIÓN CON SUPABASE =====
-        async function saveData() {
-            try {
-                if (!isOnline) {
-                    showNotification('⚠️ Modo offline - Guardando localmente', 'warning');
-                    saveToLocalStorage();
-                    return false;
-                }
-                
-                // Guardar artículos en Supabase
-                const { error: articlesError } = await supabase
-                    .from('articles')
-                    .upsert(articles.map(article => ({
-                        id: article.id,
-                        title: article.title,
-                        summary: article.summary,
-                        content: article.content,
-                        category: article.category,
-                        author: article.author,
-                        date: article.date,
-                        image: article.image,
-                        views: article.views || 0,
-                        featured: article.featured || false,
-                        updated_at: new Date().toISOString()
-                    })));
-                
-                // Guardar información del autor en Supabase
-                const { error: authorError } = await supabase
-                    .from('author')
-                    .upsert([{ 
-                        id: 1, 
-                        name: authorInfo.name,
-                        photo: authorInfo.photo,
-                        quote: authorInfo.quote,
-                        bio: authorInfo.bio,
-                        updated_at: new Date().toISOString()
-                    }]);
-                
-                if (articlesError || authorError) {
-                    console.error('Error guardando en Supabase:', articlesError || authorError);
-                    showNotification('⚠️ Error guardando en la nube - Guardando localmente', 'warning');
-                    saveToLocalStorage();
-                    return false;
-                } else {
-                    console.log('✅ Datos guardados en Supabase');
-                    document.getElementById('sync-status-text').textContent = 'Sincronizado: ' + new Date().toLocaleTimeString();
-                    document.getElementById('sync-status').style.borderLeftColor = '#4CAF50';
-                    document.getElementById('sync-status').style.backgroundColor = '#e8f5e9';
-                    return true;
-                }
-            } catch (error) {
-                console.error('Error en saveData:', error);
-                saveToLocalStorage();
-                return false;
-            }
-        }
-        
+        // ===== CARGA DE DATOS =====
         async function loadData() {
             showNotification('📂 Cargando datos...', 'info');
             
             try {
-                // Primero intentar cargar desde Supabase
-                if (isOnline) {
-                    // Cargar artículos desde Supabase
-                    const { data: articlesData, error: articlesError } = await supabase
-                        .from('articles')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    // Cargar autor desde Supabase
-                    const { data: authorData, error: authorError } = await supabase
-                        .from('author')
-                        .select('*')
-                        .eq('id', 1)
-                        .single();
-                    
-                    if (!articlesError && articlesData && articlesData.length > 0) {
-                        articles = articlesData;
-                        authorInfo = authorData || getDefaultAuthor();
+                // Si Supabase está configurado, intentar cargar desde allí
+                if (useSupabase && typeof supabase !== 'undefined') {
+                    try {
+                        const { data: articlesData, error: articlesError } = await supabase
+                            .from('articles')
+                            .select('*')
+                            .order('created_at', { ascending: false });
                         
-                        if (articles.length > 0) {
-                            currentArticleId = Math.max(...articles.map(a => a.id));
+                        const { data: authorData, error: authorError } = await supabase
+                            .from('author')
+                            .select('*')
+                            .eq('id', 1)
+                            .single();
+                        
+                        if (!articlesError && articlesData && articlesData.length > 0) {
+                            articles = articlesData;
+                            authorInfo = authorData || getDefaultAuthor();
+                            
+                            if (articles.length > 0) {
+                                currentArticleId = Math.max(...articles.map(a => a.id));
+                            }
+                            
+                            showNotification('✅ Datos cargados desde Supabase', 'success');
+                            saveToLocalStorage(); // Guardar copia local
+                            return true;
                         }
-                        
-                        // Actualizar estado de sincronización
-                        document.getElementById('sync-status-text').textContent = 'Conectado a Supabase';
-                        document.getElementById('sync-status').style.borderLeftColor = '#4CAF50';
-                        document.getElementById('sync-status').style.backgroundColor = '#e8f5e9';
-                        
-                        // Guardar copia local
-                        saveToLocalStorage();
-                        
-                        showNotification('✅ Datos cargados desde la nube', 'success');
-                        return true;
+                    } catch (supabaseError) {
+                        console.log('Error con Supabase, usando localStorage:', supabaseError);
                     }
                 }
                 
-                // Si no hay conexión o error, cargar desde localStorage
+                // Cargar desde localStorage
                 const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
                 const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
                 
@@ -1454,11 +1398,7 @@
                         currentArticleId = Math.max(...articles.map(a => a.id));
                     }
                     
-                    document.getElementById('sync-status-text').textContent = 'Modo offline - Usando datos locales';
-                    document.getElementById('sync-status').style.borderLeftColor = '#FF9800';
-                    document.getElementById('sync-status').style.backgroundColor = '#FFF3E0';
-                    
-                    showNotification('✅ Datos cargados desde caché local', 'success');
+                    showNotification('✅ Datos cargados correctamente', 'success');
                 } else {
                     // Datos predeterminados
                     articles = getDefaultArticles();
@@ -1471,16 +1411,10 @@
                 
                 return true;
             } catch (error) {
-                console.error('Error en loadData:', error);
+                console.error('Error cargando datos:', error);
                 showNotification('❌ Error cargando datos', 'error');
                 return false;
             }
-        }
-        
-        function saveToLocalStorage() {
-            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
-            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
-            localStorage.setItem('ladoC-last-sync', new Date().toISOString());
         }
         
         // ===== DATOS PREDETERMINADOS =====
@@ -1714,7 +1648,7 @@
             
             // Incrementar contador de vistas
             article.views = (article.views || 0) + 1;
-            saveData();
+            saveToLocalStorage();
             
             // Mostrar artículo completo
             const articleFullView = document.getElementById('article-full-view');
@@ -1988,8 +1922,18 @@
                 showNotification('✅ Editorial creado correctamente', 'success');
             }
             
-            // Guardar en Supabase
-            await saveData();
+            // Guardar datos
+            saveToLocalStorage();
+            
+            // Si Supabase está configurado, guardar allí también
+            if (useSupabase && typeof supabase !== 'undefined') {
+                try {
+                    await saveToSupabase();
+                } catch (error) {
+                    console.error('Error guardando en Supabase:', error);
+                }
+            }
+            
             updateViewAfterChange();
             
             // Limpiar formulario si es nuevo artículo
@@ -2000,6 +1944,28 @@
                 document.getElementById('article-image').value = '';
                 document.getElementById('article-author').value = authorInfo.name || '';
                 document.getElementById('article-featured').value = 'false';
+            }
+        }
+        
+        async function saveToSupabase() {
+            if (!useSupabase || typeof supabase === 'undefined') return;
+            
+            try {
+                // Guardar artículos
+                const { error: articlesError } = await supabase
+                    .from('articles')
+                    .upsert(articles);
+                
+                // Guardar autor
+                const { error: authorError } = await supabase
+                    .from('author')
+                    .upsert([{ id: 1, ...authorInfo }]);
+                
+                if (!articlesError && !authorError) {
+                    console.log('✅ Datos guardados en Supabase');
+                }
+            } catch (error) {
+                console.error('Error guardando en Supabase:', error);
             }
         }
         
@@ -2015,8 +1981,8 @@
             if (!confirm(`¿Eliminar "${article.title}"? Esta acción no se puede deshacer.`)) return;
             
             try {
-                // Eliminar de Supabase si estamos en línea
-                if (isOnline) {
+                // Si Supabase está configurado, eliminar de allí
+                if (useSupabase && typeof supabase !== 'undefined') {
                     const { error } = await supabase
                         .from('articles')
                         .delete()
@@ -2024,21 +1990,16 @@
                     
                     if (error) throw error;
                 }
-                
-                // Eliminar localmente
-                articles = articles.filter(a => a.id !== id);
-                saveToLocalStorage();
-                
-                showNotification('✅ Editorial eliminado correctamente', 'success');
-                updateViewAfterChange();
             } catch (error) {
-                console.error('Error eliminando artículo:', error);
-                // Eliminar solo localmente
-                articles = articles.filter(a => a.id !== id);
-                saveToLocalStorage();
-                showNotification('✅ Editorial eliminado localmente', 'success');
-                updateViewAfterChange();
+                console.error('Error eliminando de Supabase:', error);
             }
+            
+            // Eliminar localmente
+            articles = articles.filter(a => a.id !== id);
+            saveToLocalStorage();
+            
+            showNotification('✅ Editorial eliminado correctamente', 'success');
+            updateViewAfterChange();
         }
         
         async function saveAuthor() {
@@ -2053,9 +2014,16 @@
             }
             
             authorInfo = { name, photo, quote, bio };
+            saveToLocalStorage();
             
-            // Guardar en Supabase
-            await saveData();
+            // Si Supabase está configurado, guardar allí
+            if (useSupabase && typeof supabase !== 'undefined') {
+                try {
+                    await saveToSupabase();
+                } catch (error) {
+                    console.error('Error guardando autor en Supabase:', error);
+                }
+            }
             
             // Actualizar UI
             document.getElementById('author-name').textContent = name;
@@ -2185,8 +2153,17 @@
             
             authorInfo = getDefaultAuthor();
             
-            // Guardar en Supabase
-            await saveData();
+            // Guardar
+            saveToLocalStorage();
+            
+            // Si Supabase está configurado, actualizar allí
+            if (useSupabase && typeof supabase !== 'undefined') {
+                try {
+                    await saveToSupabase();
+                } catch (error) {
+                    console.error('Error actualizando Supabase:', error);
+                }
+            }
             
             // Actualizar vista de autor
             document.getElementById('author-name').textContent = authorInfo.name;
@@ -2241,8 +2218,18 @@
                             authorInfo = data.author || getDefaultAuthor();
                             currentArticleId = data.currentArticleId || 0;
                             
-                            // Guardar en Supabase
-                            await saveData();
+                            // Guardar
+                            saveToLocalStorage();
+                            
+                            // Si Supabase está configurado, actualizar allí
+                            if (useSupabase && typeof supabase !== 'undefined') {
+                                try {
+                                    await saveToSupabase();
+                                } catch (error) {
+                                    console.error('Error actualizando Supabase:', error);
+                                }
+                            }
+                            
                             updateViewAfterChange();
                             
                             document.getElementById('author-name').textContent = authorInfo.name;
@@ -2260,48 +2247,6 @@
             };
             
             input.click();
-        }
-        
-        async function clearAllData() {
-            if (!confirm("¿Está seguro de que desea eliminar TODOS los datos? Esta acción no se puede deshacer.")) {
-                return;
-            }
-            
-            if (!confirm("¿REALMENTE seguro? Se perderán todos los artículos y configuraciones.")) {
-                return;
-            }
-            
-            try {
-                // Limpiar Supabase si estamos en línea
-                if (isOnline) {
-                    const { error } = await supabase
-                        .from('articles')
-                        .delete()
-                        .gte('id', 0); // Eliminar todos los artículos
-                    
-                    if (error) throw error;
-                }
-                
-                // Limpiar localmente
-                localStorage.clear();
-                articles = [];
-                authorInfo = getDefaultAuthor();
-                currentArticleId = 0;
-                isAdmin = false;
-                
-                document.getElementById('author-name').textContent = authorInfo.name;
-                document.getElementById('author-photo').src = authorInfo.photo;
-                document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-                document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-                
-                updateViewAfterChange();
-                updateAdminUI();
-                
-                showNotification('✅ Todos los datos han sido eliminados', 'success');
-            } catch (error) {
-                console.error('Error limpiando datos:', error);
-                showNotification('❌ Error al limpiar datos', 'error');
-            }
         }
         
         // ===== FUNCIONES DE LOGIN MODAL =====
@@ -2340,28 +2285,8 @@
             showNotification('✅ Mensaje enviado correctamente', 'success');
         }
         
-        // ===== DETECCIÓN DE CONEXIÓN =====
-        function updateOnlineStatus() {
-            isOnline = navigator.onLine;
-            
-            if (isOnline) {
-                document.getElementById('sync-status-text').textContent = 'En línea - Conectado a Supabase';
-                document.getElementById('sync-status').style.borderLeftColor = '#4CAF50';
-                document.getElementById('sync-status').style.backgroundColor = '#e8f5e9';
-            } else {
-                document.getElementById('sync-status-text').textContent = 'Modo offline - Usando datos locales';
-                document.getElementById('sync-status').style.borderLeftColor = '#FF9800';
-                document.getElementById('sync-status').style.backgroundColor = '#FFF3E0';
-            }
-        }
-        
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', async function() {
-            // Configurar detección de conexión
-            window.addEventListener('online', updateOnlineStatus);
-            window.addEventListener('offline', updateOnlineStatus);
-            updateOnlineStatus();
-            
             checkAuth();
             
             // Cargar datos
