@@ -1171,8 +1171,8 @@
                 <div class="form-group">
                     <label for="article-featured">Destacado:</label>
                     <select id="article-featured" class="form-control">
-                        <option value="0">No destacado</option>
-                        <option value="1">Destacado</option>
+                        <option value="false">No destacado</option>
+                        <option value="true">Destacado</option>
                     </select>
                 </div>
                 
@@ -1333,10 +1333,10 @@
     </div>
 
     <script>
-        // ===== CONFIGURACIÓN SUPABASE - CREDENCIALES PÚBLICAS =====
+        // ===== CONFIGURACIÓN SUPABASE =====
         const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_Dja2vBRCFGNfiCqWFVtf7Q_wpjFXgnP';
-
+        
         // ===== VARIABLES DEL SISTEMA =====
         let supabaseClient = null;
         let articles = [];
@@ -1405,46 +1405,60 @@
         
         // ===== INICIALIZAR SUPABASE =====
         function initSupabase() {
-            if (window.supabase) {
-                const config = loadSupabaseConfig();
-                const url = config?.url || SUPABASE_URL;
-                const key = config?.key || SUPABASE_ANON_KEY;
-                
-                if (url && key) {
-                    supabaseClient = window.supabase.createClient(url, key);
-                    console.log('✅ Supabase inicializado');
-                    return true;
+            try {
+                if (window.supabase) {
+                    const config = loadSupabaseConfig();
+                    const url = config?.url || SUPABASE_URL;
+                    const key = config?.key || SUPABASE_ANON_KEY;
+                    
+                    if (url && key) {
+                        supabaseClient = window.supabase.createClient(url, key);
+                        console.log('✅ Supabase inicializado con URL:', url);
+                        return true;
+                    }
                 }
+                console.warn('⚠ Supabase no se pudo inicializar');
+                return false;
+            } catch (error) {
+                console.error('❌ Error inicializando Supabase:', error);
+                return false;
             }
-            console.error('❌ Error inicializando Supabase');
-            return false;
         }
         
         // ===== CARGA DE DATOS DESDE SUPABASE =====
         async function loadDataFromSupabase() {
-            if (!supabaseClient) return null;
+            if (!supabaseClient) {
+                console.log('Supabase no inicializado');
+                return null;
+            }
             
             try {
-                // 1. Cargar artículos
+                // Cargar artículos
                 const { data: articlesData, error: articlesError } = await supabaseClient
                     .from('articles')
-                    .select('*');
+                    .select('*')
+                    .order('created_at', { ascending: false });
                 
                 if (articlesError) {
                     console.error('Error cargando artículos:', articlesError);
                     return null;
                 }
                 
-                // 2. Cargar autor
+                // Cargar autor
                 const { data: authorData, error: authorError } = await supabaseClient
                     .from('author')
                     .select('*')
                     .limit(1)
                     .single();
                 
-                if (authorError && authorError.code !== 'PGRST116') { // PGRST116 = no encontrado
+                if (authorError && authorError.code !== 'PGRST116') {
                     console.error('Error cargando autor:', authorError);
                 }
+                
+                console.log('✅ Datos cargados desde Supabase:', {
+                    articles: articlesData?.length || 0,
+                    author: authorData ? 'Sí' : 'No'
+                });
                 
                 return {
                     articles: articlesData || [],
@@ -1457,42 +1471,59 @@
             }
         }
         
-        // ===== GUARDADO EN SUPABASE (SOLO ADMINS) =====
+        // ===== GUARDADO EN SUPABASE =====
         async function saveArticleToSupabase(article) {
-            if (!supabaseClient || !isAdmin) return false;
+            if (!supabaseClient || !isAdmin) {
+                console.log('No se puede guardar: Supabase no inicializado o no es admin');
+                return false;
+            }
             
             try {
-                // Verificar si existe
-                const { data: existing, error: fetchError } = await supabaseClient
-                    .from('articles')
-                    .select('id')
-                    .eq('id', article.id)
-                    .maybeSingle();
+                // Preparar datos para Supabase (convertir tipos)
+                const articleForSupabase = {
+                    title: article.title,
+                    summary: article.summary,
+                    content: article.content,
+                    category: article.category,
+                    author: article.author,
+                    date: article.date,
+                    image: article.image,
+                    views: article.views || 0,
+                    featured: article.featured === true || article.featured === 'true'
+                };
                 
-                if (fetchError) throw fetchError;
+                let result;
                 
-                if (existing) {
-                    // Actualizar
-                    const { error } = await supabaseClient
+                if (article.supabase_id) {
+                    // Actualizar artículo existente
+                    result = await supabaseClient
                         .from('articles')
-                        .update(article)
-                        .eq('id', article.id);
-                    
-                    if (error) throw error;
-                    console.log(`✅ Artículo ${article.id} actualizado en Supabase`);
+                        .update(articleForSupabase)
+                        .eq('id', article.supabase_id);
                 } else {
-                    // Insertar
-                    const { error } = await supabaseClient
+                    // Insertar nuevo artículo
+                    result = await supabaseClient
                         .from('articles')
-                        .insert([article]);
+                        .insert([articleForSupabase])
+                        .select();
                     
-                    if (error) throw error;
-                    console.log(`✅ Artículo ${article.id} insertado en Supabase`);
+                    if (result.data && result.data[0]) {
+                        // Guardar el ID de Supabase en nuestro artículo local
+                        article.supabase_id = result.data[0].id;
+                        saveToLocalStorage();
+                    }
                 }
                 
+                if (result.error) {
+                    throw result.error;
+                }
+                
+                console.log(`✅ Artículo guardado en Supabase: ${article.title}`);
                 return true;
+                
             } catch (error) {
                 console.error('❌ Error guardando artículo en Supabase:', error);
+                showNotification(`❌ Error guardando: ${error.message}`, 'error');
                 return false;
             }
         }
@@ -1501,18 +1532,26 @@
             if (!supabaseClient || !isAdmin) return false;
             
             try {
+                // Encontrar el artículo para obtener su supabase_id
+                const article = articles.find(a => a.id === id);
+                if (!article || !article.supabase_id) {
+                    console.log('Artículo no tiene ID de Supabase');
+                    return false;
+                }
+                
                 const { error } = await supabaseClient
                     .from('articles')
                     .delete()
-                    .eq('id', id);
+                    .eq('id', article.supabase_id);
                 
                 if (error) throw error;
                 
-                console.log(`✅ Artículo ${id} eliminado de Supabase`);
+                console.log(`✅ Artículo eliminado de Supabase: ${article.title}`);
                 return true;
                 
             } catch (error) {
                 console.error('❌ Error eliminando artículo de Supabase:', error);
+                showNotification(`❌ Error eliminando: ${error.message}`, 'error');
                 return false;
             }
         }
@@ -1521,37 +1560,37 @@
             if (!supabaseClient || !isAdmin) return false;
             
             try {
-                // Verificar si ya existe un autor
-                const { data: existingAuthor, error: fetchError } = await supabaseClient
+                // Primero verificar si ya existe autor en Supabase
+                const { data: existingAuthors, error: fetchError } = await supabaseClient
                     .from('author')
-                    .select('id')
+                    .select('*')
                     .limit(1);
                 
                 if (fetchError) throw fetchError;
                 
-                if (existingAuthor && existingAuthor.length > 0) {
+                let result;
+                
+                if (existingAuthors && existingAuthors.length > 0) {
                     // Actualizar autor existente
-                    const { error: updateError } = await supabaseClient
+                    result = await supabaseClient
                         .from('author')
                         .update(authorInfo)
-                        .eq('id', existingAuthor[0].id);
-                    
-                    if (updateError) throw updateError;
-                    console.log('✅ Autor actualizado en Supabase');
+                        .eq('id', existingAuthors[0].id);
                 } else {
                     // Insertar nuevo autor
-                    const { error: insertError } = await supabaseClient
+                    result = await supabaseClient
                         .from('author')
                         .insert([authorInfo]);
-                    
-                    if (insertError) throw insertError;
-                    console.log('✅ Autor insertado en Supabase');
                 }
                 
+                if (result.error) throw result.error;
+                
+                console.log('✅ Autor guardado en Supabase');
                 return true;
                 
             } catch (error) {
                 console.error('❌ Error guardando autor en Supabase:', error);
+                showNotification(`❌ Error guardando autor: ${error.message}`, 'error');
                 return false;
             }
         }
@@ -1568,14 +1607,29 @@
             
             if (supabaseData && supabaseData.articles) {
                 // ✅ ÉXITO: Usar datos de Supabase
-                articles = supabaseData.articles || [];
+                articles = supabaseData.articles.map(article => ({
+                    id: article.id, // Usar el ID de Supabase como ID local
+                    supabase_id: article.id, // Guardar también el ID de Supabase
+                    title: article.title,
+                    summary: article.summary,
+                    content: article.content,
+                    category: article.category,
+                    author: article.author,
+                    date: article.date,
+                    image: article.image,
+                    views: article.views || 0,
+                    featured: article.featured || false
+                }));
+                
                 authorInfo = supabaseData.author || getDefaultAuthor();
                 
                 if (articles.length > 0) {
                     currentArticleId = Math.max(...articles.map(a => a.id));
                 }
                 
+                // Guardar en localStorage como caché
                 saveToLocalStorage();
+                
                 showNotification('✅ Datos actualizados cargados', 'success');
             } else {
                 // Fallback a localStorage
@@ -1598,6 +1652,7 @@
                 }
             }
             
+            console.log('Datos cargados:', { articlesCount: articles.length });
             return articles.length > 0;
         }
         
@@ -1804,11 +1859,11 @@
             if (!article) return;
             
             // Incrementar contador de vistas
-            article.views++;
+            article.views = (article.views || 0) + 1;
             saveToLocalStorage();
             
             // Guardar cambio en Supabase
-            if (supabaseClient && isAdmin) {
+            if (supabaseClient && isAdmin && article.supabase_id) {
                 saveArticleToSupabase(article);
             }
             
@@ -1950,10 +2005,10 @@
             document.body.style.overflow = 'hidden';
             
             // Cargar datos actuales en el formulario
-            document.getElementById('author-name-input').value = authorInfo.name;
-            document.getElementById('author-photo-input').value = authorInfo.photo;
-            document.getElementById('author-quote-input').value = authorInfo.quote;
-            document.getElementById('author-bio-input').value = authorInfo.bio;
+            document.getElementById('author-name-input').value = authorInfo.name || '';
+            document.getElementById('author-photo-input').value = authorInfo.photo || '';
+            document.getElementById('author-quote-input').value = authorInfo.quote || '';
+            document.getElementById('author-bio-input').value = authorInfo.bio || '';
             
             // Actualizar lista de artículos
             updateAdminArticleList();
@@ -2032,7 +2087,7 @@
             const category = document.getElementById('article-category').value;
             const image = document.getElementById('article-image').value;
             const author = document.getElementById('article-author').value || authorInfo.name;
-            const featured = document.getElementById('article-featured').value === '1';
+            const featured = document.getElementById('article-featured').value === 'true';
             const editingId = document.getElementById('editing-article-id').value;
             
             if (!title || !summary || !content) {
@@ -2103,6 +2158,7 @@
                 document.getElementById('article-content').value = '';
                 document.getElementById('article-image').value = '';
                 document.getElementById('article-author').value = '';
+                document.getElementById('article-featured').value = 'false';
             }
         }
         
@@ -2117,15 +2173,15 @@
             
             if (!confirm(`¿Eliminar "${article.title}"?`)) return;
             
-            // 1. Eliminar localmente
-            articles = articles.filter(a => a.id !== id);
-            saveToLocalStorage();
-            
-            // 2. Eliminar de Supabase
+            // 1. Intentar eliminar de Supabase primero
             let supabaseSuccess = false;
-            if (supabaseClient) {
+            if (supabaseClient && article.supabase_id) {
                 supabaseSuccess = await deleteArticleFromSupabase(id);
             }
+            
+            // 2. Eliminar localmente
+            articles = articles.filter(a => a.id !== id);
+            saveToLocalStorage();
             
             if (supabaseSuccess) {
                 showNotification('✅ Editorial eliminado de la base de datos', 'success');
@@ -2194,7 +2250,7 @@
         function updateStatistics() {
             const totalArticles = articles.length;
             const featuredArticles = articles.filter(a => a.featured).length;
-            const totalViews = articles.reduce((sum, article) => sum + article.views, 0);
+            const totalViews = articles.reduce((sum, article) => sum + (article.views || 0), 0);
             
             document.getElementById('total-articles').textContent = totalArticles;
             document.getElementById('featured-articles').textContent = featuredArticles;
@@ -2218,7 +2274,7 @@
             document.getElementById('article-category').value = article.category;
             document.getElementById('article-image').value = article.image;
             document.getElementById('article-author').value = article.author;
-            document.getElementById('article-featured').value = article.featured ? '1' : '0';
+            document.getElementById('article-featured').value = article.featured ? 'true' : 'false';
             document.getElementById('editing-article-id').value = article.id;
             
             // Cambiar botón a modo edición
@@ -2241,7 +2297,7 @@
             document.getElementById('article-image').value = '';
             document.getElementById('article-author').value = '';
             document.getElementById('article-category').value = 'Opinión';
-            document.getElementById('article-featured').value = '0';
+            document.getElementById('article-featured').value = 'false';
             document.getElementById('editing-article-id').value = '';
             
             // Cambiar botón a modo creación
@@ -2301,6 +2357,11 @@
         async function testSupabaseConnection() {
             showNotification('🔌 Probando conexión con Supabase...', 'info');
             
+            if (!supabaseClient) {
+                showNotification('❌ Supabase no inicializado', 'error');
+                return;
+            }
+            
             try {
                 const { data, error } = await supabaseClient
                     .from('articles')
@@ -2331,7 +2392,20 @@
             const supabaseData = await loadDataFromSupabase();
             
             if (supabaseData && supabaseData.articles) {
-                articles = supabaseData.articles || [];
+                articles = supabaseData.articles.map(article => ({
+                    id: article.id,
+                    supabase_id: article.id,
+                    title: article.title,
+                    summary: article.summary,
+                    content: article.content,
+                    category: article.category,
+                    author: article.author,
+                    date: article.date,
+                    image: article.image,
+                    views: article.views || 0,
+                    featured: article.featured || false
+                }));
+                
                 authorInfo = supabaseData.author || getDefaultAuthor();
                 
                 if (articles.length > 0) {
@@ -2409,10 +2483,10 @@
             // Cargar datos
             await loadData();
             
-            document.getElementById('author-name').textContent = authorInfo.name;
-            document.getElementById('author-photo').src = authorInfo.photo;
-            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+            document.getElementById('author-name').textContent = authorInfo.name || '';
+            document.getElementById('author-photo').src = authorInfo.photo || '';
+            document.getElementById('author-quote').textContent = authorInfo.quote ? `"${authorInfo.quote}"` : '';
+            document.getElementById('author-bio').innerHTML = authorInfo.bio ? `<p>${authorInfo.bio}</p>` : '<p></p>';
             
             renderArticles();
             
