@@ -1347,14 +1347,6 @@ let isAdmin = false;
 let currentSection = 'inicio';
 let currentArchiveFilter = 'all';
         
-        // ===== VARIABLES DEL SISTEMA =====
-        let articles = [];
-        let authorInfo = {};
-        let currentArticleId = 0;
-        let isAdmin = false;
-        let currentSection = 'inicio';
-        let currentArchiveFilter = 'all';
-        
         // ===== AUTENTICACIÓN =====
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "ladoc2023";
@@ -1404,22 +1396,7 @@ let currentArchiveFilter = 'all';
                 
                 localStorage.setItem('ladoC-supabase-config', JSON.stringify(supabaseConfig));
                 showNotification('✅ Configuración de Supabase guardada', 'success');
-                
-                // Inicializar Supabase con la nueva configuración
-                initSupabase();
-            }
-        }
-        
-        function initSupabase() {
-            if (supabaseConfig.url && supabaseConfig.key) {
-                supabaseClient = window.supabase.createClient(supabaseConfig.url, supabaseConfig.key);
-                console.log('Supabase inicializado');
-                return true;
-            } else {
-                console.log('No hay configuración de Supabase');
-                return false;
-            }
-        }
+            
         
         // ===== CARGA DE DATOS DESDE SUPABASE =====
         async function loadDataFromSupabase() {
@@ -1571,7 +1548,6 @@ let currentArchiveFilter = 'all';
             }
         }
         
-        // ===== CARGA PRINCIPAL INTELIGENTE =====
         // ===== CARGA PRINCIPAL INTELIGENTE =====
 async function loadData() {
     showNotification('📡 Conectando con la base de datos...', 'info');
@@ -2173,7 +2149,12 @@ async function saveAuthorToSupabase() {
         }
         
         // ===== GESTIÓN DE EDITORIALES =====
-       async function saveArticle() {
+      async function saveArticle() {
+    if (!isAdmin) {
+        showNotification('❌ Debes iniciar sesión', 'error');
+        return;
+    }
+    
     const title = document.getElementById('article-title').value;
     const summary = document.getElementById('article-summary').value;
     const content = document.getElementById('article-content').value;
@@ -2227,11 +2208,11 @@ async function saveAuthorToSupabase() {
         articles.unshift(articleToSave);
     }
     
-    // 1. Guardar en localStorage (para caché)
+    // Guardar en localStorage
     saveToLocalStorage();
     
-    // 2. Guardar en Supabase (solo admins)
-    if (isAdmin) {
+    // Guardar en Supabase
+    if (supabaseClient) {
         const supabaseSuccess = await saveArticleToSupabase(articleToSave);
         
         if (supabaseSuccess) {
@@ -2240,7 +2221,7 @@ async function saveAuthorToSupabase() {
             showNotification('⚠ Editorial guardado localmente', 'warning');
         }
     } else {
-        showNotification('✅ Editorial guardado', 'success');
+        showNotification('✅ Editorial guardado localmente', 'info');
     }
     
     updateViewAfterChange();
@@ -2662,39 +2643,50 @@ async function reloadFromSupabase() {
         }
         
         // ===== INICIALIZACIÓN =====
-       document.addEventListener('DOMContentLoaded', async function() {
-    checkAuth();
+      // ===== CARGA PRINCIPAL INTELIGENTE =====
+async function loadData() {
+    showNotification('📡 Conectando con la base de datos...', 'info');
     
     // Inicializar Supabase
     initSupabase();
     
-    // Cargar datos (ahora carga desde Supabase para todos)
-    await loadData();
+    // Intentar cargar desde Supabase
+    const supabaseData = await loadDataFromSupabase();
     
-    document.getElementById('author-name').textContent = authorInfo.name;
-    document.getElementById('author-photo').src = authorInfo.photo;
-    document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-    document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+    if (supabaseData && supabaseData.articles) {
+        // ✅ ÉXITO: Usar datos de Supabase
+        articles = supabaseData.articles || [];
+        authorInfo = supabaseData.author || getDefaultAuthor();
+        
+        if (articles.length > 0) {
+            currentArticleId = Math.max(...articles.map(a => a.id));
+        }
+        
+        saveToLocalStorage();
+        showNotification('✅ Datos actualizados cargados', 'success');
+    } else {
+        // Fallback a localStorage
+        const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
+        const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
+        
+        if (savedArticles && savedArticles.length > 0) {
+            articles = savedArticles;
+            authorInfo = savedAuthor || getDefaultAuthor();
+            showNotification('⚠ Usando datos en caché', 'warning');
+        } else {
+            // Datos predeterminados
+            articles = getDefaultArticles();
+            authorInfo = getDefaultAuthor();
+            showNotification('ℹ️ Bienvenido a Lado C', 'info');
+        }
+        
+        if (articles.length > 0) {
+            currentArticleId = Math.max(...articles.map(a => a.id));
+        }
+    }
     
-    renderArticles();
-            
-            const savedColor = localStorage.getItem('ladoC-color');
-            if (savedColor) {
-                document.documentElement.style.setProperty('--color-bordo', savedColor);
-                document.querySelectorAll('.color-option').forEach(option => {
-                    option.classList.remove('active');
-                    if (option.dataset.color === savedColor) {
-                        option.classList.add('active');
-                    }
-                });
-            }
-            
-            const savedTitle = localStorage.getItem('ladoC-site-title');
-            if (savedTitle) {
-                document.title = savedTitle;
-                document.getElementById('site-title').value = savedTitle;
-            }
-            
+    return articles.length > 0;
+}
             // ===== EVENT LISTENERS =====
             
             // Logo - Inicio
