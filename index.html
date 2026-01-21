@@ -2572,39 +2572,6 @@ async function reloadFromSupabase() {
             }
         }
         
-        async function reloadFromSupabase() {
-            showNotification('🔄 Recargando desde Supabase...', 'info');
-            
-            const supabaseData = await loadDataFromSupabase();
-            
-            if (supabaseData && supabaseData.articles && supabaseData.author) {
-                articles = supabaseData.articles;
-                authorInfo = supabaseData.author;
-                
-                if (articles.length > 0) {
-                    currentArticleId = Math.max(...articles.map(a => a.id));
-                }
-                
-                saveToLocalStorage();
-                
-                if (currentSection === 'inicio') renderArticles();
-                else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
-                    renderCategoryArticles(currentSection);
-                } else if (currentSection === 'archivo') renderFullArchive();
-                
-                document.getElementById('author-name').textContent = authorInfo.name;
-                document.getElementById('author-photo').src = authorInfo.photo;
-                document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-                document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-                
-                updateAdminArticleList();
-                updateStatistics();
-                
-                showNotification('✅ Datos recargados desde Supabase', 'success');
-            } else {
-                showNotification('❌ Error al recargar desde Supabase', 'error');
-            }
-        }
         
         // ===== FUNCIONES DE LOGIN MODAL =====
         function showLoginModal() {
