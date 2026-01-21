@@ -1109,7 +1109,6 @@
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
-                </div>
             </div>
             
             <div class="footer-bottom">
@@ -1246,20 +1245,20 @@
                 <button class="admin-button success" id="save-site">Guardar Configuración</button>
             </div>
             
-            <!-- SECCIÓN: BASE DE DATOS SUPABASE - VERSIÓN SIMPLIFICADA -->
+            <!-- SECCIÓN: BASE DE DATOS SUPABASE -->
             <div class="admin-section">
                 <h3>🛢️ Base de Datos Supabase</h3>
                 <p style="color: var(--color-gris-medio); margin-bottom: 20px;">
-                    <strong>Este sistema funciona completamente en local primero.</strong> Todos los cambios se guardan inmediatamente en tu navegador.
+                    <strong>Este sistema usa Supabase para almacenamiento compartido.</strong> Todos los cambios se guardan en la nube y están disponibles para todos los usuarios.
                 </p>
                 
                 <div style="background-color: var(--color-gris-claro); padding: 15px; border-radius: var(--border-radius); margin: 20px 0;">
                     <h4 style="margin-bottom: 10px; color: var(--color-bordo);">✅ ¿Cómo funciona?</h4>
                     <ol style="margin-left: 20px; color: var(--color-gris-medio);">
                         <li><strong>Tú guardas:</strong> Creas/editas un artículo o autor</li>
-                        <li><strong>Se guarda localmente:</strong> Automáticamente se guarda en tu navegador</li>
-                        <li><strong>Ellos ven:</strong> Los visitantes ven los cambios al instante</li>
-                        <li><strong>Sin servidor:</strong> No necesitas configuración complicada</li>
+                        <li><strong>Se guarda en la nube:</strong> Automáticamente se guarda en Supabase</li>
+                        <li><strong>Ellos ven:</strong> Todos los usuarios ven los cambios al instante</li>
+                        <li><strong>Sincronización:</strong> Datos compartidos entre todos los dispositivos</li>
                     </ol>
                 </div>
                 
@@ -1275,10 +1274,9 @@
                     </button>
                 </div>
                 
-                <div style="background-color: #e8f4fd; border-left: 4px solid #2196F3; padding: 12px; margin-top: 20px; border-radius: var(--border-radius);">
+                <div id="sync-status" style="background-color: #e8f4fd; border-left: 4px solid #2196F3; padding: 12px; margin-top: 20px; border-radius: var(--border-radius);">
                     <p style="color: #0d47a1; margin: 0;">
-                        <strong>💡 Sistema 100% funcional:</strong> Tus datos se guardan automáticamente en tu navegador.
-                        Puedes exportarlos e importarlos en cualquier momento.
+                        <strong>Estado de sincronización:</strong> <span id="sync-status-text">Conectando...</span>
                     </p>
                 </div>
             </div>
@@ -1302,7 +1300,7 @@
                     <div>
                         <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
                         <p><strong>Sesión activa:</strong> <span id="session-status">No activa</span></p>
-                        <p><strong>Versión:</strong> 5.0 (Local Storage)</p>
+                        <p><strong>Versión:</strong> 6.0 (Supabase Sync)</p>
                     </div>
                 </div>
             </div>
@@ -1310,6 +1308,12 @@
     </div>
 
     <script>
+        // ===== CONFIGURACIÓN SUPABASE =====
+        // ¡IMPORTANTE! Reemplaza estas credenciales con las tuyas de Supabase
+        const SUPABASE_URL = 'https://tu-proyecto.supabase.co'; // Reemplaza con tu URL
+        const SUPABASE_ANON_KEY = 'tu-clave-anon-publica'; // Reemplaza con tu clave anónima
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // ===== VARIABLES DEL SISTEMA =====
         let articles = [];
         let authorInfo = {};
@@ -1317,18 +1321,13 @@
         let isAdmin = false;
         let currentSection = 'inicio';
         let currentArchiveFilter = 'all';
+        let isOnline = true;
         
         // ===== AUTENTICACIÓN =====
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "ladoc2023";
         
         // ===== FUNCIONES DE UTILIDAD =====
-        function saveToLocalStorage() {
-            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
-            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
-            console.log('✅ Datos guardados en localStorage');
-        }
-        
         function formatDate() {
             const now = new Date();
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -1346,39 +1345,142 @@
             }, 3000);
         }
         
-        // ===== CARGA DE DATOS =====
-        function loadData() {
-            showNotification('📂 Cargando datos...', 'info');
-            
-            // Cargar artículos desde localStorage
-            const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
-            const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
-            
-            if (savedArticles && savedArticles.length > 0) {
-                articles = savedArticles;
-                authorInfo = savedAuthor || getDefaultAuthor();
-                
-                if (articles.length > 0) {
-                    currentArticleId = Math.max(...articles.map(a => a.id));
+        // ===== FUNCIONES DE SINCRONIZACIÓN CON SUPABASE =====
+        async function saveData() {
+            try {
+                if (!isOnline) {
+                    showNotification('⚠️ Modo offline - Guardando localmente', 'warning');
+                    saveToLocalStorage();
+                    return false;
                 }
                 
-                showNotification('✅ Datos cargados correctamente', 'success');
-            } else {
-                // Datos predeterminados
-                articles = getDefaultArticles();
-                authorInfo = getDefaultAuthor();
-                currentArticleId = 1;
+                // Guardar artículos en Supabase
+                const { error: articlesError } = await supabase
+                    .from('articles')
+                    .upsert(articles.map(article => ({
+                        id: article.id,
+                        title: article.title,
+                        summary: article.summary,
+                        content: article.content,
+                        category: article.category,
+                        author: article.author,
+                        date: article.date,
+                        image: article.image,
+                        views: article.views || 0,
+                        featured: article.featured || false,
+                        updated_at: new Date().toISOString()
+                    })));
                 
+                // Guardar información del autor en Supabase
+                const { error: authorError } = await supabase
+                    .from('author')
+                    .upsert([{ 
+                        id: 1, 
+                        name: authorInfo.name,
+                        photo: authorInfo.photo,
+                        quote: authorInfo.quote,
+                        bio: authorInfo.bio,
+                        updated_at: new Date().toISOString()
+                    }]);
+                
+                if (articlesError || authorError) {
+                    console.error('Error guardando en Supabase:', articlesError || authorError);
+                    showNotification('⚠️ Error guardando en la nube - Guardando localmente', 'warning');
+                    saveToLocalStorage();
+                    return false;
+                } else {
+                    console.log('✅ Datos guardados en Supabase');
+                    document.getElementById('sync-status-text').textContent = 'Sincronizado: ' + new Date().toLocaleTimeString();
+                    document.getElementById('sync-status').style.borderLeftColor = '#4CAF50';
+                    document.getElementById('sync-status').style.backgroundColor = '#e8f5e9';
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error en saveData:', error);
                 saveToLocalStorage();
-                showNotification('ℹ️ Bienvenido a Lado C', 'info');
+                return false;
             }
+        }
+        
+        async function loadData() {
+            showNotification('📂 Cargando datos...', 'info');
             
-            console.log('Datos cargados:', { 
-                articulos: articles.length, 
-                currentArticleId: currentArticleId 
-            });
-            
-            return true;
+            try {
+                // Primero intentar cargar desde Supabase
+                if (isOnline) {
+                    // Cargar artículos desde Supabase
+                    const { data: articlesData, error: articlesError } = await supabase
+                        .from('articles')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    // Cargar autor desde Supabase
+                    const { data: authorData, error: authorError } = await supabase
+                        .from('author')
+                        .select('*')
+                        .eq('id', 1)
+                        .single();
+                    
+                    if (!articlesError && articlesData && articlesData.length > 0) {
+                        articles = articlesData;
+                        authorInfo = authorData || getDefaultAuthor();
+                        
+                        if (articles.length > 0) {
+                            currentArticleId = Math.max(...articles.map(a => a.id));
+                        }
+                        
+                        // Actualizar estado de sincronización
+                        document.getElementById('sync-status-text').textContent = 'Conectado a Supabase';
+                        document.getElementById('sync-status').style.borderLeftColor = '#4CAF50';
+                        document.getElementById('sync-status').style.backgroundColor = '#e8f5e9';
+                        
+                        // Guardar copia local
+                        saveToLocalStorage();
+                        
+                        showNotification('✅ Datos cargados desde la nube', 'success');
+                        return true;
+                    }
+                }
+                
+                // Si no hay conexión o error, cargar desde localStorage
+                const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
+                const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
+                
+                if (savedArticles && savedArticles.length > 0) {
+                    articles = savedArticles;
+                    authorInfo = savedAuthor || getDefaultAuthor();
+                    
+                    if (articles.length > 0) {
+                        currentArticleId = Math.max(...articles.map(a => a.id));
+                    }
+                    
+                    document.getElementById('sync-status-text').textContent = 'Modo offline - Usando datos locales';
+                    document.getElementById('sync-status').style.borderLeftColor = '#FF9800';
+                    document.getElementById('sync-status').style.backgroundColor = '#FFF3E0';
+                    
+                    showNotification('✅ Datos cargados desde caché local', 'success');
+                } else {
+                    // Datos predeterminados
+                    articles = getDefaultArticles();
+                    authorInfo = getDefaultAuthor();
+                    currentArticleId = 3;
+                    
+                    saveToLocalStorage();
+                    showNotification('ℹ️ Bienvenido a Lado C', 'info');
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error en loadData:', error);
+                showNotification('❌ Error cargando datos', 'error');
+                return false;
+            }
+        }
+        
+        function saveToLocalStorage() {
+            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
+            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
+            localStorage.setItem('ladoC-last-sync', new Date().toISOString());
         }
         
         // ===== DATOS PREDETERMINADOS =====
@@ -1403,7 +1505,8 @@
                     date: formatDate(),
                     image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
                     views: 1,
-                    featured: true
+                    featured: true,
+                    created_at: new Date().toISOString()
                 },
                 {
                     id: 2,
@@ -1415,7 +1518,8 @@
                     date: formatDate(),
                     image: "https://images.unsplash.com/photo-1551135049-8a33b2a4a00f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
                     views: 0,
-                    featured: false
+                    featured: false,
+                    created_at: new Date().toISOString()
                 },
                 {
                     id: 3,
@@ -1427,7 +1531,8 @@
                     date: formatDate(),
                     image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80",
                     views: 0,
-                    featured: true
+                    featured: true,
+                    created_at: new Date().toISOString()
                 }
             ];
         }
@@ -1486,9 +1591,9 @@
             const featuredArticles = articles.filter(article => article.featured);
             const otherArticles = articles.filter(article => !article.featured);
             
-            // Ordenar por ID (más recientes primero)
-            featuredArticles.sort((a, b) => b.id - a.id);
-            otherArticles.sort((a, b) => b.id - a.id);
+            // Ordenar por fecha (más recientes primero)
+            featuredArticles.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
+            otherArticles.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
             
             articlesContainer.innerHTML = '';
             archiveContainer.innerHTML = '';
@@ -1535,8 +1640,8 @@
             // Filtrar artículos por categoría
             const categoryArticles = articles.filter(article => article.category === categoryName);
             
-            // Ordenar por ID (más recientes primero)
-            categoryArticles.sort((a, b) => b.id - a.id);
+            // Ordenar por fecha (más recientes primero)
+            categoryArticles.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
             
             container.innerHTML = '';
             
@@ -1560,8 +1665,8 @@
                 filteredArticles = articles.filter(article => article.category === currentArchiveFilter);
             }
             
-            // Ordenar por ID (más recientes primero)
-            filteredArticles.sort((a, b) => b.id - a.id);
+            // Ordenar por fecha (más recientes primero)
+            filteredArticles.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
             
             container.innerHTML = '';
             
@@ -1588,7 +1693,7 @@
                     <div class="article-meta">
                         <span>${article.date}</span>
                         <span>${article.category}</span>
-                        <span>${article.views} lecturas</span>
+                        <span>${article.views || 0} lecturas</span>
                     </div>
                     <p class="article-excerpt">${article.summary}</p>
                     <button class="read-more" onclick="viewArticle(${article.id})">Leer más</button>
@@ -1609,7 +1714,7 @@
             
             // Incrementar contador de vistas
             article.views = (article.views || 0) + 1;
-            saveToLocalStorage();
+            saveData();
             
             // Mostrar artículo completo
             const articleFullView = document.getElementById('article-full-view');
@@ -1625,7 +1730,7 @@
                             <span>${article.date}</span>
                             <span>${article.category}</span>
                             <span>Por ${article.author || authorInfo.name}</span>
-                            <span>${article.views} lecturas</span>
+                            <span>${article.views || 0} lecturas</span>
                         </div>
                     </div>
                     
@@ -1753,6 +1858,7 @@
             document.getElementById('author-photo-input').value = authorInfo.photo || '';
             document.getElementById('author-quote-input').value = authorInfo.quote || '';
             document.getElementById('author-bio-input').value = authorInfo.bio || '';
+            document.getElementById('article-author').value = authorInfo.name || '';
             
             // Actualizar lista de artículos
             updateAdminArticleList();
@@ -1791,8 +1897,8 @@
                 );
             }
             
-            // Ordenar por ID (más recientes primero)
-            filteredArticles.sort((a, b) => b.id - a.id);
+            // Ordenar por fecha (más recientes primero)
+            filteredArticles.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
             
             if (filteredArticles.length === 0) {
                 adminArticleList.innerHTML = '<li class="article-list-item" style="justify-content: center; color: var(--color-gris-medio);">No se encontraron editoriales</li>';
@@ -1803,7 +1909,7 @@
                     listItem.innerHTML = `
                         <div class="article-list-info">
                             <div class="article-list-title">${article.title} ${article.featured ? '<span style="color: var(--color-bordo); font-size: 0.8rem;">[Destacado]</span>' : ''}</div>
-                            <div class="article-list-meta">${article.date} - ${article.category} - ${article.views} lecturas</div>
+                            <div class="article-list-meta">${article.date} - ${article.category} - ${article.views || 0} lecturas</div>
                         </div>
                         <div class="article-list-actions">
                             <button class="admin-button warning" onclick="editArticle(${article.id})">Editar</button>
@@ -1819,7 +1925,7 @@
         }
         
         // ===== GESTIÓN DE EDITORIALES =====
-        function saveArticle() {
+        async function saveArticle() {
             if (!isAdmin) {
                 showNotification('❌ Debes iniciar sesión', 'error');
                 return;
@@ -1853,7 +1959,8 @@
                         image: finalImage,
                         author,
                         featured,
-                        date: formatDate() // Actualizar fecha al editar
+                        date: formatDate(),
+                        updated_at: new Date().toISOString()
                     };
                 }
                 
@@ -1872,15 +1979,17 @@
                     date: formatDate(),
                     image: finalImage,
                     views: 0,
-                    featured
+                    featured,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
                 };
                 
                 articles.unshift(newArticle);
                 showNotification('✅ Editorial creado correctamente', 'success');
             }
             
-            // Guardar en localStorage
-            saveToLocalStorage();
+            // Guardar en Supabase
+            await saveData();
             updateViewAfterChange();
             
             // Limpiar formulario si es nuevo artículo
@@ -1889,12 +1998,12 @@
                 document.getElementById('article-summary').value = '';
                 document.getElementById('article-content').value = '';
                 document.getElementById('article-image').value = '';
-                document.getElementById('article-author').value = '';
+                document.getElementById('article-author').value = authorInfo.name || '';
                 document.getElementById('article-featured').value = 'false';
             }
         }
         
-        function deleteArticle(id) {
+        async function deleteArticle(id) {
             if (!isAdmin) {
                 showNotification('❌ Debes iniciar sesión', 'error');
                 return;
@@ -1905,15 +2014,34 @@
             
             if (!confirm(`¿Eliminar "${article.title}"? Esta acción no se puede deshacer.`)) return;
             
-            // Eliminar artículo
-            articles = articles.filter(a => a.id !== id);
-            saveToLocalStorage();
-            
-            showNotification('✅ Editorial eliminado correctamente', 'success');
-            updateViewAfterChange();
+            try {
+                // Eliminar de Supabase si estamos en línea
+                if (isOnline) {
+                    const { error } = await supabase
+                        .from('articles')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                }
+                
+                // Eliminar localmente
+                articles = articles.filter(a => a.id !== id);
+                saveToLocalStorage();
+                
+                showNotification('✅ Editorial eliminado correctamente', 'success');
+                updateViewAfterChange();
+            } catch (error) {
+                console.error('Error eliminando artículo:', error);
+                // Eliminar solo localmente
+                articles = articles.filter(a => a.id !== id);
+                saveToLocalStorage();
+                showNotification('✅ Editorial eliminado localmente', 'success');
+                updateViewAfterChange();
+            }
         }
         
-        function saveAuthor() {
+        async function saveAuthor() {
             const name = document.getElementById('author-name-input').value;
             const photo = document.getElementById('author-photo-input').value;
             const quote = document.getElementById('author-quote-input').value;
@@ -1925,8 +2053,11 @@
             }
             
             authorInfo = { name, photo, quote, bio };
-            saveToLocalStorage();
             
+            // Guardar en Supabase
+            await saveData();
+            
+            // Actualizar UI
             document.getElementById('author-name').textContent = name;
             document.getElementById('author-photo').src = photo;
             document.getElementById('author-quote').textContent = `"${quote}"`;
@@ -1936,7 +2067,7 @@
             showNotification('✅ Autor actualizado correctamente', 'success');
         }
         
-        function saveSite() {
+        async function saveSite() {
             const selectedColor = document.querySelector('.color-option.active').dataset.color;
             const siteTitle = document.getElementById('site-title').value;
             
@@ -2043,7 +2174,7 @@
             alert("Vista previa del editorial (use el botón Aceptar para continuar)");
         }
         
-        function resetData() {
+        async function resetData() {
             if (!confirm("¿Está seguro de que desea restablecer los datos de ejemplo? Se perderán todos los editoriales actuales. Esta acción no se puede deshacer.")) {
                 return;
             }
@@ -2054,7 +2185,8 @@
             
             authorInfo = getDefaultAuthor();
             
-            saveToLocalStorage();
+            // Guardar en Supabase
+            await saveData();
             
             // Actualizar vista de autor
             document.getElementById('author-name').textContent = authorInfo.name;
@@ -2095,12 +2227,12 @@
             input.type = 'file';
             input.accept = '.json';
             
-            input.onchange = function(event) {
+            input.onchange = async function(event) {
                 const file = event.target.files[0];
                 if (!file) return;
                 
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     try {
                         const data = JSON.parse(e.target.result);
                         
@@ -2109,7 +2241,8 @@
                             authorInfo = data.author || getDefaultAuthor();
                             currentArticleId = data.currentArticleId || 0;
                             
-                            saveToLocalStorage();
+                            // Guardar en Supabase
+                            await saveData();
                             updateViewAfterChange();
                             
                             document.getElementById('author-name').textContent = authorInfo.name;
@@ -2129,7 +2262,7 @@
             input.click();
         }
         
-        function clearAllData() {
+        async function clearAllData() {
             if (!confirm("¿Está seguro de que desea eliminar TODOS los datos? Esta acción no se puede deshacer.")) {
                 return;
             }
@@ -2138,21 +2271,37 @@
                 return;
             }
             
-            localStorage.clear();
-            articles = [];
-            authorInfo = getDefaultAuthor();
-            currentArticleId = 0;
-            isAdmin = false;
-            
-            document.getElementById('author-name').textContent = authorInfo.name;
-            document.getElementById('author-photo').src = authorInfo.photo;
-            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
-            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
-            
-            updateViewAfterChange();
-            updateAdminUI();
-            
-            showNotification('✅ Todos los datos han sido eliminados', 'success');
+            try {
+                // Limpiar Supabase si estamos en línea
+                if (isOnline) {
+                    const { error } = await supabase
+                        .from('articles')
+                        .delete()
+                        .gte('id', 0); // Eliminar todos los artículos
+                    
+                    if (error) throw error;
+                }
+                
+                // Limpiar localmente
+                localStorage.clear();
+                articles = [];
+                authorInfo = getDefaultAuthor();
+                currentArticleId = 0;
+                isAdmin = false;
+                
+                document.getElementById('author-name').textContent = authorInfo.name;
+                document.getElementById('author-photo').src = authorInfo.photo;
+                document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+                document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+                
+                updateViewAfterChange();
+                updateAdminUI();
+                
+                showNotification('✅ Todos los datos han sido eliminados', 'success');
+            } catch (error) {
+                console.error('Error limpiando datos:', error);
+                showNotification('❌ Error al limpiar datos', 'error');
+            }
         }
         
         // ===== FUNCIONES DE LOGIN MODAL =====
@@ -2191,12 +2340,32 @@
             showNotification('✅ Mensaje enviado correctamente', 'success');
         }
         
+        // ===== DETECCIÓN DE CONEXIÓN =====
+        function updateOnlineStatus() {
+            isOnline = navigator.onLine;
+            
+            if (isOnline) {
+                document.getElementById('sync-status-text').textContent = 'En línea - Conectado a Supabase';
+                document.getElementById('sync-status').style.borderLeftColor = '#4CAF50';
+                document.getElementById('sync-status').style.backgroundColor = '#e8f5e9';
+            } else {
+                document.getElementById('sync-status-text').textContent = 'Modo offline - Usando datos locales';
+                document.getElementById('sync-status').style.borderLeftColor = '#FF9800';
+                document.getElementById('sync-status').style.backgroundColor = '#FFF3E0';
+            }
+        }
+        
         // ===== INICIALIZACIÓN =====
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Configurar detección de conexión
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            updateOnlineStatus();
+            
             checkAuth();
             
             // Cargar datos
-            loadData();
+            await loadData();
             
             // Configurar autor
             document.getElementById('author-name').textContent = authorInfo.name;
