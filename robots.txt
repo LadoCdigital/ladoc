@@ -1,7 +1,0 @@
-# robots.txt para Lado C
-User-agent: *
-Allow: /
-Disallow: /admin
-Disallow: /login
-
-Sitemap: https://tusitio.com/sitemap.xml
