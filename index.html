@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ESTILOS ORIGINALES REPETIDOS PARA MANTENER LA IDENTIDAD VISUAL */
         :root {
             --color-bordo: #9B1C1C;
             --color-blanco: #FFFFFF;
@@ -17,185 +18,207 @@
             --color-gris-medio: #666666;
             --color-gris-claro: #F5F5F5;
             --color-bg-sidebar: #f9f9f9;
-            --color-success: #28a745;
-            --color-warning: #ffc107;
-            --color-danger: #dc3545;
             --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
             --border-radius: 8px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Merriweather', serif;
-            color: var(--color-gris-oscuro);
-            background-color: var(--color-blanco);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3 { font-family: 'Montserrat', sans-serif; color: var(--color-bordo); }
+        body { font-family: 'Merriweather', serif; color: var(--color-gris-oscuro); background-color: var(--color-blanco); line-height: 1.6; }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--color-bordo); }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
 
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        header { background: white; box-shadow: var(--shadow-sutil); padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        /* HEADER */
+        header { background: white; box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 20px 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); text-decoration: none; }
+        .logo { font-family: 'Poppins'; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); letter-spacing: 1px; }
+        .logo span { color: var(--color-gris-medio); }
         
         nav ul { display: flex; list-style: none; gap: 20px; }
-        nav a { text-decoration: none; color: var(--color-gris-oscuro); font-weight: 600; font-family: 'Montserrat'; }
+        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.95rem; }
+        nav a:hover { color: var(--color-bordo); }
 
-        .main-content { display: flex; gap: 40px; margin: 40px auto; }
+        /* MAIN CONTENT */
+        .main-content { display: flex; gap: 40px; margin: 40px 0; }
         .content { flex: 3; }
-        .sidebar { flex: 1; background: var(--color-bg-sidebar); padding: 20px; border-radius: var(--border-radius); height: fit-content; }
+        .sidebar { flex: 1; background: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; align-self: flex-start; box-shadow: var(--shadow-sutil); }
 
-        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .article-card { border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); background: white; }
+        /* ARTICLES GRID */
+        .section-title { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 2px solid var(--color-azul-claro); }
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
+        .article-card { background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: transform 0.3s ease; }
+        .article-card:hover { transform: translateY(-5px); }
         .article-img { width: 100%; height: 200px; object-fit: cover; }
         .article-content { padding: 20px; }
-        .article-meta { font-size: 0.8rem; color: var(--color-gris-medio); margin-bottom: 10px; }
+        .article-meta { color: var(--color-gris-medio); font-size: 0.85rem; margin-bottom: 10px; }
         
-        .read-more { background: var(--color-bordo); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        
+        .read-more { display: inline-block; background: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; font-family: 'Montserrat'; font-weight: 600; border: none; cursor: pointer; }
+
+        /* ADMIN PANEL OVERLAY */
+        #admin-panel { display: none; background: #fff; border: 1px solid #ddd; padding: 25px; border-radius: 10px; margin-bottom: 30px; box-shadow: var(--shadow-sutil); }
+        .form-control { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Merriweather'; }
+
+        /* FOOTER */
+        footer { background: var(--color-bordo); color: white; padding: 40px 0; text-align: center; margin-top: 60px; }
         .hidden { display: none; }
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px; border-radius: 5px; color: white; z-index: 1000; display: none; }
-        .success { background: var(--color-success); }
-        .error { background: var(--color-danger); }
-        
-        .article-full-img { width: 100%; border-radius: 10px; margin: 20px 0; }
-        .back-button { background: #eee; border: none; padding: 10px; cursor: pointer; margin-bottom: 20px; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 5px; color: white; z-index: 2000; display: none; }
     </style>
 </head>
 <body>
 
-    <div id="notification" class="notification"></div>
+<div id="notification" class="notification"></div>
 
-    <header>
-        <div class="container header-container">
-            <a href="/" class="logo">Lado <span>C</span></a>
-            <nav>
-                <ul>
-                    <li><a href="#" onclick="location.reload()">Inicio</a></li>
-                    <li><a href="#footer-section">Contacto</a></li>
-                </ul>
-            </nav>
+<header>
+    <div class="container header-container">
+        <a href="#" class="logo" onclick="location.reload()">Lado <span>C</span></a>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="location.reload()">Inicio</a></li>
+                <li><a href="#" onclick="filterCategory('Catamarca')">Catamarca</a></li>
+                <li><a href="#" onclick="filterCategory('Política Nacional')">Nacional</a></li>
+                <li><a href="#" onclick="toggleAdmin()">Administración</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container main-content">
+    <div class="content">
+        <div id="admin-panel">
+            <h3 class="section-title">Redactar Nuevo Editorial</h3>
+            <input type="text" id="post-title" class="form-control" placeholder="Título...">
+            <select id="post-category" class="form-control">
+                <option value="Catamarca">Catamarca</option>
+                <option value="Política Nacional">Política Nacional</option>
+                <option value="Opinión">Opinión</option>
+                <option value="Sociedad">Sociedad</option>
+            </select>
+            <textarea id="post-content" class="form-control" style="height: 150px;" placeholder="Contenido (puedes usar HTML)..."></textarea>
+            <input type="text" id="post-image" class="form-control" placeholder="URL de imagen (ej. Unsplash)...">
+            <button class="read-more" onclick="publishPost()">Publicar Editorial</button>
         </div>
-    </header>
 
-    <div class="container main-content">
-        <div class="content" id="main-view">
-            <h2 style="margin-bottom: 20px;">Editoriales Recientes</h2>
+        <div id="main-view">
+            <h2 class="section-title" id="view-title">Editoriales Destacados</h2>
             <div class="articles-grid" id="articles-container">
                 </div>
         </div>
 
-        <div id="article-full-view" class="container hidden">
+        <div id="article-full-view" class="hidden">
             </div>
-
-        <aside class="sidebar">
-            <h3>Sobre el Autor</h3>
-            <p id="author-bio">Cargando información...</p>
-            <hr style="margin: 20px 0;">
-            <p style="font-size: 0.8rem; color: #666;">© 2026 Lado C - Catamarca</p>
-        </aside>
     </div>
 
-    <footer id="footer-section" style="background: var(--color-bordo); color: white; padding: 40px 0; text-align: center;">
-        <p>Contacto: ladoc.opinion@gmail.com</p>
-    </footer>
+    <aside class="sidebar">
+        <div style="text-align: center;">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150" style="border-radius: 50%; width: 130px; border: 3px solid var(--color-bordo); margin-bottom: 15px;">
+            <h3>Juan Pérez</h3>
+            <p style="font-style: italic; color: var(--color-gris-medio); margin: 10px 0;">"Pensar distinto también es un acto de compromiso."</p>
+        </div>
+        <div style="font-size: 0.95rem; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 15px;">
+            <p>Periodista y politólogo catamarqueño. Columnista especializado en análisis político y socialismo democrático.</p>
+        </div>
+    </aside>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Configuración de Supabase (Tus credenciales enviadas)
-        const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
-        
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<footer>
+    <div class="container">
+        <p>Lado C – Una mirada distinta sobre la política. © 2026</p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">Catamarca, Argentina</p>
+    </div>
+</footer>
 
-        let articles = [];
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // CREDENCIALES SUPABASE
+    const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function showNotification(msg, type = 'success') {
-            const n = document.getElementById('notification');
-            n.textContent = msg;
-            n.className = `notification ${type}`;
-            n.style.display = 'block';
-            setTimeout(() => n.style.display = 'none', 3000);
+    let allArticles = [];
+    const CLAVE_ADMIN = "catamarca2026"; // Cambia esta clave si deseas
+
+    // LOGIN Y PANEL
+    function toggleAdmin() {
+        if(prompt("Clave de acceso:") === CLAVE_ADMIN) {
+            document.getElementById('admin-panel').style.display = 'block';
+            window.scrollTo(0,0);
         }
+    }
 
-        async function loadArticles() {
-            try {
-                const { data, error } = await _supabase
-                    .from('articles')
-                    .select('*')
-                    .order('id', { ascending: false });
+    // CARGAR ARTÍCULOS
+    async function loadArticles() {
+        const { data, error } = await _supabase.from('articles').select('*').order('id', { ascending: false });
+        if(error) return console.error(error);
+        allArticles = data;
+        renderArticles(allArticles);
+    }
 
-                if (error) throw error;
-                
-                articles = data || [];
-                renderArticles();
-            } catch (err) {
-                console.error("Error cargando artículos:", err);
-                showNotification("No se pudieron cargar los artículos.", "error");
-            }
-        }
-
-        function renderArticles() {
-            const container = document.getElementById('articles-container');
-            container.innerHTML = '';
-
-            if (articles.length === 0) {
-                container.innerHTML = '<p>No hay artículos publicados todavía.</p>';
-                return;
-            }
-
-            articles.forEach(art => {
-                const card = document.createElement('div');
-                card.className = 'article-card';
-                card.innerHTML = `
-                    <img src="${art.image || 'https://via.placeholder.com/400x200'}" class="article-img" alt="Portada">
+    function renderArticles(list) {
+        const container = document.getElementById('articles-container');
+        container.innerHTML = '';
+        list.forEach(art => {
+            container.innerHTML += `
+                <div class="article-card">
+                    <img src="${art.image}" class="article-img">
                     <div class="article-content">
                         <div class="article-meta">${art.date} | ${art.category}</div>
-                        <h3 class="article-title">${art.title}</h3>
-                        <p style="font-size: 0.9rem; color: #555; margin: 10px 0;">${art.summary}</p>
-                        <button class="read-more" onclick="viewArticle(${art.id})">Leer artículo</button>
+                        <h3 style="margin-bottom: 15px; font-size: 1.3rem;">${art.title}</h3>
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 20px;">${art.summary}</p>
+                        <button class="read-more" onclick="viewArticle(${art.id})">Leer más</button>
                     </div>
-                `;
-                container.appendChild(card);
-            });
+                </div>`;
+        });
+    }
+
+    // FILTRAR POR CATEGORÍA
+    function filterCategory(cat) {
+        const filtered = allArticles.filter(a => a.category === cat);
+        document.getElementById('view-title').textContent = "Categoría: " + cat;
+        renderArticles(filtered);
+    }
+
+    // VER ARTÍCULO COMPLETO
+    async function viewArticle(id) {
+        const art = allArticles.find(a => a.id === id);
+        const main = document.getElementById('main-view');
+        const full = document.getElementById('article-full-view');
+        
+        main.classList.add('hidden');
+        full.classList.remove('hidden');
+        full.innerHTML = `
+            <button onclick="location.reload()" style="cursor:pointer; font-weight:bold; background:none; border:none; margin-bottom:20px;">← VOLVER AL INICIO</button>
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px;">${art.title}</h1>
+            <div class="article-meta">Por ${art.author} | ${art.date}</div>
+            <img src="${art.image}" style="width:100%; border-radius:10px; margin: 25px 0;">
+            <div style="font-size: 1.2rem; line-height: 1.8;">${art.content}</div>
+        `;
+        window.scrollTo(0,0);
+    }
+
+    // PUBLICAR
+    async function publishPost() {
+        const title = document.getElementById('post-title').value;
+        const content = document.getElementById('post-content').value;
+        const category = document.getElementById('post-category').value;
+        const image = document.getElementById('post-image').value || "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620";
+
+        if(!title || !content) return alert("Completa los campos");
+
+        const { error } = await _supabase.from('articles').insert([{
+            title, content, category, image,
+            author: "Juan Pérez",
+            date: new Date().toLocaleDateString('es-AR'),
+            summary: content.replace(/<[^>]*>/g, '').substring(0, 150) + "..."
+        }]);
+
+        if(!error) {
+            alert("Editorial publicado");
+            location.reload();
         }
+    }
 
-        function viewArticle(id) {
-            const art = articles.find(a => a.id === id);
-            if (!art) return;
-
-            document.getElementById('main-view').classList.add('hidden');
-            const fullView = document.getElementById('article-full-view');
-            fullView.classList.remove('hidden');
-
-            fullView.innerHTML = `
-                <button class="back-button" onclick="closeArticle()">← Volver al inicio</button>
-                <h1>${art.title}</h1>
-                <div class="article-meta">${art.date} | Autor: ${art.author}</div>
-                <img src="${art.image}" class="article-full-img">
-                <div style="font-size: 1.1rem; line-height: 1.8;">${art.content}</div>
-            `;
-            window.scrollTo(0, 0);
-        }
-
-        function closeArticle() {
-            document.getElementById('main-view').classList.remove('hidden');
-            document.getElementById('article-full-view').classList.add('hidden');
-        }
-
-        // Simulación de carga de autor (puedes conectarlo a otra tabla de Supabase)
-        function loadAuthor() {
-            document.getElementById('author-bio').textContent = "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática.";
-        }
-
-        window.onload = () => {
-            loadArticles();
-            loadAuthor();
-        };
-    </script>
+    window.onload = loadArticles;
+</script>
 </body>
 </html>
