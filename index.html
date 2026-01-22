@@ -1,271 +1,201 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lado C – Una mirada distinta sobre la política</title>
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      margin: 0;
-      background: #f9f9f9;
-      color: #333;
-    }
-    header {
-      background: #101820;
-      color: white;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-    .main-content {
-      max-width: 1000px;
-      margin: auto;
-      padding: 1rem;
-    }
-    .article-card {
-      background: white;
-      margin: 1rem 0;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .article-card img {
-      width: 100%;
-      border-radius: 8px;
-    }
-    .article-content h3 {
-      margin: 0.5rem 0;
-    }
-    .article-meta {
-      font-size: 0.8rem;
-      color: #777;
-    }
-    .read-more {
-      background: #e63946;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .read-more:hover {
-      background: #c71c32;
-    }
-    .admin-panel {
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 1rem;
-      border-radius: 10px;
-      margin: 1rem 0;
-    }
-    .notification {
-      display: none;
-      text-align: center;
-      padding: 10px;
-      color: white;
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 5px;
-      z-index: 1000;
-    }
-    .notification.success { background: #4caf50; }
-    .notification.error { background: #f44336; }
-    .hidden { display: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lado C - Una mirada distinta sobre la política</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-bordo: #9B1C1C;
+            --color-blanco: #FFFFFF;
+            --color-azul-claro: #DCE6F2;
+            --color-gris-oscuro: #333333;
+            --color-gris-medio: #666666;
+            --color-gris-claro: #F5F5F5;
+            --color-bg-sidebar: #f9f9f9;
+            --color-success: #28a745;
+            --color-warning: #ffc107;
+            --color-danger: #dc3545;
+            --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+            --border-radius: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Merriweather', serif;
+            color: var(--color-gris-oscuro);
+            background-color: var(--color-blanco);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; color: var(--color-bordo); }
+
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        header { background: white; box-shadow: var(--shadow-sutil); padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        .header-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); text-decoration: none; }
+        
+        nav ul { display: flex; list-style: none; gap: 20px; }
+        nav a { text-decoration: none; color: var(--color-gris-oscuro); font-weight: 600; font-family: 'Montserrat'; }
+
+        .main-content { display: flex; gap: 40px; margin: 40px auto; }
+        .content { flex: 3; }
+        .sidebar { flex: 1; background: var(--color-bg-sidebar); padding: 20px; border-radius: var(--border-radius); height: fit-content; }
+
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .article-card { border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); background: white; }
+        .article-img { width: 100%; height: 200px; object-fit: cover; }
+        .article-content { padding: 20px; }
+        .article-meta { font-size: 0.8rem; color: var(--color-gris-medio); margin-bottom: 10px; }
+        
+        .read-more { background: var(--color-bordo); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        
+        .hidden { display: none; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px; border-radius: 5px; color: white; z-index: 1000; display: none; }
+        .success { background: var(--color-success); }
+        .error { background: var(--color-danger); }
+        
+        .article-full-img { width: 100%; border-radius: 10px; margin: 20px 0; }
+        .back-button { background: #eee; border: none; padding: 10px; cursor: pointer; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Lado C</h1>
-    <p>Una mirada distinta sobre la política</p>
-  </header>
 
-  <div class="main-content">
-    <div class="admin-panel" id="admin-panel">
-      <h3>Panel de administración</h3>
-      <input id="article-title" placeholder="Título" style="width:100%;margin:5px 0;">
-      <input id="article-summary" placeholder="Resumen" style="width:100%;margin:5px 0;">
-      <textarea id="article-content" placeholder="Contenido" style="width:100%;height:100px;margin:5px 0;"></textarea>
-      <input id="article-image" placeholder="URL de imagen" style="width:100%;margin:5px 0;">
-      <input id="article-author" placeholder="Autor" style="width:100%;margin:5px 0;">
-      <select id="article-category" style="width:100%;margin:5px 0;">
-        <option value="Opinión">Opinión</option>
-        <option value="Análisis">Análisis</option>
-        <option value="Entrevista">Entrevista</option>
-      </select>
-      <button onclick="saveArticle()">Guardar artículo</button>
-      <button onclick="clearArticleForm()">Limpiar</button>
+    <div id="notification" class="notification"></div>
+
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">Lado <span>C</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="location.reload()">Inicio</a></li>
+                    <li><a href="#footer-section">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <div class="content" id="main-view">
+            <h2 style="margin-bottom: 20px;">Editoriales Recientes</h2>
+            <div class="articles-grid" id="articles-container">
+                </div>
+        </div>
+
+        <div id="article-full-view" class="container hidden">
+            </div>
+
+        <aside class="sidebar">
+            <h3>Sobre el Autor</h3>
+            <p id="author-bio">Cargando información...</p>
+            <hr style="margin: 20px 0;">
+            <p style="font-size: 0.8rem; color: #666;">© 2026 Lado C - Catamarca</p>
+        </aside>
     </div>
 
-    <div id="articles-container"></div>
-  </div>
+    <footer id="footer-section" style="background: var(--color-bordo); color: white; padding: 40px 0; text-align: center;">
+        <p>Contacto: ladoc.opinion@gmail.com</p>
+    </footer>
 
-  <div id="article-full-view" class="hidden"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Configuración de Supabase (Tus credenciales enviadas)
+        const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
+        
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  <div id="notification" class="notification"></div>
+        let articles = [];
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
-    const SUPABASE_KEY = 'TU_API_KEY_PUBLICA'; // 🔹 reemplazá con tu clave pública
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        function showNotification(msg, type = 'success') {
+            const n = document.getElementById('notification');
+            n.textContent = msg;
+            n.className = `notification ${type}`;
+            n.style.display = 'block';
+            setTimeout(() => n.style.display = 'none', 3000);
+        }
 
-    let articles = [];
-    let currentArticleId = null;
+        async function loadArticles() {
+            try {
+                const { data, error } = await _supabase
+                    .from('articles')
+                    .select('*')
+                    .order('id', { ascending: false });
 
-    // 🔹 Cargar artículos
-    async function loadArticles() {
-      const { data, error } = await supabase
-        .from('articles')
-        .select('*')
-        .order('id', { ascending: false });
+                if (error) throw error;
+                
+                articles = data || [];
+                renderArticles();
+            } catch (err) {
+                console.error("Error cargando artículos:", err);
+                showNotification("No se pudieron cargar los artículos.", "error");
+            }
+        }
 
-      if (error) {
-        console.error(error);
-        showNotification('Error al cargar artículos', 'error');
-        return;
-      }
-      articles = data;
-      renderArticles();
-    }
+        function renderArticles() {
+            const container = document.getElementById('articles-container');
+            container.innerHTML = '';
 
-    // 🔹 Guardar o actualizar artículo
-    async function saveArticle() {
-      const title = document.getElementById('article-title').value.trim();
-      const summary = document.getElementById('article-summary').value.trim();
-      const content = document.getElementById('article-content').value.trim();
-      const image = document.getElementById('article-image').value.trim();
-      const author = document.getElementById('article-author').value.trim() || "Redacción Lado C";
-      const category = document.getElementById('article-category').value;
-      const date = new Date().toLocaleDateString('es-AR');
+            if (articles.length === 0) {
+                container.innerHTML = '<p>No hay artículos publicados todavía.</p>';
+                return;
+            }
 
-      if (!title || !summary || !content) {
-        showNotification('Por favor completá todos los campos', 'error');
-        return;
-      }
+            articles.forEach(art => {
+                const card = document.createElement('div');
+                card.className = 'article-card';
+                card.innerHTML = `
+                    <img src="${art.image || 'https://via.placeholder.com/400x200'}" class="article-img" alt="Portada">
+                    <div class="article-content">
+                        <div class="article-meta">${art.date} | ${art.category}</div>
+                        <h3 class="article-title">${art.title}</h3>
+                        <p style="font-size: 0.9rem; color: #555; margin: 10px 0;">${art.summary}</p>
+                        <button class="read-more" onclick="viewArticle(${art.id})">Leer artículo</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
 
-      const article = { title, summary, content, image, author, category, date };
+        function viewArticle(id) {
+            const art = articles.find(a => a.id === id);
+            if (!art) return;
 
-      let error;
-      if (currentArticleId) {
-        ({ error } = await supabase.from('articles').update(article).eq('id', currentArticleId));
-      } else {
-        ({ error } = await supabase.from('articles').insert([article]));
-      }
+            document.getElementById('main-view').classList.add('hidden');
+            const fullView = document.getElementById('article-full-view');
+            fullView.classList.remove('hidden');
 
-      if (error) {
-        console.error(error);
-        showNotification('Error al guardar', 'error');
-      } else {
-        showNotification('Artículo guardado', 'success');
-        clearArticleForm();
-        await loadArticles();
-      }
-    }
+            fullView.innerHTML = `
+                <button class="back-button" onclick="closeArticle()">← Volver al inicio</button>
+                <h1>${art.title}</h1>
+                <div class="article-meta">${art.date} | Autor: ${art.author}</div>
+                <img src="${art.image}" class="article-full-img">
+                <div style="font-size: 1.1rem; line-height: 1.8;">${art.content}</div>
+            `;
+            window.scrollTo(0, 0);
+        }
 
-    // 🔹 Renderizar artículos
-    function renderArticles() {
-      const container = document.getElementById('articles-container');
-      container.innerHTML = '';
-      if (articles.length === 0) {
-        container.innerHTML = '<p style="text-align:center;">No hay artículos publicados.</p>';
-        return;
-      }
-      articles.forEach(a => {
-        const div = document.createElement('div');
-        div.className = 'article-card';
-        div.innerHTML = `
-          <img src="${a.image || 'https://via.placeholder.com/800x400'}">
-          <div class="article-content">
-            <h3>${a.title}</h3>
-            <div class="article-meta">${a.date} | ${a.category} | ${a.author}</div>
-            <p>${a.summary}</p>
-            <button class="read-more" onclick="viewArticle(${a.id})">Leer más</button>
-            <button onclick="editArticle(${a.id})">Editar</button>
-            <button onclick="deleteArticle(${a.id})">Eliminar</button>
-          </div>`;
-        container.appendChild(div);
-      });
-    }
+        function closeArticle() {
+            document.getElementById('main-view').classList.remove('hidden');
+            document.getElementById('article-full-view').classList.add('hidden');
+        }
 
-    // 🔹 Ver artículo completo
-    function viewArticle(id) {
-      const article = articles.find(a => a.id === id);
-      if (!article) return;
-      const main = document.querySelector('.main-content');
-      const full = document.getElementById('article-full-view');
-      main.classList.add('hidden');
-      full.classList.remove('hidden');
-      full.innerHTML = `
-        <div style="padding:1rem;">
-          <button onclick="goBack()">&larr; Volver</button>
-          <h2>${article.title}</h2>
-          <p><em>${article.date} – ${article.author}</em></p>
-          <img src="${article.image || 'https://via.placeholder.com/800x400'}" style="width:100%;border-radius:8px;">
-          <div style="margin-top:1rem;">${article.content}</div>
-        </div>`;
-      window.scrollTo(0,0);
-    }
+        // Simulación de carga de autor (puedes conectarlo a otra tabla de Supabase)
+        function loadAuthor() {
+            document.getElementById('author-bio').textContent = "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática.";
+        }
 
-    function goBack() {
-      document.querySelector('.main-content').classList.remove('hidden');
-      document.getElementById('article-full-view').classList.add('hidden');
-    }
-
-    // 🔹 Editar artículo
-    function editArticle(id) {
-      const a = articles.find(x => x.id === id);
-      if (!a) return;
-      document.getElementById('article-title').value = a.title;
-      document.getElementById('article-summary').value = a.summary;
-      document.getElementById('article-content').value = a.content;
-      document.getElementById('article-image').value = a.image;
-      document.getElementById('article-author').value = a.author;
-      document.getElementById('article-category').value = a.category;
-      currentArticleId = a.id;
-      showNotification('Editando artículo...', 'info');
-    }
-
-    // 🔹 Eliminar artículo
-    async function deleteArticle(id) {
-      if (!confirm("¿Eliminar este artículo?")) return;
-      const { error } = await supabase.from('articles').delete().eq('id', id);
-      if (error) {
-        console.error(error);
-        showNotification('Error al eliminar', 'error');
-      } else {
-        showNotification('Artículo eliminado', 'success');
-        await loadArticles();
-      }
-    }
-
-    // 🔹 Utilidades
-    function clearArticleForm() {
-      document.getElementById('article-title').value = '';
-      document.getElementById('article-summary').value = '';
-      document.getElementById('article-content').value = '';
-      document.getElementById('article-image').value = '';
-      document.getElementById('article-author').value = '';
-      document.getElementById('article-category').value = 'Opinión';
-      currentArticleId = null;
-    }
-
-    function showNotification(msg, type='info') {
-      const n = document.getElementById('notification');
-      n.textContent = msg;
-      n.className = `notification ${type}`;
-      n.style.display = 'block';
-      setTimeout(()=>n.style.display='none',3000);
-    }
-
-    // 🔹 Iniciar
-    window.onload = async () => {
-      await loadArticles();
-      showNotification('Conectado a Supabase', 'success');
-    };
-  </script>
+        window.onload = () => {
+            loadArticles();
+            loadAuthor();
+        };
+    </script>
 </body>
 </html>
