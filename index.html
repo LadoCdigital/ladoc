@@ -1306,10 +1306,96 @@
 
     <script>
         // ===== CONFIGURACIÓN SUPABASE =====
-// ===== CONFIGURACIÓN SUPABASE =====
-const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ===== CONFIGURACIÓN SIMPLIFICADA (SIN SUPABASE POR AHORA) =====
+let articles = [];
+let authorInfo = {};
+let currentArticleId = 0;
+let isAdmin = false;
+let currentSection = 'inicio';
+let currentArchiveFilter = 'all';
+
+// ===== AUTENTICACIÓN =====
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "ladoc2023";
+
+// ===== FUNCIÓN DE CARGA SIMPLIFICADA =====
+async function loadData() {
+    console.log('🔍 Cargando datos...');
+    
+    // 1. Intentar desde datos.json (GitHub)
+    try {
+        const response = await fetch('./datos.json');
+        if (response.ok) {
+            const data = await response.json();
+            articles = data.articles || [];
+            authorInfo = data.author || getDefaultAuthor();
+            
+            if (articles.length > 0) {
+                currentArticleId = Math.max(...articles.map(a => a.id));
+            }
+            
+            console.log(`✅ ${articles.length} artículos cargados de datos.json`);
+            return true;
+        }
+    } catch (error) {
+        console.log('No se pudo cargar datos.json');
+    }
+    
+    // 2. Datos por defecto
+    articles = getDefaultArticles();
+    authorInfo = getDefaultAuthor();
+    currentArticleId = 3;
+    
+    console.log('✅ Usando datos iniciales');
+    return true;
+}
+
+// ===== DATOS INICIALES =====
+function getDefaultAuthor() {
+    return {
+        name: "Juan Pérez",
+        photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+        quote: "Pensar distinto también es un acto de compromiso.",
+        bio: "Periodista y politólogo catamarqueño."
+    };
+}
+
+function getDefaultArticles() {
+    return [
+        {
+            id: 1,
+            title: "Bienvenido a Lado C",
+            summary: "Un medio de opinión política con enfoque en Catamarca.",
+            content: "<p>Este es un sistema simple de gestión de editoriales.</p>",
+            category: "Catamarca",
+            author: "Juan Pérez",
+            date: "22 de enero de 2026",
+            image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+            views: 0,
+            featured: true
+        }
+    ];
+}
+
+// ===== FUNCIÓN PARA GUARDAR =====
+function saveAllData() {
+    // Guardar en localStorage
+    localStorage.setItem('ladoC-articles', JSON.stringify(articles));
+    localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
+    
+    // Crear objeto para datos.json
+    const dataToSave = {
+        articles: articles,
+        author: authorInfo,
+        lastUpdated: new Date().toISOString(),
+        syncVersion: "1.0"
+    };
+    
+    console.log('💾 Datos guardados:', dataToSave);
+    alert('Datos guardados localmente. Para guardar en GitHub, actualiza datos.json manualmente.');
+    
+    return dataToSave;
+}
 
 // ===== VARIABLES DEL SISTEMA =====
 let articles = [];
