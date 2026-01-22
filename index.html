@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* MANTENEMOS TU DISEÑO ORIGINAL EXACTO */
+        /* Mantenemos exactamente tu CSS original */
         :root {
             --color-bordo: #9B1C1C;
             --color-blanco: #FFFFFF;
@@ -27,62 +27,166 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Merriweather', serif; color: var(--color-gris-oscuro); background-color: var(--color-blanco); line-height: 1.6; }
-        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--color-bordo); }
+
+        body {
+            font-family: 'Merriweather', serif;
+            color: var(--color-gris-oscuro);
+            background-color: var(--color-blanco);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--color-bordo);
+        }
+
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
         /* HEADER */
-        header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 20px 0; }
-        .header-container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); letter-spacing: 1px; }
-        .logo span { color: var(--color-gris-medio); }
+        header {
+            background-color: var(--color-blanco);
+            box-shadow: var(--shadow-sutil);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--color-bordo);
+            letter-spacing: 1px;
+        }
+
+        .logo span { font-weight: 600; color: var(--color-gris-medio); }
+
         nav ul { display: flex; list-style: none; gap: 30px; }
-        nav a { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.05rem; }
+
+        nav a {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 5px 0;
+            position: relative;
+        }
+
         nav a:hover { color: var(--color-bordo); }
 
         /* MAIN CONTENT */
         .main-content { display: flex; gap: 40px; margin: 40px 0; }
         .content { flex: 3; }
-        .sidebar { flex: 1; background-color: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; box-shadow: var(--shadow-sutil); align-self: flex-start; }
+        .sidebar {
+            flex: 1;
+            background-color: var(--color-bg-sidebar);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sutil);
+            align-self: flex-start;
+        }
 
-        /* ARTICLES */
         .section-title { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 2px solid var(--color-azul-claro); }
-        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        .article-card { background-color: var(--color-blanco); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: transform 0.3s ease; }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .article-card {
+            background-color: var(--color-blanco);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sutil);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
         .article-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+
         .article-img { width: 100%; height: 200px; object-fit: cover; }
+
         .article-content { padding: 20px; }
-        .read-more { display: inline-block; background-color: var(--color-bordo); color: var(--color-blanco); padding: 10px 20px; border-radius: var(--border-radius); font-family: 'Montserrat'; font-weight: 600; border: none; cursor: pointer; }
 
-        /* ADMIN PANEL OVERLAY (Tu panel mejorado) */
-        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; overflow-y: auto; padding: 30px 0; }
-        .admin-container { background: white; max-width: 800px; margin: 0 auto; padding: 30px; border-radius: 8px; }
-        .form-group { margin-bottom: 15px; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: 'Merriweather'; }
-        
+        .article-meta { color: var(--color-gris-medio); font-size: 0.9rem; margin-bottom: 15px; display: flex; gap: 15px; }
+
+        .read-more {
+            display: inline-block;
+            background-color: var(--color-bordo);
+            color: var(--color-blanco);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* MODALES Y PANELES */
+        .login-modal, .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            align-items: center; justify-content: center;
+        }
+
+        .admin-panel { overflow-y: auto; display: none; align-items: flex-start; padding: 30px 0; }
+
+        .login-container, .admin-container {
+            background-color: var(--color-blanco);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .admin-container { max-width: 900px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: var(--border-radius); }
+
         .hidden { display: none; }
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 5px; color: white; z-index: 3000; display: none; font-family: 'Montserrat'; font-weight: 600; }
-        .success { background: var(--color-success); }
-        .error { background: var(--color-danger); }
-        .info { background: var(--color-bordo); }
+        footer { background-color: var(--color-bordo); color: white; padding: 40px 0; text-align: center; }
 
-        footer { background-color: var(--color-bordo); color: white; padding: 40px 0; text-align: center; margin-top: 60px; }
+        .notification {
+            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
+            border-radius: var(--border-radius); color: white; z-index: 4000; display: none;
+        }
     </style>
 </head>
 <body>
+    <div class="notification" id="notification"></div>
 
-    <div id="notification" class="notification"></div>
+    <div class="login-modal" id="login-modal">
+        <div class="login-container">
+            <h2 style="text-align: center; margin-bottom: 20px;">Acceso Autor</h2>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="admin-pass" class="form-control" placeholder="Ingrese clave">
+            </div>
+            <button class="read-more" style="width: 100%;" onclick="checkLogin()">Entrar</button>
+            <button class="read-more secondary" style="width: 100%; margin-top:10px; background:#ccc; color:#333;" onclick="closeLogin()">Cancelar</button>
+        </div>
+    </div>
 
     <header>
         <div class="container header-container">
             <a href="#" class="logo" onclick="location.reload()">Lado <span>C</span></a>
             <nav>
                 <ul>
-                    <li><a href="#" onclick="location.reload()">Inicio</a></li>
-                    <li><a href="#" onclick="filterBy('Catamarca')">Catamarca</a></li>
-                    <li><a href="#" onclick="filterBy('Política Nacional')">Nacional</a></li>
-                    <li><a href="#" id="nav-admin">Administración</a></li>
+                    <li><a href="#" onclick="showSection('inicio')">Inicio</a></li>
+                    <li><a href="#" onclick="filterByCategory('Opinión')">Opinión</a></li>
+                    <li><a href="#" onclick="filterByCategory('Catamarca')">Catamarca</a></li>
+                    <li><a href="#" onclick="filterByCategory('Política Nacional')">Nacional</a></li>
+                    <li><a href="#" onclick="openAdmin()">Admin</a></li>
                 </ul>
             </nav>
         </div>
@@ -91,7 +195,7 @@
     <div class="container main-content">
         <div class="content">
             <div id="main-view">
-                <h2 class="section-title" id="page-title">Editoriales Destacados</h2>
+                <h2 class="section-title" id="page-title">Editoriales Recientes</h2>
                 <div class="articles-grid" id="articles-container">
                     </div>
             </div>
@@ -101,53 +205,50 @@
 
         <aside class="sidebar">
             <div style="text-align: center; margin-bottom: 20px;">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150" style="width: 130px; border-radius: 50%; border: 3px solid var(--color-bordo);">
-                <h3 style="margin-top: 10px;">Juan Pérez</h3>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150" style="width: 150px; border-radius: 50%; border: 3px solid var(--color-bordo);">
+                <h3 style="margin-top: 15px;">Juan Pérez</h3>
                 <p style="font-style: italic; color: #666; margin-top: 5px;">"Pensar distinto también es un acto de compromiso."</p>
             </div>
             <p style="font-size: 0.9rem; text-align: justify;">Periodista y politólogo catamarqueño. Columnista especializado en análisis político bajo la visión del socialismo democrático.</p>
-            <div style="margin-top: 20px;">
-                <button class="read-more" style="width: 100%;" onclick="openAdmin()">Acceso Editor</button>
-            </div>
         </aside>
     </div>
 
-    <div class="admin-panel" id="admin-modal">
+    <div class="admin-panel" id="admin-panel">
         <div class="admin-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>Panel de Control</h2>
+                <h2>Panel de Administración</h2>
                 <button onclick="closeAdmin()" style="background:none; border:none; font-size: 2rem; cursor:pointer;">&times;</button>
             </div>
             
             <div class="form-group">
-                <label>Título del Editorial</label>
-                <input type="text" id="article-title" class="form-control">
+                <label>Título</label>
+                <input type="text" id="art-title" class="form-control">
             </div>
             <div class="form-group">
-                <label>Resumen corto</label>
-                <textarea id="article-summary" class="form-control" style="height: 70px;"></textarea>
+                <label>Resumen</label>
+                <textarea id="art-summary" class="form-control" style="height: 60px;"></textarea>
             </div>
             <div class="form-group">
-                <label>Contenido completo (HTML)</label>
-                <textarea id="article-content" class="form-control" style="height: 200px;"></textarea>
+                <label>Contenido (HTML)</label>
+                <textarea id="art-content" class="form-control" style="height: 150px;"></textarea>
             </div>
             <div class="form-group">
                 <label>Categoría</label>
-                <select id="article-category" class="form-control">
+                <select id="art-category" class="form-control">
+                    <option value="Opinión">Opinión</option>
                     <option value="Catamarca">Catamarca</option>
                     <option value="Política Nacional">Política Nacional</option>
-                    <option value="Opinión">Opinión</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>URL de Imagen</label>
-                <input type="text" id="article-image" class="form-control" placeholder="https://...">
+                <label>URL Imagen</label>
+                <input type="text" id="art-image" class="form-control" placeholder="https://...">
             </div>
-            <button class="read-more" onclick="saveArticle()">Publicar Editorial</button>
+            <button class="read-more" onclick="saveToSupabase()">Publicar Editorial</button>
 
             <hr style="margin: 30px 0;">
-            <h3>Editoriales Publicados</h3>
-            <div id="admin-list" style="margin-top: 15px;"></div>
+            <h3>Editoriales en la Nube</h3>
+            <div id="admin-article-list" style="margin-top: 15px;"></div>
         </div>
     </div>
 
@@ -159,101 +260,111 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // CONFIGURACIÓN DE TU SUPABASE
         const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let articles = [];
-        let currentEditingId = null;
+        let isAdmin = false;
 
-        // CARGAR DATOS
-        async function load() {
+        // CARGAR DATOS AL INICIAR
+        async function loadData() {
             const { data, error } = await _supabase.from('articles').select('*').order('id', { ascending: false });
-            if (error) return showNotification("Error de conexión", "error");
+            if (error) return console.error(error);
             articles = data || [];
-            render(articles);
-            renderAdminList();
+            renderArticles(articles);
+            if (isAdmin) renderAdminList();
         }
 
-        function render(list) {
+        function renderArticles(list) {
             const container = document.getElementById('articles-container');
             container.innerHTML = '';
+            if (list.length === 0) container.innerHTML = '<p>No hay artículos en esta sección.</p>';
+            
             list.forEach(art => {
-                container.innerHTML += `
-                    <div class="article-card">
-                        <img src="${art.image || 'https://via.placeholder.com/400x200'}" class="article-img">
-                        <div class="article-content">
-                            <div style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">${art.date} | ${art.category}</div>
-                            <h3 style="margin-bottom: 15px;">${art.title}</h3>
-                            <p style="font-size: 0.9rem; color: #444; margin-bottom: 15px;">${art.summary}</p>
-                            <button class="read-more" onclick="viewFull(${art.id})">Leer más</button>
-                        </div>
+                const card = document.createElement('div');
+                card.className = 'article-card';
+                card.innerHTML = `
+                    <img src="${art.image || 'https://via.placeholder.com/400x200'}" class="article-img">
+                    <div class="article-content">
+                        <div class="article-meta"><span>${art.date}</span><span>${art.category}</span></div>
+                        <h3 class="article-title">${art.title}</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">${art.summary}</p>
+                        <button class="read-more" onclick="viewFull(${art.id})">Leer más</button>
                     </div>`;
+                container.appendChild(card);
             });
         }
 
         function viewFull(id) {
             const art = articles.find(a => a.id === id);
             document.getElementById('main-view').classList.add('hidden');
-            const full = document.getElementById('article-full-view');
-            full.classList.remove('hidden');
-            full.innerHTML = `
-                <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold;">← VOLVER AL INICIO</button>
-                <h1 style="font-size: 2.5rem; margin-bottom: 20px;">${art.title}</h1>
-                <div style="color: #666; margin-bottom: 20px;">${art.date} | Sección: ${art.category}</div>
+            const fullView = document.getElementById('article-full-view');
+            fullView.classList.remove('hidden');
+            fullView.innerHTML = `
+                <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold;">← VOLVER</button>
+                <h1 style="font-size: 2.2rem; margin-bottom: 10px;">${art.title}</h1>
+                <div class="article-meta" style="margin-bottom:20px;">${art.date} | Sección: ${art.category}</div>
                 <img src="${art.image}" style="width:100%; border-radius:8px; margin-bottom:30px;">
-                <div style="font-size: 1.2rem; line-height: 1.9; font-family: 'Merriweather';">${art.content}</div>`;
-            window.scrollTo(0, 0);
+                <div style="font-size: 1.15rem; line-height: 1.8;">${art.content}</div>`;
+            window.scrollTo(0,0);
         }
 
-        function filterBy(cat) {
+        function filterByCategory(cat) {
             document.getElementById('page-title').innerText = "Sección: " + cat;
-            render(articles.filter(a => a.category === cat));
+            renderArticles(articles.filter(a => a.category === cat));
         }
 
-        // ADMIN LOGIC
+        // PANEL DE ADMINISTRACIÓN
         function openAdmin() {
-            if(prompt("Clave de Autor:") === "catamarca2026") {
-                document.getElementById('admin-modal').style.display = 'block';
-                document.body.style.overflow = 'hidden';
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+
+        function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
+
+        function checkLogin() {
+            if (document.getElementById('admin-pass').value === "catamarca2026") {
+                isAdmin = true;
+                closeLogin();
+                document.getElementById('admin-panel').style.display = 'flex';
+                renderAdminList();
+            } else {
+                alert("Clave incorrecta");
             }
         }
 
-        function closeAdmin() {
-            document.getElementById('admin-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
 
-        async function saveArticle() {
-            const title = document.getElementById('article-title').value;
-            const summary = document.getElementById('article-summary').value;
-            const content = document.getElementById('article-content').value;
-            const category = document.getElementById('article-category').value;
-            const image = document.getElementById('article-image').value;
+        async function saveToSupabase() {
+            const title = document.getElementById('art-title').value;
+            const summary = document.getElementById('art-summary').value;
+            const content = document.getElementById('art-content').value;
+            const category = document.getElementById('art-category').value;
+            const image = document.getElementById('art-image').value;
 
-            if(!title || !content) return showNotification("Faltan campos", "error");
+            if(!title || !content) return alert("Complete los campos");
 
-            const payload = { 
-                title, summary, content, category, image, 
-                author: "Juan Pérez", 
-                date: new Date().toLocaleDateString('es-AR') 
-            };
+            const { error } = await _supabase.from('articles').insert([{
+                title, summary, content, category, image,
+                author: "Juan Pérez",
+                date: new Date().toLocaleDateString('es-AR')
+            }]);
 
-            const { error } = await _supabase.from('articles').insert([payload]);
             if(!error) {
-                showNotification("¡Editorial Publicado!", "success");
-                setTimeout(() => location.reload(), 1000);
+                alert("¡Publicado!");
+                location.reload();
             }
         }
 
         async function deleteArt(id) {
-            if(!confirm("¿Eliminar este editorial?")) return;
+            if (!confirm("¿Borrar este editorial?")) return;
             await _supabase.from('articles').delete().eq('id', id);
-            load();
+            loadData();
         }
 
         function renderAdminList() {
-            const listDiv = document.getElementById('admin-list');
+            const listDiv = document.getElementById('admin-article-list');
             listDiv.innerHTML = '';
             articles.forEach(a => {
                 listDiv.innerHTML += `
@@ -264,15 +375,7 @@
             });
         }
 
-        function showNotification(msg, type) {
-            const n = document.getElementById('notification');
-            n.innerText = msg;
-            n.className = `notification ${type}`;
-            n.style.display = 'block';
-            setTimeout(() => n.style.display = 'none', 3000);
-        }
-
-        window.onload = load;
+        window.onload = loadData;
     </script>
 </body>
 </html>
