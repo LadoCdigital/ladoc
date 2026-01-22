@@ -2016,26 +2016,51 @@ async function loadData() {
         }
         
         async function saveToSupabase() {
-            if (!useSupabase || typeof supabase === 'undefined') return;
+    if (!useSupabase || typeof supabase === 'undefined') {
+        console.log('Supabase no está configurado');
+        return;
+    }
+    
+    try {
+        console.log('Guardando en Supabase...');
+        
+        // Guardar artículos (eliminar todos primero y reinsertar)
+        const { error: deleteError } = await supabase
+            .from('articles')
+            .delete()
+            .neq('id', 0); // Eliminar todos los artículos
+        
+        if (deleteError) throw deleteError;
+        
+        // Insertar todos los artículos
+        if (articles.length > 0) {
+            const { error: insertError } = await supabase
+                .from('articles')
+                .insert(articles);
             
-            try {
-                // Guardar artículos
-                const { error: articlesError } = await supabase
-                    .from('articles')
-                    .upsert(articles);
-                
-                // Guardar autor
-                const { error: authorError } = await supabase
-                    .from('author')
-                    .upsert([{ id: 1, ...authorInfo }]);
-                
-                if (!articlesError && !authorError) {
-                    console.log('✅ Datos guardados en Supabase');
-                }
-            } catch (error) {
-                console.error('Error guardando en Supabase:', error);
-            }
+            if (insertError) throw insertError;
         }
+        
+        // Guardar/actualizar autor
+        const { error: authorError } = await supabase
+            .from('author')
+            .upsert([{ 
+                id: 1, 
+                ...authorInfo,
+                updated_at: new Date().toISOString()
+            }]);
+        
+        if (authorError) throw authorError;
+        
+        console.log('✅ Datos guardados en Supabase');
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Error guardando en Supabase:', error);
+        showNotification('Error sincronizando con Supabase', 'error');
+        return false;
+    }
+}
         
         async function deleteArticle(id) {
             if (!isAdmin) {
