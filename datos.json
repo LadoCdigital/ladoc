@@ -3,8 +3,8 @@
     {
       "id": 1,
       "title": "Enero Socialista 37°: 130 años de historia, un futuro por construir",
-      "summary": "Reflexión sobre los 130 años de historia del socialismo y los desafíos futuros.",
-      "content": "<p>Este enero se cumplen 130 años de la fundación del Partido Socialista en Argentina. Un siglo y tres décadas de luchas, avances y retrocesos en la construcción de una sociedad más justa.</p><p>Hoy, en el siglo XXI, los desafíos son diferentes pero la esencia sigue siendo la misma: la búsqueda de la igualdad, la justicia social y la democracia participativa.</p><p>Desde Catamarca, miramos hacia el futuro con la memoria de quienes lucharon antes que nosotros, y con la esperanza de seguir construyendo un país para todos.</p>",
+      "summary": "Reflexión sobre los 130 años del socialismo y sus desafíos actuales",
+      "content": "<p>Este es el contenido del editorial. Escribe aquí tu artículo completo.</p><p>Puedes usar HTML básico para formatear el texto.</p><p><strong>Texto en negrita</strong> y <em>texto en cursiva</em>.</p>",
       "category": "Catamarca",
       "author": "Santiago Galindez",
       "date": "17 de enero de 2026",
@@ -17,7 +17,7 @@
     "name": "Juan Pérez",
     "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
     "quote": "Pensar distinto también es un acto de compromiso.",
-    "bio": "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
+    "bio": "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática."
   },
   "lastUpdated": "2026-01-17T18:10:14.700Z",
   "syncVersion": "3.0"
