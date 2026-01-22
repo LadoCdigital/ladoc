@@ -1349,12 +1349,56 @@ let useSupabase = true; //
         }
         
         // ===== CARGA DE DATOS =====
-       // ===== CARGA DE DATOS =====
 async function loadData() {
     showNotification('📂 Cargando datos...', 'info');
     
     try {
-        // 1. PRIMERO intentar cargar desde GitHub (datos.json)
+        // 1. PRIMERO intentar cargar desde SUPABASE
+        if (useSupabase && typeof supabase !== 'undefined') {
+            try {
+                console.log('Intentando cargar desde Supabase...');
+                
+                // Cargar artículos desde Supabase
+                const { data: articlesData, error: articlesError } = await supabase
+                    .from('articles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                // Cargar autor desde Supabase
+                const { data: authorData, error: authorError } = await supabase
+                    .from('author')
+                    .select('*')
+                    .limit(1);
+                
+                if (!articlesError && articlesData) {
+                    articles = articlesData;
+                    
+                    // Actualizar currentArticleId
+                    if (articles.length > 0) {
+                        currentArticleId = Math.max(...articles.map(a => a.id));
+                    }
+                    
+                    // Cargar información del autor
+                    if (!authorError && authorData && authorData.length > 0) {
+                        authorInfo = authorData[0];
+                    } else {
+                        authorInfo = getDefaultAuthor();
+                    }
+                    
+                    // Guardar copia local
+                    saveToLocalStorage();
+                    
+                    showNotification('✅ Datos cargados desde Supabase', 'success');
+                    return true;
+                } else {
+                    console.error('Error cargando de Supabase:', articlesError);
+                }
+            } catch (supabaseError) {
+                console.error('Error en conexión Supabase:', supabaseError);
+            }
+        }
+        
+        // 2. Si Supabase falla, intentar desde GitHub
         try {
             const response = await fetch('./datos.json');
             if (response.ok) {
@@ -1366,16 +1410,20 @@ async function loadData() {
                     currentArticleId = Math.max(...articles.map(a => a.id));
                 }
                 
-                showNotification('✅ Datos cargados desde GitHub', 'success');
-                // También guardar copia local por si acaso
+                // Guardar en Supabase si está disponible
+                if (useSupabase && typeof supabase !== 'undefined') {
+                    await saveToSupabase();
+                }
+                
                 saveToLocalStorage();
+                showNotification('✅ Datos cargados desde GitHub', 'success');
                 return true;
             }
         } catch (githubError) {
-            console.log('No se pudo cargar de GitHub, intentando localStorage:', githubError);
+            console.log('No se pudo cargar de GitHub:', githubError);
         }
         
-        // 2. Si GitHub falla, usar localStorage
+        // 3. Si todo falla, usar localStorage
         const savedArticles = JSON.parse(localStorage.getItem('ladoC-articles'));
         const savedAuthor = JSON.parse(localStorage.getItem('ladoC-author'));
         
@@ -1387,20 +1435,20 @@ async function loadData() {
                 currentArticleId = Math.max(...articles.map(a => a.id));
             }
             
-            showNotification('✅ Datos cargados correctamente', 'success');
+            showNotification('✅ Datos cargados desde almacenamiento local', 'success');
         } else {
-            // 3. Si no hay nada, datos predeterminados
+            // 4. Datos predeterminados
             articles = getDefaultArticles();
             authorInfo = getDefaultAuthor();
             currentArticleId = 3;
             
             saveToLocalStorage();
-            showNotification('ℹ️ Bienvenido a Lado C', 'info');
+            showNotification('ℹ️ Bienvenido a Lado C - Usando datos iniciales', 'info');
         }
         
         return true;
     } catch (error) {
-        console.error('Error cargando datos:', error);
+        console.error('Error crítico cargando datos:', error);
         showNotification('❌ Error cargando datos', 'error');
         return false;
     }
