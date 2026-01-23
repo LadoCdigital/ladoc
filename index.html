@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS ORIGINAL PRESERVADO */
         :root {
             --color-bordo: #9B1C1C;
             --color-blanco: #FFFFFF;
@@ -20,7 +19,6 @@
             --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
             --border-radius: 8px;
             --color-success: #28a745;
-            --color-danger: #dc3545;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,7 +33,6 @@
         .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); }
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
-        nav a:hover { color: var(--color-bordo); }
 
         /* TOAST NOTIFICATION */
         .toast {
@@ -46,13 +43,14 @@
         }
         @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
-        /* CONTENT */
+        /* MAIN CONTENT */
         .main-content { display: flex; gap: 40px; margin: 40px 0; }
         .content { flex: 3; }
         .sidebar { flex: 1; background-color: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; align-self: flex-start; box-shadow: var(--shadow-sutil); }
 
         .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
-        .article-card { background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: 0.3s; position: relative; }
+        .article-card { background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: 0.3s; }
+        .article-card:hover { transform: translateY(-5px); }
         .article-img { width: 100%; height: 200px; object-fit: cover; }
         .article-content { padding: 20px; }
         .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; border: none; }
@@ -62,27 +60,25 @@
         .admin-container { background: white; max-width: 950px; margin: 0 auto; padding: 30px; border-radius: 12px; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .form-control { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
-        
+
         .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; }
         .login-box { background: white; padding: 40px; border-radius: 8px; width: 350px; text-align: center; }
 
         .hidden { display: none; }
-        footer { background-color: var(--color-bordo); color: white; padding: 40px 0; text-align: center; }
+        footer { background-color: var(--color-bordo); color: white; padding: 40px 0; text-align: center; margin-top: 60px; }
     </style>
 </head>
 <body>
 
-<div class="toast" id="toast">
-    <i class="fas fa-check-circle"></i> <span id="toast-msg">Guardado con éxito</span>
-</div>
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg">Guardado</span></div>
 
 <div class="login-modal" id="login-modal">
     <div class="login-box">
-        <h2>Lado C - Gestión</h2>
-        <input type="text" id="login-user" class="form-control" placeholder="Usuario" style="margin-top:20px;">
-        <input type="password" id="login-pass" class="form-control" placeholder="Contraseña">
-        <button class="read-more" style="width: 100%;" onclick="attemptLogin()">Entrar</button>
-        <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:10px; cursor:pointer; background:none; border:none; color:#666;">Cancelar</button>
+        <h2>Acceso Lado C</h2>
+        <input type="text" id="l-user" class="form-control" placeholder="admin" style="margin-top:20px;">
+        <input type="password" id="l-pass" class="form-control" placeholder="contraseña">
+        <button class="read-more" style="width: 100%;" onclick="validateLogin()">Entrar</button>
+        <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:10px; background:none; border:none; color:#666; cursor:pointer;">Cerrar</button>
     </div>
 </div>
 
@@ -96,7 +92,7 @@
                 <li><a onclick="filterByCat('Catamarca')">Catamarca</a></li>
                 <li><a onclick="filterByCat('Sociedad')">Sociedad</a></li>
                 <li><a onclick="filterByCat('Política Nacional')">Argentina</a></li>
-                <li><a onclick="openAdmin()"><i class="fas fa-lock"></i> Gestión</a></li>
+                <li><a onclick="openAdmin()"><i class="fas fa-user-shield"></i> Gestión</a></li>
             </ul>
         </nav>
     </div>
@@ -110,10 +106,10 @@
     <div id="full-view" class="content hidden"></div>
 
     <aside class="sidebar">
-        <div id="author-display" style="text-align: center;">
-            <img src="" id="side-photo" style="width: 150px; height: 150px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover;">
-            <h3 id="side-name" style="margin-top: 15px;">Cargando...</h3>
-            <p id="side-quote" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 15px;"></p>
+        <div id="side-profile" style="text-align: center;">
+            <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover;">
+            <h3 id="side-name" style="margin-top: 15px;"></h3>
+            <p id="side-quote" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 10px;"></p>
             <p id="side-bio" style="font-size: 0.85rem; text-align: justify;"></p>
         </div>
     </aside>
@@ -121,47 +117,40 @@
 
 <div class="admin-panel" id="admin-panel">
     <div class="admin-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee;">
-            <h1>Centro de Gestión Lado C</h1>
-            <button onclick="closeAdmin()" style="background:none; border:none; font-size: 2.5rem; cursor:pointer;">&times;</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid #eee;">
+            <h1>Panel Administrativo</h1>
+            <button onclick="closeAdmin()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
-
         <div class="admin-grid">
             <div>
-                <h3><i class="fas fa-feather"></i> Editorial</h3>
-                <input type="text" id="art-title" class="form-control" placeholder="Título">
-                <textarea id="art-summary" class="form-control" style="height: 60px;" placeholder="Resumen"></textarea>
-                <textarea id="art-content" class="form-control" style="height: 150px;" placeholder="Contenido (HTML)"></textarea>
-                <div style="display:flex; gap:10px;">
-                    <select id="art-author-sel" class="form-control"></select>
-                    <select id="art-cat-sel" class="form-control">
-                        <option value="Opinión">Opinión</option>
-                        <option value="Catamarca">Catamarca</option>
-                        <option value="Sociedad">Sociedad</option>
-                        <option value="Política Nacional">Argentina</option>
-                    </select>
-                </div>
-                <input type="text" id="art-img" class="form-control" placeholder="URL Imagen">
-                <button class="read-more" onclick="publishArt()">Publicar</button>
+                <h3><i class="fas fa-edit"></i> Nuevo Editorial</h3>
+                <input type="text" id="a-title" class="form-control" placeholder="Título">
+                <textarea id="a-sum" class="form-control" style="height:60px;" placeholder="Resumen"></textarea>
+                <textarea id="a-cont" class="form-control" style="height:120px;" placeholder="Contenido (HTML)"></textarea>
+                <select id="a-auth" class="form-control"></select>
+                <select id="a-cat" class="form-control">
+                    <option value="Opinión">Opinión</option>
+                    <option value="Catamarca">Catamarca</option>
+                    <option value="Sociedad">Sociedad</option>
+                    <option value="Política Nacional">Argentina</option>
+                </select>
+                <input type="text" id="a-img" class="form-control" placeholder="URL Imagen">
+                <button class="read-more" onclick="publish()">Publicar Artículo</button>
             </div>
-
             <div>
                 <h3><i class="fas fa-user-plus"></i> Gestionar Columnistas</h3>
-                <input type="text" id="col-name" class="form-control" placeholder="Nombre completo">
-                <input type="text" id="col-photo" class="form-control" placeholder="URL Foto">
-                <input type="text" id="col-quote" class="form-control" placeholder="Frase destacada">
-                <textarea id="col-bio" class="form-control" style="height:80px;" placeholder="Biografía"></textarea>
-                <button class="read-more" style="background:var(--color-success);" onclick="saveCol()">Guardar Columnista</button>
-                
+                <input type="text" id="c-name" class="form-control" placeholder="Nombre">
+                <input type="text" id="c-photo" class="form-control" placeholder="URL Foto">
+                <input type="text" id="c-quote" class="form-control" placeholder="Frase destacada">
+                <textarea id="c-bio" class="form-control" placeholder="Biografía corta"></textarea>
+                <button class="read-more" style="background:#28a745;" onclick="saveColumnist()">Guardar Columnista</button>
                 <div style="margin-top:20px;">
-                    <h3><i class="fas fa-palette"></i> Color del Sitio</h3>
+                    <h3><i class="fas fa-palette"></i> Color Principal</h3>
                     <input type="color" onchange="updateTheme(this.value)" style="width:100%; height:40px; cursor:pointer;">
                 </div>
             </div>
         </div>
-        
-        <hr style="margin: 30px 0;">
-        <button class="read-more" style="background:var(--color-danger);" onclick="logout()">Cerrar Sesión</button>
+        <button class="read-more" style="background:#dc3545; margin-top:30px;" onclick="logout()">Cerrar Sesión</button>
     </div>
 </div>
 
@@ -179,38 +168,41 @@
         const { data: a } = await _supabase.from('articles').select('*').order('id', { ascending: false });
         const { data: c } = await _supabase.from('columnists').select('*');
         articles = a || []; columnists = c || [];
-        renderPublic(); renderAdminUI();
-        if(columnists.length > 0) updateSidebar(columnists[0]);
+        render(); if(columnists.length > 0) updateSidebar(columnists[0]);
+        const theme = localStorage.getItem('ladoC-theme');
+        if(theme) document.documentElement.style.setProperty('--color-bordo', theme);
     }
 
-    function renderPublic(list = articles) {
-        const grid = document.getElementById('articles-container'); grid.innerHTML = '';
-        list.forEach(a => {
-            grid.innerHTML += `<div class="article-card">
-                <img src="${a.image}" class="article-img">
-                <div class="article-content">
-                    <small>${a.date} | ${a.category}</small>
-                    <h3>${a.title}</h3>
-                    <p style="font-size:0.85rem; color:#666; margin:10px 0;">Por <strong>${a.author}</strong></p>
-                    <button class="read-more" onclick="viewArticle(${a.id})">Leer más</button>
-                </div></div>`;
-        });
+    function render(list = articles) {
+        document.getElementById('articles-container').innerHTML = list.map(a => `<div class="article-card">
+            <img src="${a.image}" class="article-img">
+            <div class="article-content">
+                <small>${a.date} | ${a.category}</small>
+                <h3>${a.title}</h3>
+                <p style="font-size:0.8rem; color:#666; margin:10px 0;">Por <strong>${a.author}</strong></p>
+                <button class="read-more" onclick="view(${a.id})">Leer más</button>
+            </div></div>`).join('');
+        document.getElementById('a-auth').innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
     }
 
-    function viewArticle(id) {
+    function view(id) {
         const a = articles.find(x => x.id === id);
         const col = columnists.find(c => c.name === a.author);
         if(col) updateSidebar(col);
-
         document.getElementById('main-view').classList.add('hidden');
         const f = document.getElementById('full-view'); f.classList.remove('hidden');
         f.innerHTML = `
             <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER</button>
-            <h1 style="font-size: 2.5rem; line-height:1.1;">${a.title}</h1>
-            <div style="margin: 20px 0; color:#666;">Escrito por <strong>${a.author}</strong> | ${a.date}</div>
-            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:30px;">
-            <div style="font-size: 1.2rem; line-height: 1.8;">${a.content}</div>`;
+            <h1 style="font-size:2.5rem;">${a.title}</h1>
+            <div style="margin:20px 0; color:#666;">Por <strong>${a.author}</strong> | ${a.date}</div>
+            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:20px;">
+            <div style="font-size:1.1rem; line-height:1.8;">${a.content}</div>`;
         window.scrollTo(0,0);
+    }
+
+    function filterByCat(cat) {
+        document.getElementById('page-title').innerText = "Sección: " + cat;
+        render(articles.filter(a => a.category === cat));
     }
 
     function updateSidebar(c) {
@@ -220,26 +212,22 @@
         document.getElementById('side-bio').innerText = c.bio;
     }
 
-    function filterByCat(cat) {
-        document.getElementById('page-title').innerText = "Sección: " + cat;
-        renderPublic(articles.filter(a => a.category === cat));
-    }
-
-    // GESTIÓN
-    async function saveCol() {
-        const p = { name: document.getElementById('col-name').value, photo: document.getElementById('col-photo').value, quote: document.getElementById('col-quote').value, bio: document.getElementById('col-bio').value };
+    async function saveColumnist() {
+        const p = { name: document.getElementById('c-name').value, photo: document.getElementById('c-photo').value, quote: document.getElementById('c-quote').value, bio: document.getElementById('c-bio').value };
         const { error } = await _supabase.from('columnists').insert([p]);
         if(!error) { showToast("¡Columnista guardado!"); load(); }
     }
 
-    async function publishArt() {
-        const p = { title: document.getElementById('art-title').value, summary: document.getElementById('art-summary').value, content: document.getElementById('art-content').value, author: document.getElementById('art-author-sel').value, category: document.getElementById('art-cat-sel').value, image: document.getElementById('art-img').value, date: new Date().toLocaleDateString('es-AR') };
+    async function publish() {
+        const p = { title: document.getElementById('a-title').value, summary: document.getElementById('a-sum').value, content: document.getElementById('a-cont').value, author: document.getElementById('a-auth').value, category: document.getElementById('a-cat').value, image: document.getElementById('a-img').value, date: new Date().toLocaleDateString('es-AR') };
         const { error } = await _supabase.from('articles').insert([p]);
-        if(!error) { showToast("¡Editorial publicado!"); setTimeout(() => location.reload(), 1500); }
+        if(!error) { showToast("¡Publicado!"); setTimeout(() => location.reload(), 1500); }
     }
 
-    function renderAdminUI() {
-        document.getElementById('art-author-sel').innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+    function validateLogin() {
+        if(document.getElementById('l-user').value === 'admin' && document.getElementById('l-pass').value === 'catamarca2026') {
+            isAdmin = true; localStorage.setItem('ladoC-auth', 'true'); location.reload();
+        } else alert("Error");
     }
 
     function showToast(m) {
@@ -247,22 +235,12 @@
         t.style.display = 'flex'; setTimeout(() => t.style.display = 'none', 3000);
     }
 
-    function attemptLogin() {
-        if(document.getElementById('login-user').value === 'admin' && document.getElementById('login-pass').value === 'catamarca2026') {
-            isAdmin = true; localStorage.setItem('ladoC-auth', 'true'); location.reload();
-        } else alert("Datos incorrectos");
-    }
-
     function openAdmin() { if(!isAdmin) document.getElementById('login-modal').style.display='flex'; else document.getElementById('admin-panel').style.display='block'; }
     function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
     function updateTheme(c) { document.documentElement.style.setProperty('--color-bordo', c); localStorage.setItem('ladoC-theme', c); showToast("Color actualizado"); }
     function logout() { localStorage.removeItem('ladoC-auth'); location.reload(); }
 
-    window.onload = () => {
-        load();
-        const theme = localStorage.getItem('ladoC-theme');
-        if(theme) document.documentElement.style.setProperty('--color-bordo', theme);
-    };
+    window.onload = load;
 </script>
 </body>
 </html>
