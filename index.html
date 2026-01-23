@@ -3,58 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lado C - Gestión Total</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <title>Lado C - Una mirada distinta sobre la política</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS ORIGINAL PRESERVADO */
+        /* CSS ORIGINAL PRESERVADO [cite: 2, 3] */
         :root {
-            --color-bordo: #9B1C1C; --color-blanco: #FFFFFF; --color-azul-claro: #DCE6F2;
-            --color-gris-oscuro: #333333; --color-gris-medio: #666666; --color-bg-sidebar: #f9f9f9;
-            --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08); --border-radius: 8px;
+            --color-bordo: #9B1C1C;
+            --color-blanco: #FFFFFF;
+            --color-azul-claro: #DCE6F2;
+            --color-gris-oscuro: #333333;
+            --color-gris-medio: #666666;
+            --color-bg-sidebar: #f9f9f9;
+            --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-radius: 8px;
+            --color-success: #28a745;
+            --color-danger: #dc3545;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Merriweather', serif; color: var(--color-gris-oscuro); background-color: var(--color-blanco); line-height: 1.6; }
         h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--color-bordo); }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        /* HEADER */
-        header { background: white; box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 20px 0; }
+        /* HEADER [cite: 10, 11] */
+        header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 20px 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Poppins'; font-size: 2.2rem; color: var(--color-bordo); font-weight: 700; }
-        nav ul { display: flex; list-style: none; gap: 25px; }
+        .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); }
+        nav ul { display: flex; list-style: none; gap: 30px; }
         nav a { font-family: 'Montserrat'; font-weight: 600; cursor: pointer; }
 
-        /* MAIN CONTENT */
+        /* MAIN CONTENT [cite: 24, 25] */
         .main-content { display: flex; gap: 40px; margin: 40px 0; }
         .content { flex: 3; }
-        .sidebar { flex: 1; background: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; align-self: flex-start; }
+        .sidebar { flex: 1; background-color: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; box-shadow: var(--shadow-sutil); align-self: flex-start; }
 
-        /* CARDS */
+        /* ARTICLES GRID [cite: 29, 30] */
         .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
         .article-card { background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: 0.3s; position: relative; }
-        .article-card:hover { transform: translateY(-5px); }
         .article-img { width: 100%; height: 200px; object-fit: cover; }
         .article-content { padding: 20px; }
-        .read-more { display: inline-block; background: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; font-weight: 600; border: none; cursor: pointer; }
+        .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: 'Montserrat'; font-weight: 600; border: none; }
 
-        /* ADMIN INTERFACE */
-        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 20px; }
-        .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        .form-control { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
+        /* PANEL ADMIN MEJORADO [cite: 78, 80] */
+        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
+        .admin-container { background: white; max-width: 950px; margin: 0 auto; padding: 30px; border-radius: 12px; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .form-control { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
         
+        /* VENTANA DE CONFIRMACIÓN (TOAST)  */
+        .notification { 
+            position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; 
+            border-radius: 8px; color: white; z-index: 5000; display: none; 
+            font-family: 'Montserrat'; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
         .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; }
         .login-box { background: white; padding: 40px; border-radius: 8px; width: 350px; text-align: center; }
 
-        .color-picker { display: flex; gap: 10px; margin: 10px 0; }
-        .color-opt { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 4px rgba(0,0,0,0.2); }
-
         .hidden { display: none; }
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 5px; color: white; z-index: 4000; display: none; font-weight: 600; }
-        footer { background: var(--color-bordo); color: white; padding: 40px 0; text-align: center; }
+        footer { background-color: var(--color-bordo); color: white; padding: 40px 0; text-align: center; }
     </style>
 </head>
 <body>
@@ -64,10 +77,10 @@
 <div class="login-modal" id="login-modal">
     <div class="login-box">
         <h2>Lado C - Acceso</h2>
-        <input type="text" id="user" class="form-control" placeholder="Usuario" style="margin-top:20px;">
-        <input type="password" id="pass" class="form-control" placeholder="Contraseña">
-        <button class="read-more" style="width: 100%;" onclick="attemptLogin()">Entrar</button>
-        <button onclick="closeLogin()" style="background:none; border:none; margin-top:10px; color:#666; cursor:pointer;">Cancelar</button>
+        <input type="text" id="admin-user" class="form-control" placeholder="Usuario" style="margin-top:20px;">
+        <input type="password" id="admin-pass" class="form-control" placeholder="Contraseña">
+        <button class="read-more" style="width: 100%;" onclick="validateLogin()">Entrar</button>
+        <button onclick="closeLogin()" style="background:none; border:none; margin-top:10px; color:#666; cursor:pointer;">Cerrar</button>
     </div>
 </div>
 
@@ -77,9 +90,7 @@
         <nav>
             <ul>
                 <li><a onclick="showSection('inicio')">Inicio</a></li>
-                <li><a onclick="filterBy('Catamarca')">Catamarca</a></li>
-                <li><a onclick="filterBy('Política Nacional')">Nacional</a></li>
-                <li><a onclick="openAdmin()"><i class="fas fa-cog"></i> Panel</a></li>
+                <li><a onclick="openAdmin()"><i class="fas fa-lock"></i> Administración</a></li>
             </ul>
         </nav>
     </div>
@@ -87,15 +98,15 @@
 
 <div class="container main-content">
     <div class="content" id="main-view">
-        <h2 class="section-title" id="page-title">Editoriales Recientes</h2>
+        <h2 class="section-title">Editoriales Recientes</h2>
         <div class="articles-grid" id="articles-container"></div>
     </div>
-    <div id="full-view" class="content hidden"></div>
+    <div id="article-full-view" class="content hidden"></div>
 
     <aside class="sidebar">
-        <div id="side-author-info" style="text-align: center;">
+        <div id="active-columnist" style="text-align: center;">
             <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover;">
-            <h3 id="side-name" style="margin-top: 15px;"></h3>
+            <h3 id="side-name" style="margin-top: 15px;">Cargando...</h3>
             <p id="side-quote" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 10px;"></p>
             <p id="side-bio" style="font-size: 0.85rem; text-align: justify;"></p>
         </div>
@@ -111,49 +122,34 @@
 
         <div class="admin-grid">
             <div>
-                <h3><i class="fas fa-feather"></i> Publicar / Editar</h3>
+                <h3><i class="fas fa-edit"></i> Editorial</h3>
                 <input type="text" id="art-title" class="form-control" placeholder="Título">
                 <textarea id="art-summary" class="form-control" style="height: 60px;" placeholder="Resumen"></textarea>
-                <textarea id="art-content" class="form-control" style="height: 150px;" placeholder="Contenido (HTML)"></textarea>
-                <div style="display:flex; gap:10px;">
-                    <select id="art-cat" class="form-control">
-                        <option value="Opinión">Opinión</option>
-                        <option value="Catamarca">Catamarca</option>
-                        <option value="Política Nacional">Nacional</option>
-                    </select>
-                    <select id="art-auth" class="form-control"></select>
-                </div>
+                <textarea id="art-content" class="form-control" style="height: 120px;" placeholder="Contenido (HTML)"></textarea>
+                <select id="art-author-select" class="form-control"></select>
                 <input type="text" id="art-img" class="form-control" placeholder="URL Imagen">
-                <button class="read-more" onclick="saveArticle()">Guardar Editorial</button>
+                <button class="read-more" onclick="publishArticle()">Publicar Editorial</button>
             </div>
 
             <div>
-                <h3><i class="fas fa-user-tie"></i> Columnistas</h3>
+                <h3><i class="fas fa-user-plus"></i> Columnistas</h3>
                 <input type="text" id="col-name" class="form-control" placeholder="Nombre">
                 <input type="text" id="col-photo" class="form-control" placeholder="URL Foto">
                 <input type="text" id="col-quote" class="form-control" placeholder="Frase">
                 <textarea id="col-bio" class="form-control" placeholder="Biografía"></textarea>
-                <button class="read-more" style="background:#28a745;" onclick="saveCol()">Agregar Columnista</button>
+                <button class="read-more" style="background:var(--color-success);" onclick="saveColumnist()">Guardar Columnista</button>
                 
-                <hr style="margin: 20px 0;">
-                <h3><i class="fas fa-paint-roller"></i> Estética</h3>
-                <div class="color-picker">
-                    <div class="color-opt" style="background:#9B1C1C;" onclick="updateTheme('#9B1C1C')"></div>
-                    <div class="color-opt" style="background:#1C4E9B;" onclick="updateTheme('#1C4E9B')"></div>
-                    <div class="color-opt" style="background:#1C9B5E;" onclick="updateTheme('#1C9B5E')"></div>
-                    <div class="color-opt" style="background:#6B1C9B;" onclick="updateTheme('#6B1C9B')"></div>
+                <div style="margin-top: 20px;">
+                    <h3><i class="fas fa-paint-brush"></i> Color del Sitio</h3>
+                    <input type="color" id="theme-color" onchange="updateTheme(this.value)" style="width: 100%; height: 40px; cursor: pointer;">
                 </div>
             </div>
         </div>
 
         <hr style="margin: 30px 0;">
-        <h3>Artículos Publicados</h3>
-        <div id="admin-art-list" style="max-height: 250px; overflow-y: auto;"></div>
-        <button class="read-more" style="background:#dc3545; margin-top:20px;" onclick="logout()">Cerrar Sesión</button>
+        <button class="read-more" style="background:var(--color-danger);" onclick="logout()">Cerrar Sesión</button>
     </div>
 </div>
-
-<footer><p>Lado C – Gestión Digital Catamarca. © 2026</p></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -162,93 +158,121 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let articles = [], columnists = [], isAdmin = localStorage.getItem('ladoC-auth') === 'true';
-    let editId = null;
 
-    async function load() {
+    async function loadData() {
         const { data: a } = await _supabase.from('articles').select('*').order('id', { ascending: false });
         const { data: c } = await _supabase.from('columnists').select('*');
         articles = a || []; columnists = c || [];
-        renderPublic(); renderSidebar(); renderAdmin();
-        const theme = localStorage.getItem('ladoC-theme');
-        if(theme) document.documentElement.style.setProperty('--color-bordo', theme);
+        renderPublic(); renderSidebar(); renderAdminUI();
+        const savedColor = localStorage.getItem('ladoC-theme');
+        if(savedColor) document.documentElement.style.setProperty('--color-bordo', savedColor);
     }
 
-    function renderPublic(list = articles) {
-        const c = document.getElementById('articles-container'); c.innerHTML = '';
-        list.forEach(a => {
-            c.innerHTML += `<div class="article-card">
+    function renderPublic() {
+        const cont = document.getElementById('articles-container');
+        cont.innerHTML = articles.map(a => `
+            <div class="article-card">
                 <img src="${a.image}" class="article-img">
                 <div class="article-content">
-                    <div class="article-meta"><span>${a.date}</span><span>${a.category}</span></div>
+                    <div class="article-meta"><span>${a.date}</span></div>
                     <h3 style="margin-bottom:10px;">${a.title}</h3>
-                    <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">Por <strong>${a.author}</strong></p>
-                    <button class="read-more" onclick="view(${a.id})">Leer más</button>
-                </div></div>`;
-        });
+                    <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">Escrito por: ${a.author}</p>
+                    <button class="read-more" onclick="viewArticle(${a.id})">Leer más</button>
+                </div>
+            </div>`).join('');
     }
 
     function renderSidebar() {
         if(columnists.length > 0) {
-            const col = columnists[0];
-            document.getElementById('side-name').innerText = col.name;
-            document.getElementById('side-photo').src = col.photo;
-            document.getElementById('side-quote').innerText = `"${col.quote}"`;
-            document.getElementById('side-bio').innerText = col.bio;
+            const c = columnists[0];
+            document.getElementById('side-name').innerText = c.name;
+            document.getElementById('side-photo').src = c.photo;
+            document.getElementById('side-quote').innerText = `"${c.quote}"`;
+            document.getElementById('side-bio').innerText = c.bio;
         }
     }
 
-    function view(id) {
-        const a = articles.find(x => x.id === id);
-        const m = document.getElementById('main-view'), f = document.getElementById('full-view');
-        m.classList.add('hidden'); f.classList.remove('hidden');
-        f.innerHTML = `
-            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER</button>
-            <h1 style="font-size: 2.3rem;">${a.title}</h1>
-            <div class="article-meta" style="margin: 20px 0;">Escrito por <strong>${a.author}</strong> | ${a.date}</div>
-            <img src="${a.image}" style="width:100%; border-radius:10px; margin-bottom:30px;">
-            <div style="font-size: 1.2rem; line-height: 1.8;">${a.content}</div>`;
-        window.scrollTo(0,0);
+    async function saveColumnist() {
+        const p = { 
+            name: document.getElementById('col-name').value, 
+            photo: document.getElementById('col-photo').value, 
+            quote: document.getElementById('col-quote').value, 
+            bio: document.getElementById('col-bio').value 
+        };
+        if(!p.name) return showNotification("El nombre es obligatorio", "error");
+
+        const { error } = await _supabase.from('columnists').insert([p]);
+        if(!error) {
+            showNotification("¡Columnista guardado con éxito!", "success");
+            loadData(); // Recargar datos
+            // Limpiar campos
+            document.getElementById('col-name').value = '';
+            document.getElementById('col-photo').value = '';
+            document.getElementById('col-quote').value = '';
+            document.getElementById('col-bio').value = '';
+        } else {
+            showNotification("Error al guardar en Supabase", "error");
+        }
     }
 
-    function attemptLogin() {
-        if(document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'catamarca2026') {
+    async function publishArticle() {
+        const payload = {
+            title: document.getElementById('art-title').value,
+            summary: document.getElementById('art-summary').value,
+            content: document.getElementById('art-content').value,
+            author: document.getElementById('art-author-select').value,
+            image: document.getElementById('art-img').value,
+            date: new Date().toLocaleDateString('es-AR')
+        };
+        const { error } = await _supabase.from('articles').insert([payload]);
+        if(!error) {
+            showNotification("¡Editorial publicado!", "success");
+            setTimeout(() => location.reload(), 1500);
+        }
+    }
+
+    function renderAdminUI() {
+        const sel = document.getElementById('art-author-select');
+        sel.innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+    }
+
+    function showNotification(msg, type) {
+        const n = document.getElementById('notification');
+        n.innerText = msg;
+        n.style.background = type === 'success' ? 'var(--color-success)' : 'var(--color-danger)';
+        n.style.display = 'block';
+        setTimeout(() => n.style.display = 'none', 3500);
+    }
+
+    function validateLogin() {
+        const u = document.getElementById('admin-user').value;
+        const p = document.getElementById('admin-pass').value;
+        if(u === 'admin' && p === 'catamarca2026') {
             isAdmin = true; localStorage.setItem('ladoC-auth', 'true'); location.reload();
         } else alert("Error");
     }
 
-    async function saveArticle() {
-        const p = { title: document.getElementById('art-title').value, summary: document.getElementById('art-summary').value, content: document.getElementById('art-content').value, category: document.getElementById('art-cat').value, author: document.getElementById('art-auth').value, image: document.getElementById('art-img').value, date: new Date().toLocaleDateString('es-AR') };
-        if(editId) await _supabase.from('articles').update(p).eq('id', editId);
-        else await _supabase.from('articles').insert([p]);
-        location.reload();
+    function viewArticle(id) {
+        const a = articles.find(x => x.id === id);
+        document.getElementById('main-view').classList.add('hidden');
+        const full = document.getElementById('article-full-view');
+        full.classList.remove('hidden');
+        full.innerHTML = `
+            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER</button>
+            <h1 style="font-size: 2.5rem;">${a.title}</h1>
+            <div class="article-meta" style="margin: 20px 0;">Por <strong>${a.author}</strong> | ${a.date}</div>
+            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:30px;">
+            <div style="font-size: 1.2rem; line-height: 1.8;">${a.content}</div>`;
+        window.scrollTo(0,0);
     }
 
-    async function saveCol() {
-        const p = { name: document.getElementById('col-name').value, photo: document.getElementById('col-photo').value, quote: document.getElementById('col-quote').value, bio: document.getElementById('col-bio').value };
-        await _supabase.from('columnists').insert([p]); load();
-    }
-
-    function renderAdmin() {
-        document.getElementById('art-auth').innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-        document.getElementById('admin-art-list').innerHTML = articles.map(a => `<div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #eee;"><span>${a.title}</span><div><button onclick="editArt(${a.id})" style="color:blue; margin-right:10px; border:none; background:none; cursor:pointer;">Editar</button><button onclick="delArt(${a.id})" style="color:red; border:none; background:none; cursor:pointer;">Borrar</button></div></div>`).join('');
-    }
-
-    function editArt(id) {
-        const a = articles.find(x => x.id === id); editId = id;
-        document.getElementById('art-title').value = a.title; document.getElementById('art-summary').value = a.summary;
-        document.getElementById('art-content').value = a.content; document.getElementById('art-img').value = a.image;
-        notify("Cargado para editar", "info");
-    }
-
-    async function delArt(id) { if(confirm("¿Borrar?")) { await _supabase.from('articles').delete().eq('id', id); load(); } }
     function openAdmin() { if(!isAdmin) document.getElementById('login-modal').style.display = 'flex'; else document.getElementById('admin-panel').style.display = 'block'; }
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
     function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
-    function updateTheme(c) { document.documentElement.style.setProperty('--color-bordo', c); localStorage.setItem('ladoC-theme', c); }
+    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+    function updateTheme(c) { document.documentElement.style.setProperty('--color-bordo', c); localStorage.setItem('ladoC-theme', c); showNotification("Color actualizado", "success"); }
     function logout() { localStorage.removeItem('ladoC-auth'); location.reload(); }
-    function notify(m, t) { const n = document.getElementById('notification'); n.innerText = m; n.style.background = t === 'success' ? '#28a745' : '#9B1C1C'; n.style.display = 'block'; setTimeout(() => n.style.display='none', 3000); }
-    
-    window.onload = load;
+
+    window.onload = loadData;
 </script>
 </body>
 </html>
