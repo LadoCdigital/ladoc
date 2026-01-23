@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* MANTENEMOS TU IDENTIDAD VISUAL ORIGINAL */
         :root {
             --color-bordo: #9B1C1C;
             --color-blanco: #FFFFFF;
@@ -17,27 +18,23 @@
             --color-gris-medio: #666666;
             --color-gris-claro: #F5F5F5;
             --color-bg-sidebar: #f9f9f9;
-            --color-success: #28a745;
-            --color-warning: #ffc107;
-            --color-danger: #dc3545;
             --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
             --border-radius: 8px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Merriweather', serif; color: var(--color-gris-oscuro); background-color: var(--color-blanco); line-height: 1.6; }
-        h1, h2, h3, h4, h5 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--color-bordo); }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--color-bordo); }
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
         /* HEADER */
         header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 20px 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; color: var(--color-bordo); letter-spacing: 1px; }
-        .logo span { color: var(--color-gris-medio); }
-        nav ul { display: flex; list-style: none; gap: 25px; }
-        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 1rem; cursor: pointer; }
+        .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); letter-spacing: 1px; }
+        .logo span { font-weight: 600; color: var(--color-gris-medio); }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 1.05rem; cursor: pointer; }
         nav a:hover { color: var(--color-bordo); }
 
         /* MAIN CONTENT */
@@ -45,34 +42,32 @@
         .content { flex: 3; }
         .sidebar { flex: 1; background-color: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; box-shadow: var(--shadow-sutil); align-self: flex-start; }
 
-        /* ARTICLES GRID */
+        /* ARTICLES */
         .section-title { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 2px solid var(--color-azul-claro); }
-        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
-        .article-card { background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: 0.3s; position: relative; }
-        .article-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .article-card { background-color: var(--color-blanco); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: transform 0.3s ease; }
+        .article-card:hover { transform: translateY(-5px); }
         .article-img { width: 100%; height: 200px; object-fit: cover; }
         .article-content { padding: 20px; }
-        .article-meta { color: var(--color-gris-medio); font-size: 0.85rem; margin-bottom: 10px; }
-        .read-more { display: inline-block; background: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: 'Montserrat'; font-weight: 600; border: none; }
+        .read-more { display: inline-block; background-color: var(--color-bordo); color: var(--color-blanco); padding: 10px 20px; border-radius: var(--border-radius); font-family: 'Montserrat'; font-weight: 600; border: none; cursor: pointer; }
 
-        /* ADMIN INTERFACE */
-        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
-        .admin-container { background: white; max-width: 900px; margin: 0 auto; padding: 30px; border-radius: 12px; }
-        .admin-section { border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        /* NUEVO PANEL ADMIN PROFESIONAL */
+        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 20px; }
+        .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .form-group { margin-bottom: 15px; }
         .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
-        .article-list-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #f5f5f5; align-items: center; }
         
-        /* LOGIN */
+        /* LOGIN MODAL */
         .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; }
         .login-box { background: white; padding: 40px; border-radius: 8px; width: 350px; text-align: center; }
 
-        /* COLORS */
+        /* COLOR PICKER */
         .color-picker { display: flex; gap: 10px; margin-top: 10px; }
         .color-option { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
 
         .hidden { display: none; }
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 5px; color: white; z-index: 4000; display: none; font-family: 'Montserrat'; font-weight: 600; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 5px; color: white; z-index: 4000; display: none; font-family: 'Montserrat'; }
         footer { background: var(--color-bordo); color: white; padding: 40px 0; text-align: center; margin-top: 60px; }
     </style>
 </head>
@@ -82,28 +77,27 @@
 
 <div class="login-modal" id="login-modal">
     <div class="login-box">
-        <h2>Lado C Admin</h2>
+        <h2>Lado C - Acceso</h2>
         <div class="form-group" style="margin-top: 20px;">
             <input type="text" id="admin-user" class="form-control" placeholder="Usuario">
         </div>
         <div class="form-group">
             <input type="password" id="admin-pass" class="form-control" placeholder="Contraseña">
         </div>
-        <button class="read-more" style="width: 100%;" onclick="attemptLogin()">Entrar</button>
-        <button onclick="closeLogin()" style="background:none; border:none; margin-top:15px; color:#666; cursor:pointer;">Cancelar</button>
+        <button class="read-more" style="width: 100%;" onclick="validateLogin()">Iniciar Sesión</button>
+        <button onclick="closeLogin()" style="background:none; border:none; margin-top:15px; color:#666; cursor:pointer;">Cerrar</button>
     </div>
 </div>
 
 <header>
     <div class="container header-container">
-        <a href="#" class="logo" onclick="showSection('inicio')">Lado <span>C</span></a>
+        <a href="#" class="logo" onclick="location.reload()">Lado <span>C</span></a>
         <nav>
             <ul>
                 <li><a onclick="showSection('inicio')">Inicio</a></li>
-                <li><a onclick="filterByCategory('Catamarca')">Catamarca</a></li>
-                <li><a onclick="filterByCategory('Política Nacional')">Nacional</a></li>
-                <li><a onclick="showSection('contacto')">Contacto</a></li>
-                <li><a id="nav-admin-btn" onclick="openAdmin()" style="color: var(--color-gris-medio);"><i class="fas fa-lock"></i> Admin</a></li>
+                <li><a onclick="filterByCat('Catamarca')">Catamarca</a></li>
+                <li><a onclick="filterByCat('Política Nacional')">Nacional</a></li>
+                <li><a onclick="openAdmin()"><i class="fas fa-user-cog"></i> Administración</a></li>
             </ul>
         </nav>
     </div>
@@ -111,219 +105,189 @@
 
 <div class="container main-content">
     <div class="content" id="main-view">
-        <h2 class="section-title" id="page-title">Editoriales Destacados</h2>
+        <h2 class="section-title" id="page-title">Editoriales Recientes</h2>
         <div class="articles-grid" id="articles-container">
             </div>
     </div>
 
-    <div class="content hidden" id="full-view"></div>
+    <div id="article-full-view" class="content hidden"></div>
 
     <aside class="sidebar">
-        <div id="sidebar-columnist" style="text-align: center;">
+        <div id="author-display" style="text-align: center;">
             <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover;">
-            <h3 id="side-name" style="margin-top: 15px;">Cargando...</h3>
-            <p id="side-quote" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 10px;"></p>
-            <p id="side-bio" style="font-size: 0.85rem; text-align: justify; margin-top: 15px;"></p>
+            <h3 id="side-name" style="margin-top: 15px;"></h3>
+            <p id="side-quote" style="font-style: italic; color: #666; margin: 15px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 10px;"></p>
+            <p id="side-bio" style="font-size: 0.85rem; text-align: justify;"></p>
         </div>
     </aside>
 </div>
 
 <div class="admin-panel" id="admin-panel">
     <div class="admin-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h1>Centro de Control</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--color-azul-claro); padding-bottom: 10px;">
+            <h1>Panel Administrativo</h1>
             <button onclick="closeAdmin()" style="background:none; border:none; font-size: 2rem; cursor:pointer;">&times;</button>
         </div>
 
-        <div class="admin-section">
-            <h3><i class="fas fa-pen"></i> Redactar Editorial</h3>
-            <input type="text" id="art-title" class="form-control" placeholder="Título del Editorial">
-            <textarea id="art-summary" class="form-control" style="height: 60px;" placeholder="Resumen corto"></textarea>
-            <textarea id="art-content" class="form-control" style="height: 150px;" placeholder="Contenido (puedes usar HTML)"></textarea>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <select id="art-category" class="form-control">
-                    <option value="Catamarca">Catamarca</option>
-                    <option value="Política Nacional">Política Nacional</option>
-                    <option value="Opinión">Opinión</option>
-                    <option value="Sociedad">Sociedad</option>
-                </select>
-                <select id="art-columnist" class="form-control">
-                    </select>
-            </div>
-            <input type="text" id="art-image" class="form-control" placeholder="URL de Imagen (Unsplash)">
-            <button class="read-more" id="save-art-btn" onclick="saveArticle()">Publicar Editorial</button>
-        </div>
-
-        <div class="admin-section">
-            <h3><i class="fas fa-users"></i> Gestionar Columnistas</h3>
-            <input type="text" id="col-name" class="form-control" placeholder="Nombre completo">
-            <input type="text" id="col-photo" class="form-control" placeholder="URL Foto">
-            <input type="text" id="col-quote" class="form-control" placeholder="Frase personal">
-            <textarea id="col-bio" class="form-control" placeholder="Biografía corta"></textarea>
-            <button class="read-more" style="background: #28a745;" onclick="saveColumnist()">Guardar/Agregar Columnista</button>
-            <div id="columnist-list" style="margin-top: 15px;"></div>
-        </div>
-
-        <div class="admin-section" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="admin-grid">
             <div>
-                <h3><i class="fas fa-palette"></i> Colores</h3>
+                <h3><i class="fas fa-edit"></i> Publicar Editorial</h3>
+                <div class="form-group"><input type="text" id="art-title" class="form-control" placeholder="Título"></div>
+                <div class="form-group"><textarea id="art-summary" class="form-control" style="height: 60px;" placeholder="Resumen corto"></textarea></div>
+                <div class="form-group"><textarea id="art-content" class="form-control" style="height: 150px;" placeholder="Cuerpo del artículo (HTML permitido)"></textarea></div>
+                <div class="form-group">
+                    <select id="art-category" class="form-control">
+                        <option value="Opinión">Opinión</option>
+                        <option value="Catamarca">Catamarca</option>
+                        <option value="Política Nacional">Política Nacional</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="art-author" class="form-control">
+                        </select>
+                </div>
+                <div class="form-group"><input type="text" id="art-image" class="form-control" placeholder="URL de Imagen"></div>
+                <button class="read-more" onclick="publishArticle()">Subir a la Web</button>
+            </div>
+
+            <div>
+                <h3><i class="fas fa-user-plus"></i> Gestionar Columnistas</h3>
+                <input type="text" id="col-name" class="form-control" placeholder="Nombre">
+                <input type="text" id="col-photo" class="form-control" placeholder="URL Foto">
+                <input type="text" id="col-quote" class="form-control" placeholder="Frase destacada">
+                <textarea id="col-bio" class="form-control" placeholder="Biografía"></textarea>
+                <button class="read-more" style="background:#28a745;" onclick="saveColumnist()">Guardar Columnista</button>
+                
+                <hr style="margin: 20px 0;">
+                
+                <h3><i class="fas fa-paint-brush"></i> Identidad Visual</h3>
                 <div class="color-picker">
-                    <div class="color-option" style="background:#9B1C1C;" onclick="changeColor('#9B1C1C')"></div>
-                    <div class="color-option" style="background:#1C4E9B;" onclick="changeColor('#1C4E9B')"></div>
-                    <div class="color-option" style="background:#1C9B5E;" onclick="changeColor('#1C9B5E')"></div>
-                    <div class="color-option" style="background:#6B1C9B;" onclick="changeColor('#6B1C9B')"></div>
+                    <div class="color-option" style="background:#9B1C1C;" onclick="setTheme('#9B1C1C')"></div>
+                    <div class="color-option" style="background:#1C4E9B;" onclick="setTheme('#1C4E9B')"></div>
+                    <div class="color-option" style="background:#1C9B5E;" onclick="setTheme('#1C9B5E')"></div>
+                    <div class="color-option" style="background:#6B1C9B;" onclick="setTheme('#6B1C9B')"></div>
                 </div>
             </div>
-            <div>
-                <h3><i class="fas fa-chart-line"></i> Estadísticas</h3>
-                <p id="stats-info" style="font-size: 0.9rem; color: #555;"></p>
-            </div>
         </div>
 
-        <div class="admin-section">
-            <h3>Editoriales Publicados</h3>
-            <input type="text" id="art-search" class="form-control" placeholder="Buscar por título..." oninput="searchArticles()">
-            <div id="admin-art-list" style="max-height: 200px; overflow-y: auto;"></div>
+        <hr style="margin: 30px 0;">
+        <h3>Editoriales Activos</h3>
+        <div id="admin-art-list" style="margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
+        
+        <div style="margin-top: 30px; text-align: right;">
+            <button class="read-more" style="background:#dc3545;" onclick="logout()">Cerrar Sesión</button>
         </div>
-
-        <button class="read-more danger" style="background: #dc3545;" onclick="logout()">Cerrar Sesión</button>
     </div>
 </div>
 
 <footer>
     <div class="container">
-        <p>Lado C – Una mirada distinta sobre la política. © 2026</p>
-        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">Catamarca, Argentina</p>
+        <p>Lado C – Una mirada distinta sobre la política. © 2026 | Catamarca</p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // CREDENCIALES
+    // CREDENCIALES DE TU PROYECTO
     const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let articles = [];
     let columnists = [];
-    let currentEditId = null;
-    let isAdmin = localStorage.getItem('ladoC-isAdmin') === 'true';
+    let isAdminSession = false;
 
-    // CARGA INICIAL
-    async function init() {
-        const { data: artData } = await _supabase.from('articles').select('*').order('id', { ascending: false });
-        const { data: colData } = await _supabase.from('columnists').select('*');
+    // INICIO
+    async function loadApp() {
+        const { data: arts } = await _supabase.from('articles').select('*').order('id', { ascending: false });
+        const { data: cols } = await _supabase.from('columnists').select('*');
         
-        articles = artData || [];
-        columnists = colData || [];
+        articles = arts || [];
+        columnists = cols || [];
         
         renderPublic();
-        updateSidebar();
-        applySavedSettings();
-        if(isAdmin) {
-            document.getElementById('nav-admin-btn').innerHTML = '<i class="fas fa-user-shield"></i> Panel Activo';
-        }
+        renderSidebar();
+        renderAdminUI();
+        
+        const savedTheme = localStorage.getItem('ladoC-theme');
+        if(savedTheme) document.documentElement.style.setProperty('--color-bordo', savedTheme);
     }
 
-    // VISTA PÚBLICA
     function renderPublic(list = articles) {
         const container = document.getElementById('articles-container');
         container.innerHTML = '';
         list.forEach(a => {
-            const card = document.createElement('div');
-            card.className = 'article-card';
-            card.innerHTML = `
-                <img src="${a.image || 'https://via.placeholder.com/400x200'}" class="article-img">
-                <div class="article-content">
-                    <div class="article-meta"><span>${a.date}</span><span>${a.category}</span></div>
-                    <h3 style="margin-bottom:15px;">${a.title}</h3>
-                    <p style="font-size:0.9rem; color:#555; margin-bottom:20px;">${a.summary}</p>
-                    <button class="read-more" onclick="viewFull(${a.id})">Leer más</button>
+            container.innerHTML += `
+                <div class="article-card">
+                    <img src="${a.image || 'https://via.placeholder.com/400x200'}" class="article-img">
+                    <div class="article-content">
+                        <div class="article-meta"><span>${a.date}</span> | <span>${a.category}</span></div>
+                        <h3 style="margin-bottom:10px;">${a.title}</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">${a.summary}</p>
+                        <button class="read-more" onclick="viewArticle(${a.id})">Leer Editorial</button>
+                    </div>
                 </div>`;
-            container.appendChild(card);
         });
     }
 
-    function updateSidebar() {
+    function renderSidebar() {
         if(columnists.length > 0) {
-            const mainCol = columnists[0]; // Mostramos el primero por defecto
-            document.getElementById('side-name').innerText = mainCol.name;
-            document.getElementById('side-photo').src = mainCol.photo;
-            document.getElementById('side-quote').innerText = `"${mainCol.quote}"`;
-            document.getElementById('side-bio').innerText = mainCol.bio;
+            const c = columnists[0]; // Mostramos el principal
+            document.getElementById('side-name').innerText = c.name;
+            document.getElementById('side-photo').src = c.photo;
+            document.getElementById('side-quote').innerText = `"${c.quote}"`;
+            document.getElementById('side-bio').innerText = c.bio;
         }
     }
 
-    function viewFull(id) {
+    function viewArticle(id) {
         const a = articles.find(x => x.id === id);
-        const main = document.getElementById('main-view');
-        const full = document.getElementById('full-view');
-        main.classList.add('hidden');
-        full.classList.remove('hidden');
-        full.innerHTML = `
-            <button onclick="showSection('inicio')" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER</button>
-            <h1 style="font-size: 2.5rem; margin-bottom:20px;">${a.title}</h1>
-            <div class="article-meta" style="margin-bottom:30px;">Por ${a.author} | ${a.date} | ${a.category}</div>
-            <img src="${a.image}" style="width:100%; border-radius:10px; margin-bottom:30px; max-height:450px; object-fit:cover;">
-            <div style="font-size:1.2rem; line-height:1.9;">${a.content}</div>`;
+        document.getElementById('main-view').classList.add('hidden');
+        const v = document.getElementById('article-full-view');
+        v.classList.remove('hidden');
+        v.innerHTML = `
+            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER AL INICIO</button>
+            <h1 style="font-size: 2.5rem; line-height: 1.2;">${a.title}</h1>
+            <div class="article-meta" style="margin: 20px 0;">Por ${a.author} | ${a.date}</div>
+            <img src="${a.image}" style="width:100%; border-radius:10px; margin-bottom:30px;">
+            <div style="font-size: 1.25rem; line-height: 1.8;">${a.content}</div>`;
         window.scrollTo(0,0);
     }
 
-    function showSection(sec) {
-        document.getElementById('main-view').classList.remove('hidden');
-        document.getElementById('full-view').classList.add('hidden');
-        document.getElementById('page-title').innerText = "Editoriales Recientes";
-        renderPublic();
-    }
-
-    function filterByCategory(cat) {
+    function filterByCat(cat) {
         document.getElementById('page-title').innerText = "Sección: " + cat;
         renderPublic(articles.filter(a => a.category === cat));
     }
 
-    // LÓGICA ADMIN
+    // GESTIÓN ADMIN
     function openAdmin() {
-        if(!isAdmin) document.getElementById('login-modal').style.display = 'flex';
-        else {
-            document.getElementById('admin-panel').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            refreshAdminUI();
-        }
+        if(!isAdminSession) document.getElementById('login-modal').style.display = 'flex';
+        else document.getElementById('admin-panel').style.display = 'block';
     }
 
-    function attemptLogin() {
+    function validateLogin() {
         const u = document.getElementById('admin-user').value;
         const p = document.getElementById('admin-pass').value;
         if(u === 'admin' && p === 'catamarca2026') {
-            isAdmin = true;
-            localStorage.setItem('ladoC-isAdmin', 'true');
+            isAdminSession = true;
             closeLogin();
             openAdmin();
-        } else {
-            notify("Credenciales incorrectas", "error");
-        }
+            showNotification("Bienvenido Admin", "success");
+        } else alert("Error");
     }
 
-    async function saveArticle() {
+    async function publishArticle() {
         const payload = {
             title: document.getElementById('art-title').value,
             summary: document.getElementById('art-summary').value,
             content: document.getElementById('art-content').value,
             category: document.getElementById('art-category').value,
-            author: document.getElementById('art-columnist').value,
+            author: document.getElementById('art-author').value,
             image: document.getElementById('art-image').value,
             date: new Date().toLocaleDateString('es-AR')
         };
-
-        if(currentEditId) {
-            await _supabase.from('articles').update(payload).eq('id', currentEditId);
-            currentEditId = null;
-        } else {
-            await _supabase.from('articles').insert([payload]);
-        }
-        notify("Operación exitosa", "success");
-        init(); 
-        closeAdmin();
+        await _supabase.from('articles').insert([payload]);
+        location.reload();
     }
 
     async function saveColumnist() {
@@ -334,59 +298,48 @@
             bio: document.getElementById('col-bio').value
         };
         await _supabase.from('columnists').insert([payload]);
-        notify("Columnista agregado", "success");
-        init();
+        loadApp();
+        showNotification("Columnista guardado", "success");
     }
 
-    function refreshAdminUI() {
-        // Lista de artículos en admin
-        const list = document.getElementById('admin-art-list');
-        list.innerHTML = '';
-        articles.forEach(a => {
-            list.innerHTML += `
-                <div class="article-list-item">
-                    <span>${a.title}</span>
-                    <div>
-                        <button onclick="editArt(${a.id})" style="color:blue; border:none; background:none; cursor:pointer; margin-right:10px;">Editar</button>
-                        <button onclick="deleteArt(${a.id})" style="color:red; border:none; background:none; cursor:pointer;">Borrar</button>
-                    </div>
-                </div>`;
-        });
-
-        // Select de columnistas
-        const sel = document.getElementById('art-columnist');
+    function renderAdminUI() {
+        // Lista de autores en el select
+        const sel = document.getElementById('art-author');
         sel.innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-
-        // Stats
-        document.getElementById('stats-info').innerHTML = `
-            Editoriales: ${articles.length}<br>
-            Columnistas: ${columnists.length}<br>
-            Último: ${articles[0]?.date || 'N/A'}`;
+        
+        // Lista de artículos para borrar
+        const list = document.getElementById('admin-art-list');
+        list.innerHTML = articles.map(a => `
+            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
+                <span>${a.title}</span>
+                <button onclick="deleteArt(${a.id})" style="color:red; border:none; background:none; cursor:pointer;">Eliminar</button>
+            </div>`).join('');
     }
 
-    function changeColor(hex) {
+    async function deleteArt(id) {
+        if(confirm("¿Eliminar?")) {
+            await _supabase.from('articles').delete().eq('id', id);
+            loadApp();
+        }
+    }
+
+    function setTheme(hex) {
         document.documentElement.style.setProperty('--color-bordo', hex);
         localStorage.setItem('ladoC-theme', hex);
-        notify("Color actualizado", "info");
     }
 
-    function applySavedSettings() {
-        const theme = localStorage.getItem('ladoC-theme');
-        if(theme) document.documentElement.style.setProperty('--color-bordo', theme);
-    }
+    function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
+    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+    function logout() { isAdminSession = false; location.reload(); }
 
-    function notify(m, t) {
+    function showNotification(m, t) {
         const n = document.getElementById('notification');
         n.innerText = m; n.className = `notification ${t}`;
         n.style.display = 'block';
         setTimeout(() => n.style.display = 'none', 3000);
     }
 
-    function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; document.body.style.overflow = 'auto'; }
-    function logout() { localStorage.removeItem('ladoC-isAdmin'); location.reload(); }
-
-    window.onload = init;
+    window.onload = loadApp;
 </script>
 </body>
 </html>
