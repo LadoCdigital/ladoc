@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* MANTENEMOS TU IDENTIDAD VISUAL ORIGINAL */
+        /* CSS ORIGINAL PRESERVADO */
         :root {
             --color-bordo: #9B1C1C;
             --color-blanco: #FFFFFF;
@@ -32,43 +32,37 @@
         header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 20px 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); letter-spacing: 1px; }
-        .logo span { font-weight: 600; color: var(--color-gris-medio); }
+        .logo span { color: var(--color-gris-medio); }
         nav ul { display: flex; list-style: none; gap: 30px; }
-        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 1.05rem; cursor: pointer; }
-        nav a:hover { color: var(--color-bordo); }
+        nav a { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.05rem; cursor: pointer; }
 
         /* MAIN CONTENT */
         .main-content { display: flex; gap: 40px; margin: 40px 0; }
         .content { flex: 3; }
         .sidebar { flex: 1; background-color: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; box-shadow: var(--shadow-sutil); align-self: flex-start; }
 
-        /* ARTICLES */
-        .section-title { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 2px solid var(--color-azul-claro); }
-        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        .article-card { background-color: var(--color-blanco); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: transform 0.3s ease; }
+        /* ARTICLES GRID */
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
+        .article-card { background-color: var(--color-blanco); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: 0.3s; position: relative; }
         .article-card:hover { transform: translateY(-5px); }
         .article-img { width: 100%; height: 200px; object-fit: cover; }
         .article-content { padding: 20px; }
-        .read-more { display: inline-block; background-color: var(--color-bordo); color: var(--color-blanco); padding: 10px 20px; border-radius: var(--border-radius); font-family: 'Montserrat'; font-weight: 600; border: none; cursor: pointer; }
+        .article-meta { color: var(--color-gris-medio); font-size: 0.85rem; margin-bottom: 10px; }
+        .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; font-family: 'Montserrat'; font-weight: 600; border: none; cursor: pointer; }
 
-        /* NUEVO PANEL ADMIN PROFESIONAL */
-        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 20px; }
-        .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
+        /* ADMIN PANEL OVERLAY */
+        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
+        .admin-container { background: white; max-width: 950px; margin: 0 auto; padding: 30px; border-radius: 12px; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .form-group { margin-bottom: 15px; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
-        
-        /* LOGIN MODAL */
+        .form-control { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 5px; }
+
+        /* LOGIN */
         .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; }
         .login-box { background: white; padding: 40px; border-radius: 8px; width: 350px; text-align: center; }
 
-        /* COLOR PICKER */
-        .color-picker { display: flex; gap: 10px; margin-top: 10px; }
-        .color-option { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-
         .hidden { display: none; }
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 5px; color: white; z-index: 4000; display: none; font-family: 'Montserrat'; }
-        footer { background: var(--color-bordo); color: white; padding: 40px 0; text-align: center; margin-top: 60px; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 5px; color: white; z-index: 4000; display: none; font-family: 'Montserrat'; font-weight: 600; }
+        footer { background-color: var(--color-bordo); color: white; padding: 40px 0; text-align: center; margin-top: 60px; }
     </style>
 </head>
 <body>
@@ -78,14 +72,14 @@
 <div class="login-modal" id="login-modal">
     <div class="login-box">
         <h2>Lado C - Acceso</h2>
-        <div class="form-group" style="margin-top: 20px;">
+        <div class="form-group" style="margin-top:20px;">
             <input type="text" id="admin-user" class="form-control" placeholder="Usuario">
         </div>
         <div class="form-group">
             <input type="password" id="admin-pass" class="form-control" placeholder="Contraseña">
         </div>
-        <button class="read-more" style="width: 100%;" onclick="validateLogin()">Iniciar Sesión</button>
-        <button onclick="closeLogin()" style="background:none; border:none; margin-top:15px; color:#666; cursor:pointer;">Cerrar</button>
+        <button class="read-more" style="width: 100%;" onclick="attemptLogin()">Entrar</button>
+        <button onclick="closeLogin()" style="background:none; border:none; margin-top:10px; color:#666; cursor:pointer;">Cerrar</button>
     </div>
 </div>
 
@@ -95,9 +89,9 @@
         <nav>
             <ul>
                 <li><a onclick="showSection('inicio')">Inicio</a></li>
-                <li><a onclick="filterByCat('Catamarca')">Catamarca</a></li>
-                <li><a onclick="filterByCat('Política Nacional')">Nacional</a></li>
-                <li><a onclick="openAdmin()"><i class="fas fa-user-cog"></i> Administración</a></li>
+                <li><a onclick="filterBy('Catamarca')">Catamarca</a></li>
+                <li><a onclick="filterBy('Política Nacional')">Nacional</a></li>
+                <li><a onclick="openAdmin()"><i class="fas fa-cog"></i> Admin</a></li>
             </ul>
         </nav>
     </div>
@@ -106,17 +100,15 @@
 <div class="container main-content">
     <div class="content" id="main-view">
         <h2 class="section-title" id="page-title">Editoriales Recientes</h2>
-        <div class="articles-grid" id="articles-container">
-            </div>
+        <div class="articles-grid" id="articles-container"></div>
     </div>
-
     <div id="article-full-view" class="content hidden"></div>
 
     <aside class="sidebar">
-        <div id="author-display" style="text-align: center;">
+        <div id="author-card" style="text-align: center;">
             <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover;">
             <h3 id="side-name" style="margin-top: 15px;"></h3>
-            <p id="side-quote" style="font-style: italic; color: #666; margin: 15px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 10px;"></p>
+            <p id="side-quote" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 10px;"></p>
             <p id="side-bio" style="font-size: 0.85rem; text-align: justify;"></p>
         </div>
     </aside>
@@ -124,107 +116,80 @@
 
 <div class="admin-panel" id="admin-panel">
     <div class="admin-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--color-azul-claro); padding-bottom: 10px;">
-            <h1>Panel Administrativo</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+            <h1>Centro de Control</h1>
             <button onclick="closeAdmin()" style="background:none; border:none; font-size: 2rem; cursor:pointer;">&times;</button>
         </div>
 
         <div class="admin-grid">
             <div>
-                <h3><i class="fas fa-edit"></i> Publicar Editorial</h3>
-                <div class="form-group"><input type="text" id="art-title" class="form-control" placeholder="Título"></div>
-                <div class="form-group"><textarea id="art-summary" class="form-control" style="height: 60px;" placeholder="Resumen corto"></textarea></div>
-                <div class="form-group"><textarea id="art-content" class="form-control" style="height: 150px;" placeholder="Cuerpo del artículo (HTML permitido)"></textarea></div>
-                <div class="form-group">
-                    <select id="art-category" class="form-control">
-                        <option value="Opinión">Opinión</option>
-                        <option value="Catamarca">Catamarca</option>
-                        <option value="Política Nacional">Política Nacional</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="art-author" class="form-control">
-                        </select>
-                </div>
-                <div class="form-group"><input type="text" id="art-image" class="form-control" placeholder="URL de Imagen"></div>
-                <button class="read-more" onclick="publishArticle()">Subir a la Web</button>
+                <h3><i class="fas fa-edit"></i> Nuevo Editorial</h3>
+                <input type="text" id="art-title" class="form-control" placeholder="Título">
+                <textarea id="art-summary" class="form-control" style="height: 60px;" placeholder="Resumen"></textarea>
+                <textarea id="art-content" class="form-control" style="height: 120px;" placeholder="Contenido (HTML)"></textarea>
+                <select id="art-author-select" class="form-control"></select>
+                <select id="art-cat-select" class="form-control">
+                    <option value="Opinión">Opinión</option>
+                    <option value="Catamarca">Catamarca</option>
+                    <option value="Política Nacional">Política Nacional</option>
+                </select>
+                <input type="text" id="art-img" class="form-control" placeholder="URL Imagen">
+                <button class="read-more" onclick="publish()">Publicar</button>
             </div>
 
             <div>
-                <h3><i class="fas fa-user-plus"></i> Gestionar Columnistas</h3>
+                <h3><i class="fas fa-user-plus"></i> Columnistas</h3>
                 <input type="text" id="col-name" class="form-control" placeholder="Nombre">
                 <input type="text" id="col-photo" class="form-control" placeholder="URL Foto">
-                <input type="text" id="col-quote" class="form-control" placeholder="Frase destacada">
+                <input type="text" id="col-quote" class="form-control" placeholder="Frase">
                 <textarea id="col-bio" class="form-control" placeholder="Biografía"></textarea>
-                <button class="read-more" style="background:#28a745;" onclick="saveColumnist()">Guardar Columnista</button>
+                <button class="read-more" style="background:#28a745;" onclick="saveCol()">Agregar Columnista</button>
                 
-                <hr style="margin: 20px 0;">
-                
-                <h3><i class="fas fa-paint-brush"></i> Identidad Visual</h3>
-                <div class="color-picker">
-                    <div class="color-option" style="background:#9B1C1C;" onclick="setTheme('#9B1C1C')"></div>
-                    <div class="color-option" style="background:#1C4E9B;" onclick="setTheme('#1C4E9B')"></div>
-                    <div class="color-option" style="background:#1C9B5E;" onclick="setTheme('#1C9B5E')"></div>
-                    <div class="color-option" style="background:#6B1C9B;" onclick="setTheme('#6B1C9B')"></div>
+                <div style="margin-top: 20px;">
+                    <h3><i class="fas fa-paint-brush"></i> Color del Sitio</h3>
+                    <input type="color" id="theme-color" onchange="updateTheme(this.value)" style="width: 100%; height: 40px; cursor: pointer;">
                 </div>
             </div>
         </div>
 
         <hr style="margin: 30px 0;">
-        <h3>Editoriales Activos</h3>
-        <div id="admin-art-list" style="margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
-        
-        <div style="margin-top: 30px; text-align: right;">
-            <button class="read-more" style="background:#dc3545;" onclick="logout()">Cerrar Sesión</button>
-        </div>
+        <h3>Artículos en la Nube</h3>
+        <div id="admin-list" style="max-height: 250px; overflow-y: auto;"></div>
+        <button class="read-more" style="background:#dc3545; margin-top:20px;" onclick="logout()">Cerrar Sesión</button>
     </div>
 </div>
 
-<footer>
-    <div class="container">
-        <p>Lado C – Una mirada distinta sobre la política. © 2026 | Catamarca</p>
-    </div>
-</footer>
+<footer><p>Lado C – Una mirada distinta sobre la política. © 2026</p></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // CREDENCIALES DE TU PROYECTO
     const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let articles = [];
-    let columnists = [];
-    let isAdminSession = false;
+    let articles = [], columnists = [], isAdmin = localStorage.getItem('ladoC-auth') === 'true';
 
-    // INICIO
-    async function loadApp() {
+    async function load() {
         const { data: arts } = await _supabase.from('articles').select('*').order('id', { ascending: false });
         const { data: cols } = await _supabase.from('columnists').select('*');
-        
-        articles = arts || [];
-        columnists = cols || [];
-        
-        renderPublic();
-        renderSidebar();
-        renderAdminUI();
-        
-        const savedTheme = localStorage.getItem('ladoC-theme');
-        if(savedTheme) document.documentElement.style.setProperty('--color-bordo', savedTheme);
+        articles = arts || []; columnists = cols || [];
+        renderPublic(); renderSidebar(); renderAdminUI();
+        const savedColor = localStorage.getItem('ladoC-theme');
+        if(savedColor) document.documentElement.style.setProperty('--color-bordo', savedColor);
     }
 
     function renderPublic(list = articles) {
-        const container = document.getElementById('articles-container');
-        container.innerHTML = '';
+        const cont = document.getElementById('articles-container');
+        cont.innerHTML = '';
         list.forEach(a => {
-            container.innerHTML += `
+            cont.innerHTML += `
                 <div class="article-card">
-                    <img src="${a.image || 'https://via.placeholder.com/400x200'}" class="article-img">
+                    <img src="${a.image}" class="article-img">
                     <div class="article-content">
-                        <div class="article-meta"><span>${a.date}</span> | <span>${a.category}</span></div>
+                        <div class="article-meta"><span>${a.date}</span><span>${a.category}</span></div>
                         <h3 style="margin-bottom:10px;">${a.title}</h3>
-                        <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">${a.summary}</p>
-                        <button class="read-more" onclick="viewArticle(${a.id})">Leer Editorial</button>
+                        <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">Por ${a.author}</p>
+                        <button class="read-more" onclick="viewArticle(${a.id})">Leer más</button>
                     </div>
                 </div>`;
         });
@@ -232,7 +197,7 @@
 
     function renderSidebar() {
         if(columnists.length > 0) {
-            const c = columnists[0]; // Mostramos el principal
+            const c = columnists[0];
             document.getElementById('side-name').innerText = c.name;
             document.getElementById('side-photo').src = c.photo;
             document.getElementById('side-quote').innerText = `"${c.quote}"`;
@@ -242,104 +207,59 @@
 
     function viewArticle(id) {
         const a = articles.find(x => x.id === id);
-        document.getElementById('main-view').classList.add('hidden');
-        const v = document.getElementById('article-full-view');
-        v.classList.remove('hidden');
-        v.innerHTML = `
-            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER AL INICIO</button>
-            <h1 style="font-size: 2.5rem; line-height: 1.2;">${a.title}</h1>
-            <div class="article-meta" style="margin: 20px 0;">Por ${a.author} | ${a.date}</div>
-            <img src="${a.image}" style="width:100%; border-radius:10px; margin-bottom:30px;">
-            <div style="font-size: 1.25rem; line-height: 1.8;">${a.content}</div>`;
+        const main = document.getElementById('main-view'), full = document.getElementById('article-full-view');
+        main.classList.add('hidden'); full.classList.remove('hidden');
+        full.innerHTML = `
+            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER</button>
+            <h1 style="font-size: 2.5rem; line-height: 1.1;">${a.title}</h1>
+            <div class="article-meta" style="margin: 20px 0;">Escrito por <strong>${a.author}</strong> | ${a.date}</div>
+            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:30px;">
+            <div style="font-size: 1.2rem; line-height: 1.8;">${a.content}</div>`;
         window.scrollTo(0,0);
     }
 
-    function filterByCat(cat) {
+    function filterBy(cat) {
         document.getElementById('page-title').innerText = "Sección: " + cat;
         renderPublic(articles.filter(a => a.category === cat));
     }
 
-    // GESTIÓN ADMIN
-    function openAdmin() {
-        if(!isAdminSession) document.getElementById('login-modal').style.display = 'flex';
-        else document.getElementById('admin-panel').style.display = 'block';
-    }
-
-    function validateLogin() {
-        const u = document.getElementById('admin-user').value;
-        const p = document.getElementById('admin-pass').value;
-        if(u === 'admin' && p === 'catamarca2026') {
-            isAdminSession = true;
-            closeLogin();
-            openAdmin();
-            showNotification("Bienvenido Admin", "success");
+    function openAdmin() { if(!isAdmin) document.getElementById('login-modal').style.display = 'flex'; else document.getElementById('admin-panel').style.display = 'block'; }
+    function attemptLogin() {
+        if(document.getElementById('admin-user').value === 'admin' && document.getElementById('admin-pass').value === 'catamarca2026') {
+            isAdmin = true; localStorage.setItem('ladoC-auth', 'true'); location.reload();
         } else alert("Error");
     }
 
-    async function publishArticle() {
+    async function publish() {
         const payload = {
             title: document.getElementById('art-title').value,
             summary: document.getElementById('art-summary').value,
             content: document.getElementById('art-content').value,
-            category: document.getElementById('art-category').value,
-            author: document.getElementById('art-author').value,
-            image: document.getElementById('art-image').value,
+            author: document.getElementById('art-author-select').value,
+            category: document.getElementById('art-cat-select').value,
+            image: document.getElementById('art-img').value,
             date: new Date().toLocaleDateString('es-AR')
         };
-        await _supabase.from('articles').insert([payload]);
-        location.reload();
+        await _supabase.from('articles').insert([payload]); location.reload();
     }
 
-    async function saveColumnist() {
-        const payload = {
-            name: document.getElementById('col-name').value,
-            photo: document.getElementById('col-photo').value,
-            quote: document.getElementById('col-quote').value,
-            bio: document.getElementById('col-bio').value
-        };
-        await _supabase.from('columnists').insert([payload]);
-        loadApp();
-        showNotification("Columnista guardado", "success");
+    async function saveCol() {
+        const p = { name: document.getElementById('col-name').value, photo: document.getElementById('col-photo').value, quote: document.getElementById('col-quote').value, bio: document.getElementById('col-bio').value };
+        await _supabase.from('columnists').insert([p]); load();
     }
 
     function renderAdminUI() {
-        // Lista de autores en el select
-        const sel = document.getElementById('art-author');
-        sel.innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-        
-        // Lista de artículos para borrar
-        const list = document.getElementById('admin-art-list');
-        list.innerHTML = articles.map(a => `
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
-                <span>${a.title}</span>
-                <button onclick="deleteArt(${a.id})" style="color:red; border:none; background:none; cursor:pointer;">Eliminar</button>
-            </div>`).join('');
+        document.getElementById('art-author-select').innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        document.getElementById('admin-list').innerHTML = articles.map(a => `<div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #eee;"><span>${a.title}</span><button onclick="delArt(${a.id})" style="color:red; border:none; background:none; cursor:pointer;">Borrar</button></div>`).join('');
     }
 
-    async function deleteArt(id) {
-        if(confirm("¿Eliminar?")) {
-            await _supabase.from('articles').delete().eq('id', id);
-            loadApp();
-        }
-    }
-
-    function setTheme(hex) {
-        document.documentElement.style.setProperty('--color-bordo', hex);
-        localStorage.setItem('ladoC-theme', hex);
-    }
-
+    async function delArt(id) { if(confirm("¿Borrar?")) { await _supabase.from('articles').delete().eq('id', id); load(); } }
+    function updateTheme(color) { document.documentElement.style.setProperty('--color-bordo', color); localStorage.setItem('ladoC-theme', color); }
     function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
     function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-    function logout() { isAdminSession = false; location.reload(); }
+    function logout() { localStorage.removeItem('ladoC-auth'); location.reload(); }
 
-    function showNotification(m, t) {
-        const n = document.getElementById('notification');
-        n.innerText = m; n.className = `notification ${t}`;
-        n.style.display = 'block';
-        setTimeout(() => n.style.display = 'none', 3000);
-    }
-
-    window.onload = loadApp;
+    window.onload = load;
 </script>
 </body>
 </html>
