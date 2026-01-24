@@ -132,19 +132,20 @@
                     <option value="Sociedad">Sociedad</option>
                     <option value="Política Nacional">Argentina</option>
                 </select>
-                <input type="text" id="a-img" class="form-control" placeholder="Pegar URL de Imagen" oninput="previewImage(this.value)">
+                <input type="text" id="a-img" class="form-control" placeholder="URL de Imagen del artículo" oninput="previewImage(this.value)">
                 <img id="img-preview" src="">
                 <button class="read-more" onclick="publish()" style="margin-top:15px;">Publicar Artículo</button>
             </div>
             <div>
-                <h3><i class="fas fa-trash-alt"></i> Borrar Artículos</h3>
-                <div id="admin-delete-list" style="max-height: 400px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 5px;"></div>
-                <hr style="margin:20px 0;">
-                <h3><i class="fas fa-user-plus"></i> Columnistas</h3>
+                <h3><i class="fas fa-trash-alt"></i> Gestionar Artículos</h3>
+                <div id="admin-delete-list" style="max-height: 250px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 5px; margin-bottom:20px;"></div>
+                
+                <h3><i class="fas fa-user-plus"></i> Nuevo Columnista</h3>
                 <input type="text" id="c-name" class="form-control" placeholder="Nombre completo">
-                <input type="text" id="c-photo" class="form-control" placeholder="URL Foto">
+                <input type="text" id="c-photo" class="form-control" placeholder="URL Foto de perfil">
+                <input type="text" id="c-quote" class="form-control" placeholder="Frase personal (ej: Una mirada distinta...)">
                 <textarea id="c-bio" class="form-control" placeholder="Biografía corta"></textarea>
-                <button class="read-more" style="background:var(--color-success);" onclick="saveColumnist()">Guardar Columnista</button>
+                <button class="read-more" style="background:var(--color-success); width:100%;" onclick="saveColumnist()">Guardar Columnista</button>
             </div>
         </div>
         <button class="read-more" style="background:#dc3545; margin-top:30px;" onclick="logout()">Cerrar Sesión</button>
@@ -164,27 +165,35 @@
     async function load() {
         const { data: a } = await _supabase.from('articles').select('*').order('id', { ascending: false });
         const { data: c } = await _supabase.from('columnists').select('*');
-        articles = a || []; columnists = c || [];
+        articles = a || []; 
+        columnists = c || [];
         render(); 
+        
+        // Carga al primer columnista por defecto en el sidebar al inicio
         if(columnists.length > 0) updateSidebar(columnists[0]);
     }
 
     function render(list = articles) {
-        document.getElementById('articles-container').innerHTML = list.map(a => `<div class="article-card">
-            <img src="${a.image || ''}" class="article-img" onerror="this.src='https://via.placeholder.com/400x200?text=Sin+Imagen'">
-            <div class="article-content">
-                <small>${a.date}</small>
-                <h3>${a.title}</h3>
-                <p style="font-size:0.8rem; color:#666; margin:10px 0;">Por <strong>${a.author}</strong></p>
-                <button class="read-more" onclick="view(${a.id})">Leer más</button>
-            </div></div>`).join('');
+        // Renderizar grilla de artículos
+        document.getElementById('articles-container').innerHTML = list.map(a => `
+            <div class="article-card">
+                <img src="${a.image}" class="article-img" onerror="this.src='https://via.placeholder.com/400x200?text=Lado+C'">
+                <div class="article-content">
+                    <small>${a.date} | ${a.category}</small>
+                    <h3>${a.title}</h3>
+                    <p style="font-size:0.8rem; color:#666; margin:10px 0;">Por <strong>${a.author}</strong></p>
+                    <button class="read-more" onclick="view(${a.id})">Leer más</button>
+                </div>
+            </div>`).join('');
         
+        // Actualizar selector de autores en el panel admin
         document.getElementById('a-auth').innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
 
+        // Actualizar lista de borrado
         document.getElementById('admin-delete-list').innerHTML = articles.map(a => `
             <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #f9f9f9; font-size:0.85rem;">
                 <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;">${a.title}</span>
-                <button onclick="deleteArt(${a.id})" style="color:var(--color-danger); background:none; border:none; cursor:pointer;"><i class="fas fa-trash"></i> Borrar</button>
+                <button onclick="deleteArt(${a.id})" style="color:var(--color-danger); background:none; border:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
             </div>`).join('');
     }
 
@@ -192,10 +201,8 @@
         if(!confirm("¿Estás seguro de eliminar este editorial?")) return;
         const { error } = await _supabase.from('articles').delete().eq('id', id);
         if(!error) { 
-            showToast("Artículo eliminado con éxito"); 
+            showToast("Artículo eliminado"); 
             await load(); 
-        } else {
-            alert("Error al borrar de Supabase");
         }
     }
 
@@ -206,52 +213,100 @@
     }
 
     async function publish() {
-        const p = { title: document.getElementById('a-title').value, summary: document.getElementById('a-sum').value, content: document.getElementById('a-cont').value, author: document.getElementById('a-auth').value, category: document.getElementById('a-cat').value, image: document.getElementById('a-img').value, date: new Date().toLocaleDateString('es-AR') };
+        const p = { 
+            title: document.getElementById('a-title').value, 
+            summary: document.getElementById('a-sum').value, 
+            content: document.getElementById('a-cont').value, 
+            author: document.getElementById('a-auth').value, 
+            category: document.getElementById('a-cat').value, 
+            image: document.getElementById('a-img').value, 
+            date: new Date().toLocaleDateString('es-AR') 
+        };
         const { error } = await _supabase.from('articles').insert([p]);
-        if(!error) { showToast("¡Editorial publicado!"); setTimeout(() => location.reload(), 1500); }
+        if(!error) { 
+            showToast("¡Editorial publicado!"); 
+            document.getElementById('a-title').value = "";
+            document.getElementById('a-cont').value = "";
+            await load(); 
+        }
     }
 
     async function saveColumnist() {
-        const p = { name: document.getElementById('c-name').value, photo: document.getElementById('c-photo').value, bio: document.getElementById('c-bio').value };
+        const p = { 
+            name: document.getElementById('c-name').value, 
+            photo: document.getElementById('c-photo').value, 
+            bio: document.getElementById('c-bio').value,
+            quote: document.getElementById('c-quote').value // Nuevo campo para frase
+        };
         const { error } = await _supabase.from('columnists').insert([p]);
-        if(!error) { showToast("¡Columnista guardado!"); load(); }
+        if(!error) { 
+            showToast("¡Columnista guardado!"); 
+            document.getElementById('c-name').value = "";
+            document.getElementById('c-photo').value = "";
+            document.getElementById('c-quote').value = "";
+            document.getElementById('c-bio').value = "";
+            await load(); 
+        }
     }
 
     function view(id) {
         const a = articles.find(x => x.id === id);
         const col = columnists.find(c => c.name === a.author);
+        
+        // Actualizar el sidebar con el autor del artículo que se está leyendo
         if(col) updateSidebar(col);
+
         document.getElementById('main-view').classList.add('hidden');
-        const f = document.getElementById('full-view'); f.classList.remove('hidden');
+        const f = document.getElementById('full-view'); 
+        f.classList.remove('hidden');
+        
         f.innerHTML = `
-            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);">← VOLVER</button>
-            <h1 style="font-size:2.5rem;">${a.title}</h1>
-            <div style="margin:20px 0; color:#666;">Por <strong>${a.author}</strong> | ${a.date}</div>
-            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:20px;" onerror="this.style.display='none'">
-            <div style="font-size:1.1rem; line-height:1.8;">${a.content}</div>`;
+            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);"><i class="fas fa-arrow-left"></i> VOLVER</button>
+            <h1 style="font-size:2.5rem; margin-bottom:10px;">${a.title}</h1>
+            <div style="margin:20px 0; color:#666;">Por <strong>${a.author}</strong> | ${a.date} | Sección: ${a.category}</div>
+            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:30px; box-shadow: var(--shadow-sutil);" onerror="this.style.display='none'">
+            <div style="font-size:1.2rem; line-height:1.9; font-family:'Merriweather', serif;">${a.content}</div>`;
         window.scrollTo(0,0);
     }
 
     function updateSidebar(c) {
-        document.getElementById('side-name').innerText = c.name || '';
-        document.getElementById('side-photo').src = c.photo || '';
+        document.getElementById('side-name').innerText = c.name || 'Lado C';
+        document.getElementById('side-photo').src = c.photo || 'https://via.placeholder.com/140';
         document.getElementById('side-bio').innerText = c.bio || '';
+        document.getElementById('side-quote').innerText = c.quote || 'Una mirada distinta sobre la política.';
+        
+        // Si no hay frase, ocultamos el estilo de la frase
+        document.getElementById('side-quote').style.display = c.quote ? 'block' : 'none';
     }
 
     function validateLogin() {
         if(document.getElementById('l-user').value === 'admin' && document.getElementById('l-pass').value === 'catamarca2026') {
-            isAdmin = true; localStorage.setItem('ladoC-auth', 'true'); location.reload();
+            isAdmin = true; 
+            localStorage.setItem('ladoC-auth', 'true'); 
+            location.reload();
         } else alert("Credenciales incorrectas");
     }
 
     function showToast(m) {
-        const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m;
-        t.style.display = 'flex'; setTimeout(() => t.style.display = 'none', 3000);
+        const t = document.getElementById('toast'); 
+        document.getElementById('toast-msg').innerText = m;
+        t.style.display = 'flex'; 
+        setTimeout(() => t.style.display = 'none', 3000);
     }
 
-    function openAdmin() { if(!isAdmin) document.getElementById('login-modal').style.display='flex'; else document.getElementById('admin-panel').style.display='block'; }
+    function openAdmin() { 
+        if(!isAdmin) document.getElementById('login-modal').style.display='flex'; 
+        else document.getElementById('admin-panel').style.display='block'; 
+    }
+    
     function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-    function filterByCat(cat) { document.getElementById('page-title').innerText = "Sección: " + cat; render(articles.filter(a => a.category === cat)); }
+    
+    function filterByCat(cat) { 
+        document.getElementById('page-title').innerText = "Sección: " + cat; 
+        render(articles.filter(a => a.category === cat)); 
+        window.scrollTo(0,0);
+    }
+    
     function logout() { localStorage.removeItem('ladoC-auth'); location.reload(); }
 
     window.onload = load;
