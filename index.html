@@ -20,6 +20,7 @@
             --border-radius: 8px;
             --color-success: #28a745;
             --color-danger: #dc3545;
+            --color-info: #17a2b8;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,14 +51,15 @@
         .article-card { background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: 0.3s; }
         .article-img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
         .article-content { padding: 20px; }
-        .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; border: none; }
+        .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; border: none; text-align: center; }
 
         .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
-        .admin-container { background: white; max-width: 950px; margin: 0 auto; padding: 30px; border-radius: 12px; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .form-control { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
-
-        #img-preview { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; margin-top: 5px; display: none; border: 1px solid #eee; }
+        .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
+        .admin-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; }
+        .form-control { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
+        
+        .admin-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; transition: 0.2s; }
+        .admin-list-item:hover { background: #fdfdfd; }
 
         .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; }
         .login-box { background: white; padding: 40px; border-radius: 8px; width: 350px; text-align: center; }
@@ -76,7 +78,7 @@
         <input type="text" id="l-user" class="form-control" placeholder="admin" style="margin-top:20px;">
         <input type="password" id="l-pass" class="form-control" placeholder="contraseña">
         <button class="read-more" style="width: 100%;" onclick="validateLogin()">Entrar</button>
-        <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:10px; background:none; border:none; color:#666; cursor:pointer;">Cerrar</button>
+        <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:15px; background:none; border:none; color:#666; cursor:pointer;">Cancelar</button>
     </div>
 </div>
 
@@ -98,61 +100,81 @@
 
 <div class="container main-content">
     <div class="content" id="main-view">
-        <h2 class="section-title" id="page-title">Editoriales Recientes</h2>
+        <h2 class="section-title" id="page-title" style="margin-bottom: 30px;">Editoriales Recientes</h2>
         <div class="articles-grid" id="articles-container"></div>
     </div>
+    
     <div id="full-view" class="content hidden"></div>
 
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div id="side-profile" style="text-align: center;">
-            <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover;">
+            <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover; background: #eee;">
             <h3 id="side-name" style="margin-top: 15px;"></h3>
-            <p id="side-quote" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; border-left: 3px solid var(--color-bordo); padding-left: 10px;"></p>
-            <p id="side-bio" style="font-size: 0.85rem; text-align: justify;"></p>
+            <p id="side-quote" style="font-style: italic; color: #666; margin: 15px 0; font-size: 0.95rem; border-left: 3px solid var(--color-bordo); padding-left: 10px; text-align: left;"></p>
+            <p id="side-bio" style="font-size: 0.85rem; text-align: justify; color: #444;"></p>
         </div>
     </aside>
 </div>
 
 <div class="admin-panel" id="admin-panel">
     <div class="admin-container">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid #eee;">
-            <h1>Centro de Gestión</h1>
-            <button onclick="closeAdmin()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid #eee; padding-bottom: 10px;">
+            <h1 id="admin-main-title">Centro de Gestión</h1>
+            <button onclick="closeAdmin()" style="background:none; border:none; font-size:2rem; cursor:pointer; color: #999;">&times;</button>
         </div>
+        
         <div class="admin-grid">
-            <div>
-                <h3><i class="fas fa-edit"></i> Nuevo Editorial</h3>
-                <input type="text" id="a-title" class="form-control" placeholder="Título">
-                <textarea id="a-sum" class="form-control" style="height:60px;" placeholder="Resumen"></textarea>
-                <textarea id="a-cont" class="form-control" style="height:120px;" placeholder="Contenido (HTML)"></textarea>
-                <select id="a-auth" class="form-control"></select>
-                <select id="a-cat" class="form-control">
-                    <option value="Opinión">Opinión</option>
-                    <option value="Catamarca">Catamarca</option>
-                    <option value="Sociedad">Sociedad</option>
-                    <option value="Política Nacional">Argentina</option>
-                </select>
-                <input type="text" id="a-img" class="form-control" placeholder="URL de Imagen del artículo" oninput="previewImage(this.value)">
-                <img id="img-preview" src="">
-                <button class="read-more" onclick="publish()" style="margin-top:15px;">Publicar Artículo</button>
-            </div>
-            <div>
-                <h3><i class="fas fa-trash-alt"></i> Gestionar Artículos</h3>
-                <div id="admin-delete-list" style="max-height: 250px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 5px; margin-bottom:20px;"></div>
+            <div style="background: #fdfdfd; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
+                <h3 id="form-title"><i class="fas fa-edit"></i> Redactar Editorial</h3>
+                <input type="hidden" id="edit-id">
+                <input type="text" id="a-title" class="form-control" placeholder="Título impactante">
+                <textarea id="a-sum" class="form-control" style="height:60px;" placeholder="Breve resumen (opcional)"></textarea>
+                <textarea id="a-cont" class="form-control" style="height:180px;" placeholder="Contenido del artículo (puedes usar etiquetas HTML como <p> o <br>)"></textarea>
                 
-                <h3><i class="fas fa-user-plus"></i> Nuevo Columnista</h3>
-                <input type="text" id="c-name" class="form-control" placeholder="Nombre completo">
-                <input type="text" id="c-photo" class="form-control" placeholder="URL Foto de perfil">
-                <input type="text" id="c-quote" class="form-control" placeholder="Frase personal (ej: Una mirada distinta...)">
-                <textarea id="c-bio" class="form-control" placeholder="Biografía corta"></textarea>
-                <button class="read-more" style="background:var(--color-success); width:100%;" onclick="saveColumnist()">Guardar Columnista</button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <select id="a-auth" class="form-control"></select>
+                    <select id="a-cat" class="form-control">
+                        <option value="Opinión">Opinión</option>
+                        <option value="Catamarca">Catamarca</option>
+                        <option value="Sociedad">Sociedad</option>
+                        <option value="Política Nacional">Argentina</option>
+                    </select>
+                </div>
+                
+                <input type="text" id="a-img" class="form-control" placeholder="URL de la Imagen Principal" oninput="previewImage(this.value)">
+                <img id="img-preview" src="" style="width:100%; height:120px; object-fit:cover; border-radius:5px; margin-bottom:10px; display:none; border:1px solid #ddd;">
+                
+                <button class="read-more" id="btn-publish" onclick="publish()" style="width: 100%; font-size: 1.1rem;">Publicar Artículo</button>
+                <button class="read-more hidden" id="btn-cancel-edit" onclick="cancelEdit()" style="width: 100%; margin-top:10px; background: #666;">Cancelar Edición</button>
+            </div>
+
+            <div>
+                <h3><i class="fas fa-list"></i> Artículos Existentes</h3>
+                <div id="admin-delete-list" style="max-height: 280px; overflow-y: auto; border: 1px solid #eee; border-radius: 6px; margin-bottom: 25px; background: white;"></div>
+                
+                <div style="background: #f4f4f4; padding: 20px; border-radius: 8px;">
+                    <h3><i class="fas fa-user-circle"></i> Nuevo Columnista</h3>
+                    <input type="text" id="c-name" class="form-control" placeholder="Nombre y Apellido">
+                    <input type="text" id="c-photo" class="form-control" placeholder="URL Foto de Perfil">
+                    <input type="text" id="c-quote" class="form-control" placeholder="Frase Personal (ej: Una mirada distinta...)">
+                    <textarea id="c-bio" class="form-control" style="height:60px;" placeholder="Biografía breve"></textarea>
+                    <button class="read-more" style="background:var(--color-success); width:100%;" onclick="saveColumnist()">Registrar Columnista</button>
+                </div>
             </div>
         </div>
-        <button class="read-more" style="background:#dc3545; margin-top:30px;" onclick="logout()">Cerrar Sesión</button>
+        
+        <div style="margin-top: 30px; text-align: right; border-top: 1px solid #eee; padding-top: 20px;">
+            <button class="read-more" style="background:#dc3545;" onclick="logout()">Cerrar Sesión Administrativa</button>
+        </div>
     </div>
 </div>
 
-<footer><p>Lado C – Catamarca, Argentina. © 2026</p></footer>
+<footer>
+    <div class="container">
+        <p>Lado C – Catamarca, Argentina. © 2026</p>
+        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.7;">Análisis y opinión política independiente.</p>
+    </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -168,51 +190,78 @@
         articles = a || []; 
         columnists = c || [];
         render(); 
-        
-        // Carga al primer columnista por defecto en el sidebar al inicio
         if(columnists.length > 0) updateSidebar(columnists[0]);
     }
 
     function render(list = articles) {
-        // Renderizar grilla de artículos
+        // Render Principal
         document.getElementById('articles-container').innerHTML = list.map(a => `
             <div class="article-card">
                 <img src="${a.image}" class="article-img" onerror="this.src='https://via.placeholder.com/400x200?text=Lado+C'">
                 <div class="article-content">
-                    <small>${a.date} | ${a.category}</small>
-                    <h3>${a.title}</h3>
-                    <p style="font-size:0.8rem; color:#666; margin:10px 0;">Por <strong>${a.author}</strong></p>
-                    <button class="read-more" onclick="view(${a.id})">Leer más</button>
+                    <small style="color:var(--color-bordo); font-weight:700;">${a.category.toUpperCase()}</small>
+                    <h3 style="margin: 10px 0;">${a.title}</h3>
+                    <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">Por <strong>${a.author}</strong> | ${a.date}</p>
+                    <button class="read-more" onclick="view(${a.id})">Leer Editorial</button>
                 </div>
             </div>`).join('');
         
-        // Actualizar selector de autores en el panel admin
+        // Selectores Admin
         document.getElementById('a-auth').innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
 
-        // Actualizar lista de borrado
+        // Lista de gestión Admin (Borrar y Editar)
         document.getElementById('admin-delete-list').innerHTML = articles.map(a => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #f9f9f9; font-size:0.85rem;">
-                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%;">${a.title}</span>
-                <button onclick="deleteArt(${a.id})" style="color:var(--color-danger); background:none; border:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
+            <div class="admin-list-item">
+                <div style="max-width: 65%;">
+                    <div style="font-weight: 700; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${a.title}</div>
+                    <div style="font-size: 0.75rem; color: #888;">${a.author}</div>
+                </div>
+                <div>
+                    <button onclick="prepareEdit(${a.id})" style="color:var(--color-info); background:none; border:none; cursor:pointer; margin-right:10px;"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteArt(${a.id})" style="color:var(--color-danger); background:none; border:none; cursor:pointer;"><i class="fas fa-trash-alt"></i></button>
+                </div>
             </div>`).join('');
     }
 
-    async function deleteArt(id) {
-        if(!confirm("¿Estás seguro de eliminar este editorial?")) return;
-        const { error } = await _supabase.from('articles').delete().eq('id', id);
-        if(!error) { 
-            showToast("Artículo eliminado"); 
-            await load(); 
-        }
+    // --- FUNCIONES DE EDITAR ---
+    function prepareEdit(id) {
+        const a = articles.find(x => x.id === id);
+        document.getElementById('edit-id').value = a.id;
+        document.getElementById('a-title').value = a.title;
+        document.getElementById('a-sum').value = a.summary || '';
+        document.getElementById('a-cont').value = a.content;
+        document.getElementById('a-auth').value = a.author;
+        document.getElementById('a-cat').value = a.category;
+        document.getElementById('a-img').value = a.image;
+        
+        previewImage(a.image);
+        
+        // Cambiar interfaz
+        document.getElementById('form-title').innerHTML = '<i class="fas fa-sync"></i> Editando Editorial';
+        document.getElementById('btn-publish').innerText = 'Actualizar Editorial';
+        document.getElementById('btn-publish').style.background = 'var(--color-info)';
+        document.getElementById('btn-cancel-edit').classList.remove('hidden');
+        
+        // Hacer scroll al formulario
+        document.querySelector('.admin-container').scrollTo(0,0);
     }
 
-    function previewImage(url) {
-        const img = document.getElementById('img-preview');
-        if(url) { img.src = url; img.style.display = 'block'; }
-        else img.style.display = 'none';
+    function cancelEdit() {
+        document.getElementById('edit-id').value = "";
+        document.getElementById('a-title').value = "";
+        document.getElementById('a-sum').value = "";
+        document.getElementById('a-cont').value = "";
+        document.getElementById('a-img').value = "";
+        document.getElementById('img-preview').style.display = 'none';
+        
+        document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Redactar Editorial';
+        document.getElementById('btn-publish').innerText = 'Publicar Artículo';
+        document.getElementById('btn-publish').style.background = 'var(--color-bordo)';
+        document.getElementById('btn-cancel-edit').classList.add('hidden');
     }
 
     async function publish() {
+        const editId = document.getElementById('edit-id').value;
         const p = { 
             title: document.getElementById('a-title').value, 
             summary: document.getElementById('a-sum').value, 
@@ -222,11 +271,33 @@
             image: document.getElementById('a-img').value, 
             date: new Date().toLocaleDateString('es-AR') 
         };
-        const { error } = await _supabase.from('articles').insert([p]);
+
+        if(!p.title || !p.content) return alert("El título y contenido son obligatorios");
+
+        let response;
+        if(editId) {
+            // Actualizar
+            response = await _supabase.from('articles').update(p).eq('id', editId);
+        } else {
+            // Insertar nuevo
+            response = await _supabase.from('articles').insert([p]);
+        }
+
+        if(!response.error) {
+            showToast(editId ? "¡Actualizado con éxito!" : "¡Publicado con éxito!");
+            cancelEdit();
+            await load();
+        } else {
+            alert("Error al guardar en la base de datos");
+        }
+    }
+
+    // --- OTRAS FUNCIONES ---
+    async function deleteArt(id) {
+        if(!confirm("¿Estás seguro de eliminar este editorial para siempre?")) return;
+        const { error } = await _supabase.from('articles').delete().eq('id', id);
         if(!error) { 
-            showToast("¡Editorial publicado!"); 
-            document.getElementById('a-title').value = "";
-            document.getElementById('a-cont').value = "";
+            showToast("Artículo borrado"); 
             await load(); 
         }
     }
@@ -236,11 +307,13 @@
             name: document.getElementById('c-name').value, 
             photo: document.getElementById('c-photo').value, 
             bio: document.getElementById('c-bio').value,
-            quote: document.getElementById('c-quote').value // Nuevo campo para frase
+            quote: document.getElementById('c-quote').value
         };
+        if(!p.name) return alert("El nombre es obligatorio");
+        
         const { error } = await _supabase.from('columnists').insert([p]);
         if(!error) { 
-            showToast("¡Columnista guardado!"); 
+            showToast("¡Nuevo columnista guardado!"); 
             document.getElementById('c-name').value = "";
             document.getElementById('c-photo').value = "";
             document.getElementById('c-quote').value = "";
@@ -252,8 +325,6 @@
     function view(id) {
         const a = articles.find(x => x.id === id);
         const col = columnists.find(c => c.name === a.author);
-        
-        // Actualizar el sidebar con el autor del artículo que se está leyendo
         if(col) updateSidebar(col);
 
         document.getElementById('main-view').classList.add('hidden');
@@ -261,22 +332,28 @@
         f.classList.remove('hidden');
         
         f.innerHTML = `
-            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);"><i class="fas fa-arrow-left"></i> VOLVER</button>
-            <h1 style="font-size:2.5rem; margin-bottom:10px;">${a.title}</h1>
-            <div style="margin:20px 0; color:#666;">Por <strong>${a.author}</strong> | ${a.date} | Sección: ${a.category}</div>
+            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo); font-family:'Montserrat';"><i class="fas fa-chevron-left"></i> VOLVER AL INICIO</button>
+            <h1 style="font-size:2.8rem; line-height:1.2; margin-bottom:15px;">${a.title}</h1>
+            <p style="font-size: 1.2rem; color: #555; margin-bottom: 20px; font-weight: 400;">${a.summary || ''}</p>
+            <div style="margin:20px 0; padding: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; color:#666; font-family:'Montserrat';">
+                Por <strong>${a.author}</strong> | ${a.date} | <span style="color:var(--color-bordo);">${a.category}</span>
+            </div>
             <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:30px; box-shadow: var(--shadow-sutil);" onerror="this.style.display='none'">
-            <div style="font-size:1.2rem; line-height:1.9; font-family:'Merriweather', serif;">${a.content}</div>`;
+            <div style="font-size:1.15rem; line-height:1.8; color: #222;">${a.content}</div>`;
         window.scrollTo(0,0);
     }
 
     function updateSidebar(c) {
-        document.getElementById('side-name').innerText = c.name || 'Lado C';
-        document.getElementById('side-photo').src = c.photo || 'https://via.placeholder.com/140';
+        document.getElementById('side-name').innerText = c.name || 'Invitado';
+        document.getElementById('side-photo').src = c.photo || 'https://via.placeholder.com/140?text=Columnista';
         document.getElementById('side-bio').innerText = c.bio || '';
         document.getElementById('side-quote').innerText = c.quote || 'Una mirada distinta sobre la política.';
-        
-        // Si no hay frase, ocultamos el estilo de la frase
-        document.getElementById('side-quote').style.display = c.quote ? 'block' : 'none';
+    }
+
+    function previewImage(url) {
+        const img = document.getElementById('img-preview');
+        if(url) { img.src = url; img.style.display = 'block'; }
+        else img.style.display = 'none';
     }
 
     function validateLogin() {
@@ -284,14 +361,12 @@
             isAdmin = true; 
             localStorage.setItem('ladoC-auth', 'true'); 
             location.reload();
-        } else alert("Credenciales incorrectas");
+        } else alert("Acceso denegado");
     }
 
     function showToast(m) {
-        const t = document.getElementById('toast'); 
-        document.getElementById('toast-msg').innerText = m;
-        t.style.display = 'flex'; 
-        setTimeout(() => t.style.display = 'none', 3000);
+        const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m;
+        t.style.display = 'flex'; setTimeout(() => t.style.display = 'none', 3000);
     }
 
     function openAdmin() { 
@@ -299,7 +374,10 @@
         else document.getElementById('admin-panel').style.display='block'; 
     }
     
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+    function closeAdmin() { 
+        cancelEdit();
+        document.getElementById('admin-panel').style.display = 'none'; 
+    }
     
     function filterByCat(cat) { 
         document.getElementById('page-title').innerText = "Sección: " + cat; 
