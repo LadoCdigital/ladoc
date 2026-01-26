@@ -48,7 +48,7 @@
 
         header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 20px 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); }
+        .logo { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--color-bordo); cursor: pointer; }
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
 
@@ -101,13 +101,13 @@
 
 <header>
     <div class="container header-container">
-        <a href="#" class="logo" onclick="location.reload()">
+        <a class="logo" onclick="goHome()">
             <img src="logo.png" alt="Lado C" style="height: 50px; vertical-align: middle; margin-right: 10px;">
             Lado <span>C</span>
         </a>
         <nav>
             <ul>
-                <li><a onclick="location.reload()">Inicio</a></li>
+                <li><a onclick="goHome()">Inicio</a></li>
                 <li><a onclick="filterByCat('Opinión')">Opinión</a></li>
                 <li><a onclick="filterByCat('Catamarca')">Catamarca</a></li>
                 <li><a onclick="filterByCat('Sociedad')">Sociedad</a></li>
@@ -220,8 +220,18 @@
         const { data: c } = await _supabase.from('columnists').select('*');
         articles = a || []; 
         columnists = c || [];
+        
+        // --- LOGICA DE LINK PROPIO ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id');
+        
         render(); 
-        if(columnists.length > 0) updateSidebar(columnists[0]);
+        
+        if (articleId) {
+            view(parseInt(articleId), false); // Cargar articulo si viene en el link
+        } else if (columnists.length > 0) {
+            updateSidebar(columnists[0]);
+        }
     }
 
     function handleImageUpload(event, previewId, inputId) {
@@ -309,21 +319,47 @@
         }
     }
 
-    function view(id) {
+    // --- FUNCION VIEW ACTUALIZADA PARA CAMBIAR EL LINK ---
+    function view(id, updateHistory = true) {
         const a = articles.find(x => x.id === id);
+        if (!a) return goHome();
+
         const col = columnists.find(c => c.name === a.author);
         if(col) updateSidebar(col);
+
+        // Actualizar URL sin recargar la página
+        if (updateHistory) {
+            window.history.pushState({id: id}, a.title, `?id=${id}`);
+        }
+
         document.getElementById('main-view').classList.add('hidden');
         const f = document.getElementById('full-view'); 
         f.classList.remove('hidden');
         f.innerHTML = `
-            <button onclick="location.reload()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);"><i class="fas fa-chevron-left"></i> VOLVER</button>
+            <button onclick="goHome()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);"><i class="fas fa-chevron-left"></i> VOLVER AL INICIO</button>
             <h1 style="font-size: 2.5rem; line-height: 1.2;">${a.title}</h1>
             <div style="margin:20px 0; color:#666;">Por ${a.author} | ${a.date}</div>
             <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:20px;">
             <div style="font-size:1.2rem; line-height:1.8;">${a.content}</div>`;
         window.scrollTo(0,0);
     }
+
+    function goHome() {
+        window.history.pushState({}, "Lado C", window.location.pathname);
+        document.getElementById('main-view').classList.remove('hidden');
+        document.getElementById('full-view').classList.add('hidden');
+        document.getElementById('page-title').innerText = "Editoriales Recientes";
+        render();
+        window.scrollTo(0,0);
+    }
+
+    // Detectar cuando el usuario le da al boton "Atrás" del navegador
+    window.onpopstate = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        if (id) view(parseInt(id), false);
+        else goHome();
+    };
 
     function updateSidebar(c) {
         document.getElementById('side-name').innerText = c.name;
