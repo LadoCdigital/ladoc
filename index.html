@@ -37,12 +37,12 @@
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 15px 0; }
+        header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 10px 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
         
-        /* LOGO UNIFICADO */
-        .logo { display: flex; align-items: center; cursor: pointer; text-decoration: none; }
-        .logo img { height: 55px; width: auto; }
+        /* SOLUCIÓN LOGO DUPLICADO: Se usa solo la imagen */
+        .logo-link { display: flex; align-items: center; cursor: pointer; }
+        .logo-img { height: 60px; width: auto; object-fit: contain; }
 
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
@@ -57,13 +57,14 @@
         .article-content { padding: 20px; }
         .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; border: none; }
 
-        /* SECCIÓN COMENTARIOS */
+        /* SECCIÓN COMENTARIOS MEJORADA */
         .comments-section { margin-top: 50px; border-top: 2px solid #eee; padding-top: 30px; }
-        .comment-form { background: #f4f4f4; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-        .comment-item { background: white; padding: 15px; border-radius: 8px; border-left: 4px solid var(--color-bordo); margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .comment-form { background: #f9f9f9; padding: 25px; border-radius: 12px; margin-bottom: 30px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .comment-item { background: white; padding: 15px; border-radius: 8px; border-left: 5px solid var(--color-bordo); margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .comment-item strong { display: block; color: var(--color-bordo); margin-bottom: 5px; font-family: 'Montserrat'; }
 
-        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
-        .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
+        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 20px; }
+        .admin-container { background: white; max-width: 900px; margin: 40px auto; padding: 30px; border-radius: 12px; }
         .form-control { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; }
         
         .hidden { display: none; }
@@ -74,14 +75,13 @@
 
 <header>
     <div class="container header-container">
-        <a class="logo" onclick="goHome()">
-            <img src="logo.png" alt="Lado C Logo">
+        <a class="logo-link" onclick="goHome()">
+            <img src="logo.png" alt="Lado C" class="logo-img">
         </a>
         <nav>
             <ul>
                 <li><a onclick="goHome()">Inicio</a></li>
                 <li><a onclick="filterByCat('Opinión')">Opinión</a></li>
-                <li><a onclick="filterByCat('Catamarca')">Catamarca</a></li>
                 <li><a onclick="openAdmin()"><i class="fas fa-user-shield"></i> Gestión</a></li>
             </ul>
         </nav>
@@ -98,7 +98,7 @@
 
     <aside class="sidebar" id="sidebar">
         <div id="side-profile" style="text-align: center;">
-            <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover;">
+            <img src="" id="side-photo" alt="Perfil" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover; background: #eee;">
             <h3 id="side-name" style="margin-top: 15px;"></h3>
             <p id="side-quote" style="font-style: italic; color: #666; margin: 15px 0; font-size: 0.95rem;"></p>
         </div>
@@ -107,11 +107,11 @@
 
 <div class="admin-panel" id="admin-panel">
     <div class="admin-container">
-        <h2>Panel de Control</h2>
-        <input type="text" id="a-title" class="form-control" placeholder="Título">
-        <textarea id="a-cont" class="form-control" style="height:150px;" placeholder="Contenido"></textarea>
-        <button class="read-more" onclick="publish()">Publicar</button>
-        <button onclick="closeAdmin()">Cerrar</button>
+        <h2>Panel de Gestión</h2>
+        <input type="text" id="a-title" class="form-control" placeholder="Título del Artículo">
+        <textarea id="a-cont" class="form-control" style="height:200px;" placeholder="Cuerpo del editorial..."></textarea>
+        <button class="read-more" onclick="publish()">Publicar Ahora</button>
+        <button onclick="closeAdmin()" style="margin-left: 10px; background: #666;" class="read-more">Cerrar</button>
     </div>
 </div>
 
@@ -139,14 +139,14 @@
         if (artId) view(parseInt(artId), false);
     }
 
-    function render() {
-        document.getElementById('articles-container').innerHTML = articles.map(a => `
+    function render(list = articles) {
+        document.getElementById('articles-container').innerHTML = list.map(a => `
             <div class="article-card">
-                <img src="${a.image}" class="article-img" onerror="this.src='https://via.placeholder.com/400x200'">
+                <img src="${a.image}" class="article-img" onerror="this.src='https://via.placeholder.com/400x200?text=Lado+C'">
                 <div class="article-content">
-                    <small>${a.category}</small>
-                    <h3>${a.title}</h3>
-                    <button class="read-more" onclick="view(${a.id})">Leer Más</button>
+                    <small style="color:var(--color-bordo); font-weight:bold;">${a.category.toUpperCase()}</small>
+                    <h3 style="margin: 10px 0;">${a.title}</h3>
+                    <button class="read-more" onclick="view(${a.id})">Leer Editorial</button>
                 </div>
             </div>`).join('');
     }
@@ -157,31 +157,33 @@
 
         if (push) window.history.pushState({id}, a.title, `?id=${id}`);
 
+        // Cargar comentarios desde Supabase
         const { data: comments } = await _supabase.from('comments').select('*').eq('article_id', id).order('id', {ascending: false});
 
         document.getElementById('main-view').classList.add('hidden');
         const f = document.getElementById('full-view'); 
         f.classList.remove('hidden');
         f.innerHTML = `
-            <button onclick="goHome()" style="margin-bottom:20px; cursor:pointer; color:var(--color-bordo); font-weight:bold; background:none; border:none;">← VOLVER</button>
-            <h1>${a.title}</h1>
-            <img src="${a.image}" style="width:100%; border-radius:8px; margin:20px 0;">
-            <div style="font-size:1.1rem;">${a.content}</div>
+            <button onclick="goHome()" style="margin-bottom:20px; cursor:pointer; color:var(--color-bordo); font-weight:bold; background:none; border:none; font-family:'Montserrat';">← VOLVER AL INICIO</button>
+            <h1 style="font-size:2.5rem; margin-bottom:15px;">${a.title}</h1>
+            <p style="color:#666; margin-bottom:20px;">Por ${a.author} | ${a.date}</p>
+            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:30px; box-shadow:var(--shadow-sutil);">
+            <div style="font-size:1.15rem; line-height:1.8;">${a.content}</div>
 
             <div class="comments-section">
-                <h3>Comentarios</h3>
+                <h3>Comunidad Lado C - Opiniones</h3>
                 <div class="comment-form">
-                    <input type="text" id="com-name" class="form-control" placeholder="Tu nombre">
-                    <textarea id="com-text" class="form-control" placeholder="Escribe tu opinión..."></textarea>
-                    <button class="read-more" onclick="postComment(${id})">Enviar Comentario</button>
+                    <input type="text" id="com-name" class="form-control" placeholder="Tu nombre o apodo">
+                    <textarea id="com-text" class="form-control" style="height:100px;" placeholder="Escribe tu comentario aquí..."></textarea>
+                    <button class="read-more" onclick="postComment(${id})">Publicar Comentario</button>
                 </div>
                 <div id="comments-list">
-                    ${(comments || []).map(c => `
+                    ${(comments && comments.length > 0) ? comments.map(c => `
                         <div class="comment-item">
                             <strong>${c.user_name}</strong>
                             <p>${c.comment_text}</p>
                         </div>
-                    `).join('')}
+                    `).join('') : '<p style="color:#999; font-style:italic;">Aún no hay comentarios. ¡Sé el primero en opinar!</p>'}
                 </div>
             </div>`;
         window.scrollTo(0,0);
@@ -190,12 +192,13 @@
     async function postComment(artId) {
         const name = document.getElementById('com-name').value;
         const text = document.getElementById('com-text').value;
-        if(!name || !text) return alert("Por favor completa los campos");
+        if(!name || !text) return alert("Por favor, completa tu nombre y el mensaje.");
 
         const { error } = await _supabase.from('comments').insert([{ article_id: artId, user_name: name, comment_text: text }]);
         if(!error) {
-            alert("Comentario enviado");
-            view(artId, false); // Recargar para ver el nuevo comentario
+            view(artId, false); // Recargar la vista para mostrar el comentario
+        } else {
+            alert("Error al enviar el comentario. Revisa la tabla 'comments' en Supabase.");
         }
     }
 
@@ -204,6 +207,7 @@
         document.getElementById('main-view').classList.remove('hidden');
         document.getElementById('full-view').classList.add('hidden');
         render();
+        window.scrollTo(0,0);
     }
 
     function openAdmin() { document.getElementById('admin-panel').style.display='block'; }
