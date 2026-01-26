@@ -215,20 +215,21 @@
 
     let articles = [], columnists = [], isAdmin = localStorage.getItem('ladoC-auth') === 'true';
 
+    // CARGA INICIAL (Con soporte para links directos)
     async function load() {
         const { data: a } = await _supabase.from('articles').select('*').order('id', { ascending: false });
         const { data: c } = await _supabase.from('columnists').select('*');
         articles = a || []; 
         columnists = c || [];
         
-        // --- LOGICA DE LINK PROPIO ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const articleId = urlParams.get('id');
-        
         render(); 
+
+        // Detectar si la URL tiene un ID (ej: index.html?id=123)
+        const params = new URLSearchParams(window.location.search);
+        const artId = params.get('id');
         
-        if (articleId) {
-            view(parseInt(articleId), false); // Cargar articulo si viene en el link
+        if (artId) {
+            view(parseInt(artId), false); // Mostramos el artículo sin crear un nuevo historial
         } else if (columnists.length > 0) {
             updateSidebar(columnists[0]);
         }
@@ -277,6 +278,51 @@
             </div>`).join('');
     }
 
+    // --- FUNCIÓN VIEW MEJORADA PARA CAMBIAR LA URL ---
+    function view(id, pushHistory = true) {
+        const a = articles.find(x => x.id === id);
+        if (!a) return goHome();
+
+        const col = columnists.find(c => c.name === a.author);
+        if(col) updateSidebar(col);
+
+        // Actualizamos la URL para que el usuario pueda copiar el link
+        if (pushHistory) {
+            window.history.pushState({id: id}, a.title, `?id=${id}`);
+        }
+
+        document.getElementById('main-view').classList.add('hidden');
+        const f = document.getElementById('full-view'); 
+        f.classList.remove('hidden');
+        f.innerHTML = `
+            <button onclick="goHome()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);"><i class="fas fa-chevron-left"></i> VOLVER AL INICIO</button>
+            <h1 style="font-size: 2.5rem; line-height: 1.2;">${a.title}</h1>
+            <div style="margin:20px 0; color:#666;">Por ${a.author} | ${a.date}</div>
+            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:20px;">
+            <div style="font-size:1.2rem; line-height:1.8;">${a.content}</div>`;
+        window.scrollTo(0,0);
+    }
+
+    // FUNCIÓN PARA VOLVER AL INICIO Y LIMPIAR LA URL
+    function goHome() {
+        window.history.pushState({}, "Lado C", window.location.pathname);
+        document.getElementById('main-view').classList.remove('hidden');
+        document.getElementById('full-view').classList.add('hidden');
+        document.getElementById('page-title').innerText = "Editoriales Recientes";
+        render();
+        window.scrollTo(0,0);
+    }
+
+    // Escuchar cuando el usuario usa el botón "Atrás" del navegador
+    window.onpopstate = function(e) {
+        if (e.state && e.state.id) {
+            view(e.state.id, false);
+        } else {
+            goHome();
+        }
+    };
+
+    // --- RESTO DE FUNCIONES ---
     async function publish() {
         const editId = document.getElementById('edit-id').value;
         const p = { 
@@ -318,48 +364,6 @@
             await load();
         }
     }
-
-    // --- FUNCION VIEW ACTUALIZADA PARA CAMBIAR EL LINK ---
-    function view(id, updateHistory = true) {
-        const a = articles.find(x => x.id === id);
-        if (!a) return goHome();
-
-        const col = columnists.find(c => c.name === a.author);
-        if(col) updateSidebar(col);
-
-        // Actualizar URL sin recargar la página
-        if (updateHistory) {
-            window.history.pushState({id: id}, a.title, `?id=${id}`);
-        }
-
-        document.getElementById('main-view').classList.add('hidden');
-        const f = document.getElementById('full-view'); 
-        f.classList.remove('hidden');
-        f.innerHTML = `
-            <button onclick="goHome()" style="margin-bottom:20px; cursor:pointer; background:none; border:none; font-weight:bold; color:var(--color-bordo);"><i class="fas fa-chevron-left"></i> VOLVER AL INICIO</button>
-            <h1 style="font-size: 2.5rem; line-height: 1.2;">${a.title}</h1>
-            <div style="margin:20px 0; color:#666;">Por ${a.author} | ${a.date}</div>
-            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:20px;">
-            <div style="font-size:1.2rem; line-height:1.8;">${a.content}</div>`;
-        window.scrollTo(0,0);
-    }
-
-    function goHome() {
-        window.history.pushState({}, "Lado C", window.location.pathname);
-        document.getElementById('main-view').classList.remove('hidden');
-        document.getElementById('full-view').classList.add('hidden');
-        document.getElementById('page-title').innerText = "Editoriales Recientes";
-        render();
-        window.scrollTo(0,0);
-    }
-
-    // Detectar cuando el usuario le da al boton "Atrás" del navegador
-    window.onpopstate = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
-        if (id) view(parseInt(id), false);
-        else goHome();
-    };
 
     function updateSidebar(c) {
         document.getElementById('side-name').innerText = c.name;
