@@ -50,8 +50,8 @@
             display: block;
         }
 
-        nav ul { display: flex; list-style: none; gap: 20px; }
-        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+        nav ul { display: flex; list-style: none; gap: 15px; } /* Gap reducido para que entren todas las opciones */
+        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
 
         .toast {
             position: fixed; bottom: 20px; right: 20px; padding: 15px 30px;
@@ -112,8 +112,11 @@
             <ul>
                 <li><a onclick="goHome()">Inicio</a></li>
                 <li><a onclick="filterByCat('Opinión')">Opinión</a></li>
+                <li><a onclick="filterByCat('Política Nacional')">Política Nacional</a></li>
                 <li><a onclick="filterByCat('Catamarca')">Catamarca</a></li>
-                <li><a onclick="openAdmin()"><i class="fas fa-user-shield"></i> Gestión</a></li>
+                <li><a onclick="filterByCat('Sociedad')">Sociedad</a></li>
+                <li><a onclick="filterByCat('Internacional')">Internacional</a></li>
+                <li><a onclick="openAdmin()"><i class="fas fa-user-shield"></i></a></li>
             </ul>
         </nav>
     </div>
@@ -156,9 +159,10 @@
                     <select id="a-auth" class="form-control"></select>
                     <select id="a-cat" class="form-control">
                         <option value="Opinión">Opinión</option>
+                        <option value="Política Nacional">Política Nacional</option>
                         <option value="Catamarca">Catamarca</option>
                         <option value="Sociedad">Sociedad</option>
-                        <option value="Política Nacional">Argentina</option>
+                        <option value="Internacional">Internacional</option>
                     </select>
                 </div>
                 
@@ -188,7 +192,6 @@
 
                 <div style="background: #eef2f7; padding: 20px; border-radius: 8px; border: 1px solid #ccd6e0;">
                     <h3><i class="fab fa-facebook-square" style="color:#1877F2;"></i> Comentarios</h3>
-                    <p style="font-size: 0.85rem; color: #555; margin-bottom: 15px;">Gestiona los comentarios desde la herramienta oficial de Facebook.</p>
                     <a href="https://developers.facebook.com/tools/comments" target="_blank" class="read-more" style="background:#1877F2; width:100%; display:block; text-align:center;">Abrir Moderador</a>
                 </div>
             </div>
