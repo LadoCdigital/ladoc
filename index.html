@@ -42,7 +42,6 @@
         header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 15px 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; }
         
-        /* LOGO ÚNICO */
         .logo { display: flex; align-items: center; cursor: pointer; }
         .logo img { height: 55px; width: auto; }
 
@@ -67,12 +66,10 @@
         .article-content { padding: 20px; }
         .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; border: none; text-align: center; }
 
-        /* COMENTARIOS */
         .comments-section { margin-top: 50px; border-top: 2px solid #eee; padding-top: 30px; }
         .comment-form { background: #f4f4f4; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
         .comment-item { background: white; padding: 15px; border-radius: 8px; border-left: 4px solid var(--color-bordo); margin-bottom: 15px; }
 
-        /* PANEL GESTIÓN */
         .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
         .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
         .admin-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; }
@@ -164,7 +161,7 @@
                 <input type="hidden" id="a-img">
                 <img id="img-preview" src="" style="width:100%; height:120px; object-fit:cover; display:none; margin-bottom:10px;">
                 
-                <button class="read-more" id="btn-publish" onclick="publish()" style="width: 100%;">Publicar Artículo</button>
+                <button class="read-more" onclick="publish()" style="width: 100%;">Publicar Artículo</button>
             </div>
 
             <div>
@@ -321,7 +318,7 @@
             name: document.getElementById('c-name').value, 
             photo: document.getElementById('c-photo').value, 
             bio: document.getElementById('c-bio').value,
-            quote: document.getElementById('c-quote').value // GUARDAR FRASE PERSONAL
+            quote: document.getElementById('c-quote').value 
         };
         await _supabase.from('columnists').insert([p]);
         load();
@@ -342,7 +339,7 @@
         document.getElementById('side-name').innerText = c.name;
         document.getElementById('side-photo').src = c.photo || '';
         document.getElementById('side-bio').innerText = c.bio || '';
-        document.getElementById('side-quote').innerText = c.quote || ''; // MOSTRAR FRASE PERSONAL
+        document.getElementById('side-quote').innerText = c.quote || ''; 
     }
 
     function validateLogin() {
@@ -351,14 +348,8 @@
         } else alert("Error");
     }
 
-    function showToast(m) {
-        const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m;
-        t.style.display = 'flex'; setTimeout(() => t.style.display = 'none', 3000);
-    }
-
     function openAdmin() { !isAdmin ? document.getElementById('login-modal').style.display='block' : document.getElementById('admin-panel').style.display='block'; }
     function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-    function logout() { localStorage.removeItem('ladoC-auth'); location.reload(); }
     function filterByCat(cat) { render(articles.filter(a => a.category === cat)); }
 
     window.onpopstate = (e) => e.state ? view(e.state.id, false) : goHome();
