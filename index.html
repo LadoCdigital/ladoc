@@ -66,9 +66,9 @@
         .article-content { padding: 20px; }
         .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; border: none; text-align: center; }
 
-        /* ESTILO COMENTARIOS FACEBOOK */
-        .fb-comments-container { margin-top: 50px; border-top: 2px solid #eee; padding-top: 30px; background: #fff; border-radius: 8px; }
+        .fb-comments-container { margin-top: 50px; border-top: 2px solid #eee; padding-top: 30px; }
 
+        /* PANEL DE GESTION ORIGINAL CON GESTIÓN DE COMENTARIOS */
         .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
         .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
         .admin-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; }
@@ -145,7 +145,7 @@
                 <h3>Redactar Editorial</h3>
                 <input type="hidden" id="edit-id">
                 <input type="text" id="a-title" class="form-control" placeholder="Título">
-                <textarea id="a-sum" class="form-control" style="height:60px;" placeholder="Resumen"></textarea>
+                <textarea id="a-sum" class="form-control" style="height:60px;" placeholder="Resumen corto"></textarea>
                 <textarea id="a-cont" class="form-control" style="height:180px;" placeholder="Contenido"></textarea>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -163,14 +163,14 @@
                 <input type="hidden" id="a-img">
                 <img id="img-preview" src="" style="width:100%; height:120px; object-fit:cover; display:none; margin-bottom:10px;">
                 
-                <button class="read-more" onclick="publish()" style="width: 100%;">Publicar Artículo</button>
+                <button class="read-more" id="btn-publish" onclick="publish()" style="width: 100%;">Publicar Artículo</button>
             </div>
 
             <div>
                 <h3>Artículos Existentes</h3>
                 <div id="admin-delete-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #eee; background: white; margin-bottom: 20px;"></div>
                 
-                <div style="background: #f4f4f4; padding: 20px; border-radius: 8px;">
+                <div style="background: #f4f4f4; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                     <h3>Gestión de Columnistas</h3>
                     <input type="text" id="c-name" class="form-control" placeholder="Nombre completo">
                     <input type="file" class="form-control" onchange="handleImageUpload(event, 'col-img-preview', 'c-photo')">
@@ -180,6 +180,12 @@
                     <textarea id="c-bio" class="form-control" placeholder="Biografía corta"></textarea>
                     <button class="read-more" style="background:var(--color-success); width:100%;" onclick="saveColumnist()">Guardar Columnista</button>
                     <div id="admin-col-list" style="margin-top: 15px;"></div>
+                </div>
+
+                <div style="background: #eef2f7; padding: 20px; border-radius: 8px; border: 1px solid #ccd6e0;">
+                    <h3><i class="fab fa-facebook-square" style="color:#1877F2;"></i> Comentarios</h3>
+                    <p style="font-size: 0.85rem; color: #555; margin-bottom: 15px;">Gestiona, borra o responde los comentarios de tus lectores desde la herramienta oficial de Facebook.</p>
+                    <a href="https://developers.facebook.com/tools/comments" target="_blank" class="read-more" style="background:#1877F2; width:100%; display:block; text-align:center;">Abrir Moderador</a>
                 </div>
             </div>
         </div>
@@ -272,13 +278,9 @@
             <div style="font-size:1.2rem; margin-bottom: 40px;">${a.content}</div>
 
             <div class="fb-comments-container">
-                <div class="fb-comments" 
-                     data-href="${currentUrl}" 
-                     data-width="100%" 
-                     data-numposts="5"></div>
+                <div class="fb-comments" data-href="${currentUrl}" data-width="100%" data-numposts="5"></div>
             </div>`;
         
-        // Recargar el plugin de Facebook para que aparezca
         if (window.FB) FB.XFBML.parse();
         window.scrollTo(0,0);
     }
