@@ -50,8 +50,9 @@
             display: block;
         }
 
-        nav ul { display: flex; list-style: none; gap: 15px; } /* Gap reducido para que entren todas las opciones */
-        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
+        nav ul { display: flex; list-style: none; gap: 15px; align-items: center; }
+        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; color: var(--color-gris-oscuro); }
+        nav a:hover { color: var(--color-bordo); }
 
         .toast {
             position: fixed; bottom: 20px; right: 20px; padding: 15px 30px;
@@ -178,7 +179,7 @@
                 <h3>Artículos Existentes</h3>
                 <div id="admin-delete-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #eee; background: white; margin-bottom: 20px;"></div>
                 
-                <div style="background: #f4f4f4; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="background: #f4f4f4; padding: 20px; border-radius: 8px;">
                     <h3>Gestión de Columnistas</h3>
                     <input type="text" id="c-name" class="form-control" placeholder="Nombre completo">
                     <input type="file" class="form-control" onchange="handleImageUpload(event, 'col-img-preview', 'c-photo')">
@@ -190,7 +191,7 @@
                     <div id="admin-col-list" style="margin-top: 15px;"></div>
                 </div>
 
-                <div style="background: #eef2f7; padding: 20px; border-radius: 8px; border: 1px solid #ccd6e0;">
+                <div style="background: #eef2f7; padding: 20px; border-radius: 8px; border: 1px solid #ccd6e0; margin-top:20px;">
                     <h3><i class="fab fa-facebook-square" style="color:#1877F2;"></i> Comentarios</h3>
                     <a href="https://developers.facebook.com/tools/comments" target="_blank" class="read-more" style="background:#1877F2; width:100%; display:block; text-align:center;">Abrir Moderador</a>
                 </div>
@@ -243,7 +244,7 @@
             <div class="article-card">
                 <img src="${a.image}" class="article-img" onerror="this.src='https://via.placeholder.com/400x200'">
                 <div class="article-content">
-                    <small>${a.category.toUpperCase()}</small>
+                    <small style="color:var(--color-bordo); font-weight:bold;">${a.category.toUpperCase()}</small>
                     <h2>${a.title}</h2>
                     <button class="read-more" onclick="view(${a.id})">Leer Editorial</button>
                 </div>
@@ -329,6 +330,8 @@
         window.history.pushState({}, "Lado C", window.location.pathname);
         document.getElementById('main-view').classList.remove('hidden');
         document.getElementById('full-view').classList.add('hidden');
+        document.getElementById('page-title').innerText = "Editoriales Recientes";
+        render(); // Recargar todas las noticias
         window.scrollTo(0,0);
     }
 
@@ -348,7 +351,16 @@
     function openAdmin() { !isAdmin ? document.getElementById('login-modal').style.display='block' : document.getElementById('admin-panel').style.display='block'; }
     function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
     function logout() { localStorage.removeItem('ladoC-auth'); location.reload(); }
-    function filterByCat(cat) { render(articles.filter(a => a.category === cat)); }
+    
+    // Función de filtrado por categoría corregida
+    function filterByCat(cat) {
+        const filtered = articles.filter(a => a.category === cat);
+        document.getElementById('page-title').innerText = cat;
+        render(filtered);
+        document.getElementById('main-view').classList.remove('hidden');
+        document.getElementById('full-view').classList.add('hidden');
+        window.scrollTo(0,0);
+    }
 
     window.onpopstate = (e) => e.state ? view(e.state.id, false) : goHome();
     window.onload = load;
