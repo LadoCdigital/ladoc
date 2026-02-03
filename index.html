@@ -3,367 +3,1779 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta name="google-site-verification" content="F8afRuc1cHF1sPvgUsci7IupBV6B40Zhehvl4xD9AHA" />
-
-    <title>Lado C - Una mirada distinta sobre la política en Catamarca</title>
-    <meta name="description" content="Análisis, opinión e información política independiente desde Catamarca, Argentina.">
-    <link rel="canonical" href="https://ladocdigital.github.io/ladoc/">
-
-    <meta property="og:title" content="Lado C - Política y Opinión">
-    <meta property="og:image" content="https://raw.githubusercontent.com/LadoCdigital/ladoc/main/logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
-
+    <title>Lado C - Una mirada distinta sobre la política</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Montserrat:wght@600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
-            --color-bordo: #9B1C1C;
-            --color-blanco: #FFFFFF;
-            --color-gris-oscuro: #333333;
-            --color-gris-medio: #666666;
-            --color-bg-sidebar: #f9f9f9;
-            --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --border-radius: 8px;
+           --color-bordo: #9B1C1C;
+           --color-blanco: #FFFFFF;
+           --color-azul-claro: #DCE6F2;
+           --color-gris-oscuro: #333333;
+           --color-gris-medio: #666666;
+           --color-gris-claro: #F5F5F5;
+           --color-bg-sidebar: #f9f9f9;
             --color-success: #28a745;
-            --color-danger: #dc3545;
-            --color-info: #17a2b8;
+           --color-warning: #ffc107;
+           --color-danger: #dc3545;
+           --shadow-sutil: 0 4px 12px rgba(0, 0, 0, 0.08);
+           --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+           --border-radius: 8px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Merriweather', serif; color: var(--color-gris-oscuro); background-color: var(--color-blanco); line-height: 1.6; }
-        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--color-bordo); }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        header { background-color: var(--color-blanco); box-shadow: var(--shadow-sutil); position: sticky; top: 0; z-index: 1000; padding: 5px 0; }
-        .header-container { display: flex; justify-content: space-between; align-items: center; }
-        
-        .logo { display: flex; align-items: center; cursor: pointer; }
-        .logo img { 
-            height: 110px; 
-            width: auto; 
-            mix-blend-mode: multiply; 
+        body {
+           font-family: 'Merriweather', serif;
+            color: var(--color-gris-oscuro);
+           background-color: var(--color-blanco);
+           line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5 {
+           font-family: 'Montserrat', 'Poppins', sans-serif;
+           font-weight: 700;
+            color: var(--color-bordo);
+        }
+
+        a {
+           text-decoration: none;
+            color: inherit;
+           transition: all 0.3s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        header {
+           background-color: var(--color-blanco);
+           box-shadow: var(--shadow-sutil);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+       .header-container {
+            display: flex;
+           justify-content: space-between;
+           align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+           font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+           font-weight: 700;
+            color: var(--color-bordo);
+           letter-spacing: 1px;
+           transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.03);
+        }
+
+        .logo span {
+           font-weight: 600;
+            color: var(--color-gris-medio);
+        }
+
+        nav ul {
+            display: flex;
+           list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+           font-family: 'Montserrat', sans-serif;
+           font-weight: 600;
+            font-size: 1.05rem;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--color-bordo);
+        }
+
+        nav a::after {
+           content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+           background-color: var(--color-bordo);
+           transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+       .admin-indicator {
+            font-size: 0.8rem;
+           background-color: var(--color-bordo);
+            color: white;
+            padding: 2px 8px;
+           border-radius: 4px;
+           margin-left: 5px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            display: flex;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .content {
+            flex: 3;
+        }
+
+        .sidebar {
+            flex: 1;
+           background-color: var(--color-bg-sidebar);
+           border-radius: var(--border-radius);
+            padding: 25px;
+           box-shadow: var(--shadow-sutil);
+           align-self: flex-start;
+        }
+
+        /* ARTICLES */
+        .section-title {
+           margin-bottom: 25px;
+           padding-bottom: 10px;
+           border-bottom: 2px solid var(--color-azul-claro);
+        }
+
+        .articles-grid {
+            display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+           margin-bottom: 40px;
+        }
+
+        .article-card {
+           background-color: var(--color-blanco);
+           border-radius: var(--border-radius);
+            overflow: hidden;
+           box-shadow: var(--shadow-sutil);
+           transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+       .article-card:hover {
+            transform: translateY(-5px);
+           box-shadow: var(--shadow-hover);
+        }
+
+        .article-img {
+            width: 100%;
+            height: 200px;
+           object-fit: cover;
+        }
+
+       .article-content {
+            padding: 20px;
+        }
+
+        .article-title {
+            font-size: 1.4rem;
+           margin-bottom: 10px;
+           line-height: 1.3;
+        }
+
+        .article-meta {
+            color: var(--color-gris-medio);
+            font-size: 0.9rem;
+           margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+        }
+
+       .article-excerpt {
+           margin-bottom: 20px;
+            color: var(--color-gris-medio);
+        }
+
+        .read-more {
+            display: inline-block;
+           background-color: var(--color-bordo);
+            color: var(--color-blanco);
+            padding: 10px 20px;
+           border-radius: var(--border-radius);
+           font-family: 'Montserrat', sans-serif;
+           font-weight: 600;
+           border: none;
+            cursor: pointer;
+           transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+       .read-more:hover {
+           background-color: #7a1616;
+            transform: translateY(-2px);
+        }
+
+        .admin-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+           background-color: var(--color-bordo);
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+           border-radius: 4px;
+            display: none;
+        }
+
+        .admin-mode .admin-badge {
             display: block;
         }
 
-        nav ul { display: flex; list-style: none; gap: 15px; align-items: center; }
-        nav a { font-family: 'Montserrat'; font-weight: 600; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; color: var(--color-gris-oscuro); }
-        nav a:hover { color: var(--color-bordo); }
-
-        .toast {
-            position: fixed; bottom: 20px; right: 20px; padding: 15px 30px;
-            background: var(--color-success); color: white; border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 6000; font-family: 'Montserrat';
-            display: none; align-items: center; gap: 10px; animation: slideIn 0.4s ease forwards;
+        /* SIDEBAR */
+        .author-info {
+           text-align: center;
+           margin-bottom: 30px;
         }
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
-        .main-content { display: flex; gap: 40px; margin: 40px 0; }
-        .content { flex: 3; }
-        .sidebar { flex: 1; background-color: var(--color-bg-sidebar); border-radius: var(--border-radius); padding: 25px; align-self: flex-start; box-shadow: var(--shadow-sutil); }
+        .author-photo {
+            width: 150px;
+            height: 150px;
+           border-radius: 50%;
+           object-fit: cover;
+           margin-bottom: 15px;
+            border: 3px solid var(--color-bordo);
+        }
 
-        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
-        .article-card { background: white; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-sutil); transition: 0.3s; }
-        .article-img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
-        .article-content { padding: 20px; }
-        .read-more { display: inline-block; background-color: var(--color-bordo); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; border: none; text-align: center; }
+        .author-name {
+            font-size: 1.4rem;
+           margin-bottom: 10px;
+        }
 
-        .fb-comments-container { margin-top: 50px; border-top: 2px solid #eee; padding-top: 30px; }
+        .author-quote {
+           font-style: italic;
+            color: var(--color-gris-medio);
+           margin-bottom: 20px;
+            padding: 0 10px;
+           border-left: 3px solid var(--color-bordo);
+           padding-left: 15px;
+        }
 
-        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; overflow-y: auto; padding: 20px; }
-        .admin-container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 12px; }
-        .admin-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; }
-        .form-control { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
-        .admin-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .author-bio {
+            font-size: 0.95rem;
+           line-height: 1.6;
+           text-align: left;
+        }
 
-        .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; }
-        .login-box { background: white; padding: 40px; border-radius: 8px; width: 350px; text-align: center; }
+       .admin-toggle {
+           margin-top: 20px;
+            display: flex;
+           flex-direction: column;
+            gap: 15px;
+        }
 
-        .hidden { display: none; }
-        footer { background-color: var(--color-bordo); color: white; padding: 40px 0; text-align: center; margin-top: 60px; }
+        .admin-toggle button {
+            width: 100%;
+        }
+
+        /* SECCIONES ESPECÍFICAS */
+       .category-section, .contact-section, .archive-section {
+            display: none;
+        }
+
+       .category-section.active, .contact-section.active, .archive-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* ARTICLE PAGE */
+        .article-full {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+
+       .article-header {
+           margin-bottom: 30px;
+        }
+
+        .article-full-title {
+            font-size: 2.2rem;
+           margin-bottom: 15px;
+           line-height: 1.2;
+        }
+
+       .article-full-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--color-gris-medio);
+           margin-bottom: 30px;
+        }
+
+       .article-full-img {
+            width: 100%;
+            height: 400px;
+           object-fit: cover;
+           border-radius: var(--border-radius);
+           margin-bottom: 30px;
+        }
+
+        /* --- MODIFICACIÓN DE PÁRRAFOS --- */
+        .article-body {
+            font-size: 1.15rem;
+            line-height: 1.85;
+            margin-bottom: 40px;
+            color: #2c2c2c;
+        }
+
+        .article-body p {
+            margin-bottom: 25px; /* Espacio entre párrafos */
+            display: block;
+        }
+        /* -------------------------------- */
+
+        .back-button {
+            display: inline-block;
+           background-color: var(--color-azul-claro);
+            color: var(--color-gris-oscuro);
+            padding: 12px 25px;
+           border-radius: var(--border-radius);
+           font-family: 'Montserrat', sans-serif;
+           font-weight: 600;
+           margin-bottom: 40px;
+           transition: background-color 0.3s ease;
+        }
+
+       .back-button:hover {
+           background-color: #c8d6e8;
+        }
+
+        /* FOOTER */
+        footer {
+           background-color: var(--color-bordo);
+            color: var(--color-blanco);
+            padding: 40px 0 20px;
+           margin-top: 60px;
+        }
+
+       .footer-content {
+            display: flex;
+           justify-content: space-between;
+            flex-wrap: wrap;
+           gap: 30px;
+           margin-bottom: 30px;
+        }
+
+       .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+           margin-bottom: 20px;
+        }
+
+        .footer-links {
+           list-style: none;
+        }
+
+        .footer-links li {
+           margin-bottom: 10px;
+        }
+
+        .footer-links a:hover {
+           text-decoration: underline;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+           margin-top: 15px;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+           align-items: center;
+           justify-content: center;
+            width: 40px;
+            height: 40px;
+           background-color: rgba(255, 255, 255, 0.1);
+           border-radius: 50%;
+            font-size: 1.2rem;
+           transition: background-color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-bottom {
+           text-align: center;
+           padding-top: 20px;
+           border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* PANEL DE ADMINISTRACIÓN */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+           background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+           overflow-y: auto;
+            padding: 30px 0;
+        }
+
+       .admin-container {
+           background-color: var(--color-blanco);
+            max-width: 900px;
+            margin: 0 auto;
+           border-radius: var(--border-radius);
+            padding: 30px;
+           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-header {
+            display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 30px;
+           padding-bottom: 15px;
+           border-bottom: 2px solid var(--color-azul-claro);
+        }
+
+        .admin-title {
+            font-size: 1.8rem;
+        }
+
+        .close-admin {
+           background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-gris-medio);
+           transition: color 0.3s ease;
+        }
+
+        .close-admin:hover {
+            color: var(--color-bordo);
+        }
+
+        .admin-section {
+           margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--color-azul-claro);
+           border-radius: var(--border-radius);
+        }
+
+        .admin-section h3 {
+           margin-bottom: 15px;
+            color: var(--color-gris-oscuro);
+        }
+
+        .form-group {
+           margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+           margin-bottom: 8px;
+           font-weight: 600;
+           font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+           font-family: 'Merriweather', serif;
+            font-size: 1rem;
+        }
+
+        textarea.form-control {
+           min-height: 150px;
+            resize: vertical;
+        }
+
+        .admin-button {
+           background-color: var(--color-bordo);
+            color: var(--color-blanco);
+            padding: 12px 25px;
+            border: none;
+           border-radius: var(--border-radius);
+           font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+           transition: background-color 0.3s ease;
+        }
+
+       .admin-button:hover {
+           background-color: #7a1616;
+        }
+
+       .admin-button.secondary {
+           background-color: var(--color-azul-claro);
+            color: var(--color-gris-oscuro);
+        }
+
+       .admin-button.secondary:hover {
+           background-color: #c8d6e8;
+        }
+
+       .admin-button.success {
+           background-color: var(--color-success);
+        }
+
+       .admin-button.success:hover {
+           background-color: #218838;
+        }
+
+       .admin-button.danger {
+           background-color: var(--color-danger);
+        }
+
+       .admin-button.danger:hover {
+           background-color: #c9302c;
+        }
+
+       .admin-button.warning {
+           background-color: var(--color-warning);
+            color: var(--color-gris-oscuro);
+        }
+
+       .admin-button.warning:hover {
+           background-color: #e0a800;
+        }
+
+        .article-list {
+           list-style: none;
+            border: 1px solid #ddd;
+           border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .article-list-item {
+            display: flex;
+           justify-content: space-between;
+           align-items: center;
+            padding: 15px;
+           border-bottom: 1px solid #ddd;
+        }
+
+       .article-list-item:last-child {
+           border-bottom: none;
+        }
+
+       .article-list-info {
+            flex: 1;
+        }
+
+       .article-list-title {
+           font-weight: 600;
+           margin-bottom: 5px;
+        }
+
+       .article-list-meta {
+            font-size: 0.85rem;
+            color: var(--color-gris-medio);
+        }
+
+       .article-list-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+           border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+           transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+       .color-option:hover {
+            transform: scale(1.1);
+        }
+
+       .color-option.active {
+           border-color: var(--color-gris-oscuro);
+        }
+
+        /* FORMULARIO DE LOGIN */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+           background-color: rgba(0, 0, 0, 0.8);
+           z-index: 3000;
+           align-items: center;
+           justify-content: center;
+        }
+
+       .login-container {
+           background-color: var(--color-blanco);
+           border-radius: var(--border-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-title {
+           text-align: center;
+           margin-bottom: 30px;
+        }
+
+        .login-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+           border-radius: var(--border-radius);
+           margin-bottom: 20px;
+            display: none;
+        }
+
+        /* ADMIN TOOLBAR */
+        .admin-toolbar {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+       .admin-toolbar-button {
+           background-color: var(--color-bordo);
+            color: white;
+            width: 60px;
+            height: 60px;
+           border-radius: 50%;
+            display: flex;
+           align-items: center;
+           justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+           transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+       .admin-toolbar-button:hover {
+            transform: scale(1.1);
+           background-color: #7a1616;
+        }
+
+        .admin-toolbar-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+           background-color: white;
+           border-radius: var(--border-radius);
+           box-shadow: var(--shadow-hover);
+            padding: 15px;
+            min-width: 200px;
+            display: none;
+        }
+
+       .admin-toolbar-menu.show {
+            display: block;
+        }
+
+       .admin-toolbar-menu button {
+            display: block;
+            width: 100%;
+           text-align: left;
+            padding: 10px 15px;
+           background: none;
+            border: none;
+            cursor: pointer;
+           font-family: 'Montserrat', sans-serif;
+           font-weight: 600;
+            color: var(--color-gris-oscuro);
+           border-radius: 4px;
+           margin-bottom: 5px;
+           transition: background-color 0.3s ease;
+        }
+
+       .admin-toolbar-menu button:hover {
+           background-color: var(--color-gris-claro);
+        }
+
+       .admin-toolbar-menu button i {
+           margin-right: 10px;
+            width: 20px;
+           text-align: center;
+        }
+
+        /* HIGHLIGHTS */
+        .highlighted {
+            border: 2px solid var(--color-bordo);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 992px) {
+           .main-content {
+               flex-direction: column;
+            }
+            
+            .sidebar {
+                order: -1;
+               margin-bottom: 30px;
+            }
+            
+           .articles-grid {
+               grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+           .header-container {
+               flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+               flex-wrap: wrap;
+               justify-content: center;
+                gap: 15px;
+            }
+            
+           .articles-grid {
+               grid-template-columns: 1fr;
+            }
+            
+           .footer-content {
+               flex-direction: column;
+            }
+            
+           .admin-container {
+               padding: 20px;
+            }
+            
+           .article-list-item {
+               flex-direction: column;
+               align-items: flex-start;
+                gap: 15px;
+            }
+            
+           .article-list-actions {
+                width: 100%;
+               justify-content: flex-start;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .article-card, .sidebar, .article-full {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* HIDDEN ELEMENTS */
+        .hidden {
+            display: none;
+        }
+
+        /* NOTIFICACIONES */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+           border-radius: var(--border-radius);
+            color: white;
+           font-family: 'Montserrat', sans-serif;
+           font-weight: 600;
+           box-shadow: var(--shadow-sutil);
+            z-index: 4000;
+            display: none;
+        }
+
+       .notification.success {
+           background-color: var(--color-success);
+        }
+
+       .notification.error {
+           background-color: var(--color-danger);
+        }
+
+       .notification.info {
+           background-color: var(--color-bordo);
+        }
+
+        /* ARCHIVO */
+       .archive-filters {
+            display: flex;
+            gap: 15px;
+           margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+       .archive-filter-btn {
+           background-color: var(--color-azul-claro);
+            color: var(--color-gris-oscuro);
+            padding: 8px 15px;
+           border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+           font-family: 'Montserrat', sans-serif;
+           font-weight: 600;
+           transition: background-color 0.3s ease;
+        }
+
+       .archive-filter-btn.active, .archive-filter-btn:hover {
+            background-color: var(--color-bordo);
+            color: white;
+        }
+
+        /* CONTACTO */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+           margin-top: 40px;
+        }
+
+        .contact-card {
+           background-color: var(--color-gris-claro);
+            padding: 25px;
+           border-radius: var(--border-radius);
+        }
+
+        .contact-card h3 {
+           margin-bottom: 15px;
+            color: var(--color-bordo);
+        }
     </style>
 </head>
 <body>
+    <div class="notification" id="notification"></div>
 
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v18.0"></script>
-
-<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg">Operación exitosa</span></div>
-
-<div class="login-modal" id="login-modal">
-    <div class="login-box">
-        <h2>Lado C - Acceso</h2>
-        <input type="text" id="l-user" class="form-control" placeholder="admin" style="margin-top:20px;">
-        <input type="password" id="l-pass" class="form-control" placeholder="contraseña">
-        <button class="read-more" style="width: 100%;" onclick="validateLogin()">Entrar</button>
-        <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:15px; background:none; border:none; color:#666; cursor:pointer;">Cancelar</button>
-    </div>
-</div>
-
-<header>
-    <div class="container header-container">
-        <a class="logo" onclick="goHome()">
-            <img src="logo.png" alt="Lado C Logo">
-        </a>
-        <nav>
-            <ul>
-                <li><a onclick="goHome()">Inicio</a></li>
-                <li><a onclick="filterByCat('Opinión')">Opinión</a></li>
-                <li><a onclick="filterByCat('Política Nacional')">Política Nacional</a></li>
-                <li><a onclick="filterByCat('Catamarca')">Catamarca</a></li>
-                <li><a onclick="filterByCat('Sociedad')">Sociedad</a></li>
-                <li><a onclick="filterByCat('Internacional')">Internacional</a></li>
-                <li><a onclick="openAdmin()"><i class="fas fa-user-shield"></i></a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="container main-content">
-    <div class="content" id="main-view">
-        <h1 class="section-title" id="page-title" style="margin-bottom: 30px;">Editoriales Recientes</h1>
-        <div class="articles-grid" id="articles-container"></div>
-    </div>
-    
-    <div id="full-view" class="content hidden"></div>
-
-    <aside class="sidebar" id="sidebar">
-        <div id="side-profile" style="text-align: center;">
-            <img src="" id="side-photo" style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--color-bordo); object-fit: cover; background: #eee;">
-            <h3 id="side-name" style="margin-top: 15px;"></h3>
-            <p id="side-quote" style="font-style: italic; color: #666; margin: 15px 0; font-size: 0.95rem; border-left: 3px solid var(--color-bordo); padding-left: 10px; text-align: left;"></p>
-            <p id="side-bio" style="font-size: 0.85rem; text-align: justify; color: #444;"></p>
+    <div class="login-modal" id="login-modal">
+        <div class="login-container">
+            <h2 class="login-title">Acceso Administrativo</h2>
+            <div class="login-error" id="login-error">Credenciales incorrectas. Intente nuevamente.</div>
+            
+            <form id="login-form">
+               <div class="form-group">
+                   <label for="username">Usuario</label>
+                   <input type="text" id="username" class="form-control" placeholder="Ingrese su usuario">
+               </div>
+                
+               <div class="form-group">
+                   <label for="password">Contraseña</label>
+                   <input type="password" id="password" class="form-control" placeholder="Ingrese su contraseña">
+               </div>
+                
+               <div class="form-group">
+                   <button type="submit" class="admin-button" style="width: 100%;">Iniciar Sesión</button>
+               </div>
+           </form>
+            
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--color-gris-medio);">
+                Solo personal autorizado puede acceder al panel de administración.
+            </p>
         </div>
-    </aside>
-</main>
-
-<div class="admin-panel" id="admin-panel">
-    <div class="admin-container">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid #eee; padding-bottom: 10px;">
-            <h1>Centro de Gestión</h1>
-            <button onclick="closeAdmin()" style="background:none; border:none; font-size:2rem; cursor:pointer; color: #999;">&times;</button>
-        </div>
-        
-        <div class="admin-grid">
-            <div style="background: #fdfdfd; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
-                <h3>Redactar Editorial</h3>
-                <input type="hidden" id="edit-id">
-                <input type="text" id="a-title" class="form-control" placeholder="Título">
-                <textarea id="a-sum" class="form-control" style="height:60px;" placeholder="Resumen corto"></textarea>
-                <textarea id="a-cont" class="form-control" style="height:180px;" placeholder="Contenido"></textarea>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <select id="a-auth" class="form-control"></select>
-                    <select id="a-cat" class="form-control">
-                        <option value="Opinión">Opinión</option>
-                        <option value="Política Nacional">Política Nacional</option>
-                        <option value="Catamarca">Catamarca</option>
-                        <option value="Sociedad">Sociedad</option>
-                        <option value="Internacional">Internacional</option>
-                    </select>
-                </div>
-                
-                <label style="font-size: 0.8rem; font-weight: bold;">Imagen Portada:</label>
-                <input type="file" accept="image/*" class="form-control" onchange="handleImageUpload(event, 'img-preview', 'a-img')">
-                <input type="hidden" id="a-img">
-                <img id="img-preview" src="" style="width:100%; height:120px; object-fit:cover; display:none; margin-bottom:10px;">
-                
-                <button class="read-more" onclick="publish()" style="width: 100%;">Publicar Artículo</button>
-            </div>
-
-            <div>
-                <h3>Artículos Existentes</h3>
-                <div id="admin-delete-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #eee; background: white; margin-bottom: 20px;"></div>
-                
-                <div style="background: #f4f4f4; padding: 20px; border-radius: 8px;">
-                    <h3>Gestión de Columnistas</h3>
-                    <input type="text" id="c-name" class="form-control" placeholder="Nombre completo">
-                    <input type="file" class="form-control" onchange="handleImageUpload(event, 'col-img-preview', 'c-photo')">
-                    <input type="hidden" id="c-photo">
-                    <img id="col-img-preview" src="" style="width:60px; height:60px; border-radius:50%; object-fit:cover; display:none; margin-bottom:10px;">
-                    <input type="text" id="c-quote" class="form-control" placeholder="Frase Personal (Quote)">
-                    <textarea id="c-bio" class="form-control" placeholder="Biografía corta"></textarea>
-                    <button class="read-more" style="background:var(--color-success); width:100%;" onclick="saveColumnist()">Guardar Columnista</button>
-                    <div id="admin-col-list" style="margin-top: 15px;"></div>
-                </div>
-
-                <div style="background: #eef2f7; padding: 20px; border-radius: 8px; border: 1px solid #ccd6e0; margin-top:20px;">
-                    <h3><i class="fab fa-facebook-square" style="color:#1877F2;"></i> Comentarios</h3>
-                    <a href="https://developers.facebook.com/tools/comments" target="_blank" class="read-more" style="background:#1877F2; width:100%; display:block; text-align:center;">Abrir Moderador</a>
-                </div>
-            </div>
-        </div>
-        <button class="read-more" style="background:#dc3545; margin-top:20px;" onclick="logout()">Cerrar Sesión</button>
     </div>
-</div>
 
-<footer>
-    <p>Lado C – Catamarca, Argentina. © 2026</p>
-</footer>
+    <div class="admin-toolbar" id="admin-toolbar">
+        <div class="admin-toolbar-menu" id="admin-toolbar-menu">
+            <button onclick="openAdminPanel()"><i class="fas fa-cog"></i> Panel de Control</button>
+            <button onclick="showNewArticleForm()"><i class="fas fa-plus"></i> Nuevo Editorial</button>
+            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        </div>
+        <div class="admin-toolbar-button" id="admin-toolbar-button">
+            <i class="fas fa-tools"></i>
+        </div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://ygvuaitxfumdklfqkucj.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndnVhaXR4ZnVtZGtsZnFrdWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4NTMxNTAsImV4cCI6MjA4NDQyOTE1MH0.HqV7XnJKbDdHW79eFuO17ol59xUl85kRU4R2mgYiTMA';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo" id="logo">Lado <span>C</span></a>
+           <nav>
+               <ul>
+                   <li><a href="#" id="nav-inicio">Inicio</a></li>
+                   <li><a href="#" id="nav-opinion">Opinión</a></li>
+                   <li><a href="#" id="nav-catamarca">Catamarca</a></li>
+                   <li><a href="#" id="nav-politica-nacional">Política Nacional</a></li>
+                   <li><a href="#" id="nav-sociedad">Sociedad</a></li>
+                   <li><a href="#" id="nav-internacionales">Internacionales</a></li>
+                   <li><a href="#" id="nav-archivo">Archivo</a></li>
+                   <li><a href="#" id="nav-contacto">Contacto</a></li>
+                   <li><a href="#" id="nav-admin">Administración <span class="admin-indicator" id="admin-indicator"></span></a></li>
+               </ul>
+           </nav>
+        </div>
+    </header>
 
-    let articles = [], columnists = [], isAdmin = localStorage.getItem('ladoC-auth') === 'true';
+    <div class="container main-content">
+        <div class="content">
+            <div id="inicio-section">
+                <h2 class="section-title" id="destacados">Editoriales Destacados</h2>
+               <div class="articles-grid" id="articles-container">
+                   </div>
+                
+                <h2 class="section-title" id="archivo">Archivo de Editoriales</h2>
+               <div class="articles-grid" id="archive-container">
+                   </div>
+           </div>
 
-    async function load() {
-        const { data: a } = await _supabase.from('articles').select('*').order('id', { ascending: false });
-        const { data: c } = await _supabase.from('columnists').select('*');
-        articles = a || []; columnists = c || [];
-        
-        render(); 
+            <div id="opinion-section" class="category-section">
+                <h2 class="section-title">Opinión</h2>
+               <div class="articles-grid" id="opinion-container">
+                   </div>
+           </div>
 
-        const params = new URLSearchParams(window.location.search);
-        const artId = params.get('id');
-        if (artId) view(parseInt(artId), false);
-        else if (columnists.length > 0) updateSidebar(columnists[0]);
-    }
+            <div id="catamarca-section" class="category-section">
+                <h2 class="section-title">Catamarca</h2>
+               <div class="articles-grid" id="catamarca-container">
+                   </div>
+           </div>
 
-    function handleImageUpload(event, previewId, inputId) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById(previewId).src = e.target.result;
-                document.getElementById(previewId).style.display = 'block';
-                document.getElementById(inputId).value = e.target.result;
+            <div id="politica-nacional-section" class="category-section">
+                <h2 class="section-title">Política Nacional</h2>
+               <div class="articles-grid" id="politica-nacional-container">
+                   </div>
+           </div>
+
+            <div id="sociedad-section" class="category-section">
+                <h2 class="section-title">Sociedad</h2>
+               <div class="articles-grid" id="sociedad-container">
+                   </div>
+           </div>
+
+            <div id="internacionales-section" class="category-section">
+                <h2 class="section-title">Internacionales</h2>
+               <div class="articles-grid" id="internacionales-container">
+                   </div>
+           </div>
+
+            <div id="archivo-section" class="archive-section">
+                <h2 class="section-title">Archivo Completo</h2>
+               <div class="archive-filters">
+                   <button class="archive-filter-btn active" data-filter="all">Todos</button>
+                   <button class="archive-filter-btn" data-filter="Opinión">Opinión</button>
+                   <button class="archive-filter-btn" data-filter="Catamarca">Catamarca</button>
+                   <button class="archive-filter-btn" data-filter="Política Nacional">Política Nacional</button>
+                   <button class="archive-filter-btn" data-filter="Sociedad">Sociedad</button>
+                   <button class="archive-filter-btn" data-filter="Internacionales">Internacionales</button>
+               </div>
+               <div class="articles-grid" id="full-archive-container">
+                    </div>
+           </div>
+
+            <div id="contacto-section" class="contact-section">
+                <h2 class="section-title">Contacto</h2>
+                
+               <div class="contact-form">
+                   <div class="form-group">
+                       <label for="contact-name">Nombre</label>
+                       <input type="text" id="contact-name" class="form-control" placeholder="Su nombre">
+                   </div>
+                    
+                   <div class="form-group">
+                       <label for="contact-email">Correo electrónico</label>
+                       <input type="email" id="contact-email" class="form-control" placeholder="su@email.com">
+                   </div>
+                    
+                   <div class="form-group">
+                       <label for="contact-message">Mensaje</label>
+                       <textarea id="contact-message" class="form-control" placeholder="Escriba su mensaje aquí..." rows="5"></textarea>
+                   </div>
+                    
+                   <button class="admin-button" id="send-message">Enviar Mensaje</button>
+               </div>
+                
+               <div class="contact-info">
+                   <div class="contact-card">
+                       <h3>Información de contacto</h3>
+                       <p><strong>Email:</strong> ladoc.opinion@gmail.com</p>
+                       <p><strong>Teléfono:</strong> +54 3834 123456</p>
+                       <p><strong>Dirección:</strong> Catamarca, Argentina</p>
+                   </div>
+                    
+                   <div class="contact-card">
+                       <h3>Horarios de atención</h3>
+                       <p><strong>Lunes a Viernes:</strong> 9:00 - 18:00</p>
+                       <p><strong>Sábados:</strong> 9:00 - 13:00</p>
+                       <p><strong>Domingos:</strong> Cerrado</p>
+                   </div>
+               </div>
+           </div>
+        </div>
+
+        <aside class="sidebar">
+            <div class="author-info">
+                <img src="" alt="Foto del autor" class="author-photo" id="author-photo">
+                <h3 class="author-name" id="author-name"></h3>
+                <p class="author-quote" id="author-quote"></p>
+               <div class="author-bio" id="author-bio">
+                    <p></p>
+               </div>
+           </div>
+            
+            <div class="admin-toggle">
+               <button class="read-more" id="open-admin">Panel de Administración</button>
+               <button class="read-more secondary" id="new-article-button">Nuevo Editorial</button>
+           </div>
+        </aside>
+    </div>
+
+    <div class="container hidden" id="article-full-view">
+        </div>
+
+    <footer id="footer-section">
+        <div class="container">
+            <div class="footer-content">
+               <div class="footer-section">
+                   <h3 class="footer-title">Lado C</h3>
+                   <p>Un medio digital de opinión política con enfoque en Catamarca - Argentina y la visión del socialismo democrático.</p>
+               </div>
+                
+               <div class="footer-section">
+                   <h3 class="footer-title">Secciones</h3>
+                   <ul class="footer-links">
+                       <li><a href="#" id="footer-inicio">Inicio</a></li>
+                       <li><a href="#" id="footer-opinion">Opinión</a></li>
+                       <li><a href="#" id="footer-catamarca">Catamarca</a></li>
+                       <li><a href="#" id="footer-politica-nacional">Política Nacional</a></li>
+                       <li><a href="#" id="footer-sociedad">Sociedad</a></li>
+                       <li><a href="#" id="footer-internacionales">Internacionales</a></li>
+                       <li><a href="#" id="footer-archivo">Archivo</a></li>
+                       <li><a href="#" id="footer-contacto">Contacto</a></li>
+                   </ul>
+               </div>
+                
+               <div class="footer-section">
+                   <h3 class="footer-title">Redes Sociales</h3>
+                   <div class="social-icons">
+                       <a href="#"><i class="fab fa-twitter"></i></a>
+                       <a href="#"><i class="fab fa-facebook-f"></i></a>
+                       <a href="#"><i class="fab fa-instagram"></i></a>
+                       <a href="#"><i class="fab fa-youtube"></i></a>
+                   </div>
+               </div>
+           </div>
+            
+            <div class="footer-bottom">
+               <p>Lado C – Una mirada distinta sobre la política. © 2023</p>
+           </div>
+        </div>
+    </footer>
+
+    <div class="admin-panel" id="admin-panel">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2 class="admin-title">Panel de Administración - Lado C</h2>
+               <button class="close-admin" id="close-admin">&times;</button>
+           </div>
+            
+            <div class="admin-section">
+               <h3>Gestión de Editoriales</h3>
+                
+               <div class="form-group">
+                   <label for="article-title">Título:</label>
+                   <input type="text" id="article-title" class="form-control" placeholder="Título del editorial">
+               </div>
+                
+               <div class="form-group">
+                   <label for="article-summary">Resumen:</label>
+                   <textarea id="article-summary" class="form-control" placeholder="Resumen breve del editorial (aparece en la vista previa)"></textarea>
+               </div>
+                
+               <div class="form-group">
+                   <label for="article-content">Contenido:</label>
+                   <textarea id="article-content" class="form-control" placeholder="Contenido completo del editorial (usar HTML básico para formato)"></textarea>
+                   <small style="color: var(--color-gris-medio);">Puede usar etiquetas HTML como &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;h3&gt;, etc.</small>
+               </div>
+                
+               <div class="form-group">
+                   <label for="article-category">Categoría:</label>
+                   <select id="article-category" class="form-control">
+                       <option value="Opinión">Opinión</option>
+                       <option value="Catamarca">Catamarca</option>
+                       <option value="Política Nacional">Política Nacional</option>
+                       <option value="Sociedad">Sociedad</option>
+                       <option value="Internacionales">Internacionales</option>
+                   </select>
+               </div>
+                
+               <div class="form-group">
+                   <label for="article-image">URL de la imagen:</label>
+                   <input type="text" id="article-image" class="form-control" placeholder="URL de la imagen de portada">
+                   <small style="color: var(--color-gris-medio);">Puede usar imágenes de <a href="https://unsplash.com" target="_blank">Unsplash</a> u otros servicios.</small>
+               </div>
+                
+               <div class="form-group">
+                   <label for="article-author">Autor:</label>
+                   <input type="text" id="article-author" class="form-control" value="">
+               </div>
+                
+               <div class="form-group">
+                    <label for="article-featured">Destacado:</label>
+                   <select id="article-featured" class="form-control">
+                       <option value="0">No destacado</option>
+                       <option value="1">Destacado</option>
+                   </select>
+               </div>
+                
+               <div style="display: flex; gap: 15px;">
+                   <button class="admin-button success" id="save-article">Guardar Editorial</button>
+                   <button class="admin-button secondary" id="new-article">Nuevo Editorial</button>
+                   <button class="admin-button warning" id="preview-article">Vista Previa</button>
+               </div>
+                
+               <input type="hidden" id="editing-article-id" value="">
+           </div>
+            
+            <div class="admin-section">
+               <h3>Editoriales Existentes <span id="articles-count">(0 editoriales)</span></h3>
+                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+                   <input type="text" id="search-articles" class="form-control" placeholder="Buscar editoriales..." style="flex: 1;">
+                   <button class="admin-button secondary" id="refresh-articles">Actualizar</button>
+               </div>
+                <ul class="article-list" id="admin-article-list">
+                   </ul>
+           </div>
+            
+            <div class="admin-section">
+               <h3>Configuración del Columnista</h3>
+                
+               <div class="form-group">
+                   <label for="author-name-input">Nombre:</label>
+                   <input type="text" id="author-name-input" class="form-control" value="">
+               </div>
+                
+               <div class="form-group">
+                   <label for="author-photo-input">URL de la foto:</label>
+                   <input type="text" id="author-photo-input" class="form-control">
+               </div>
+                
+               <div class="form-group">
+                   <label for="author-quote-input">Frase inspiradora:</label>
+                   <input type="text" id="author-quote-input" class="form-control" value="Pensar distinto es un acto democratico">
+               </div>
+                
+               <div class="form-group">
+                   <label for="author-bio-input">Biografía:</label>
+                   <textarea id="author-bio-input" class="form-control"></textarea>
+               </div>
+                
+               <button class="admin-button success" id="save-author">Guardar Cambios del Autor</button>
+           </div>
+            
+            <div class="admin-section">
+               <h3>Configuración del Sitio</h3>
+                
+               <div class="form-group">
+                   <label>Color principal:</label>
+                   <div class="color-picker">
+                       <div class="color-option active" style="background-color: #9B1C1C;" data-color="#9B1C1C"></div>
+                       <div class="color-option" style="background-color: #1C4E9B;" data-color="#1C4E9B"></div>
+                       <div class="color-option" style="background-color: #1C9B5E;" data-color="#1C9B5E"></div>
+                       <div class="color-option" style="background-color: #6B1C9B;" data-color="#6B1C9B"></div>
+                   </div>
+               </div>
+                
+               <div class="form-group">
+                   <label for="site-title">Título del sitio:</label>
+                   <input type="text" id="site-title" class="form-control" value="Lado C - Una mirada distinta sobre la política">
+               </div>
+                
+               <button class="admin-button success" id="save-site">Guardar Configuración</button>
+           </div>
+            
+            <div class="admin-section">
+               <h3>Acciones Peligrosas</h3>
+               <button class="admin-button danger" id="reset-data">Restablecer Datos de Ejemplo</button>
+                <p style="color: var(--color-gris-medio); font-size: 0.9rem; margin-top: 10px;">Nota: Esta acción eliminará todos los editoriales y restaurará los datos originales. Solo use en caso necesario.</p>
+           </div>
+            
+            <div class="admin-section">
+               <h3>Información del Sistema</h3>
+               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                   <div>
+                       <p><strong>Total de editoriales:</strong> <span id="total-articles">0</span></p>
+                       <p><strong>Destacados:</strong> <span id="featured-articles">0</span></p>
+                       <p><strong>Visitas totales:</strong> <span id="total-views">0</span></p>
+                   </div>
+                   <div>
+                       <p><strong>Último acceso:</strong> <span id="last-access">Nunca</span></p>
+                       <p><strong>Sesión activa:</strong> <span id="session-status">No activa</span></p>
+                       <p><strong>Versión:</strong> 2.0.1</p>
+                   </div>
+               </div>
+           </div>
+        </div>
+    </div>
+
+    <script>
+        // DATOS INICIALES
+        let articles = JSON.parse(localStorage.getItem('ladoC-articles')) || [
+            {
+                id: 1,
+                title: "El futuro del socialismo democrático en Catamarca",
+                summary: "Un análisis sobre los desafíos y oportunidades del socialismo democrático en la provincia y su impacto en las políticas públicas locales.",
+                content: "<p>En los últimos años, Catamarca ha experimentado transformaciones significativas en su escenario político. El socialismo democrático, como corriente de pensamiento y acción política, enfrenta el desafío de adaptarse a las particularidades de nuestra provincia mientras mantiene sus principios fundamentales.</p><p>La experiencia de gobiernos locales en la región muestra que es posible implementar políticas progresistas que mejoren la calidad de vida sin renunciar a los valores democráticos. Sin embargo, el camino está lleno de obstáculos, desde la resistencia de sectores conservadores hasta las limitaciones presupuestarias.</p><p>El verdadero cambio no vendrá de discursos vacíos, sino de la construcción de alternativas concretas que respondan a las necesidades reales de los catamarqueños. La participación ciudadana, la transparencia en la gestión y la defensa de los derechos sociales deben ser los pilares de cualquier proyecto político que se reclame del socialismo democrático.</p>",
+                category: "Catamarca",
+                author: "Juan Pérez",
+                date: "15 de noviembre, 2023",
+                image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                views: 142,
+                featured: true
+            },
+            {
+                id: 2,
+                title: "La desigualdad regional en Argentina: un problema estructural",
+                summary: "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
+                content: "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
+                category: "Política Nacional",
+                author: "Juan Pérez",
+                date: "8 de noviembre, 2023",
+                image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
+                views: 98,
+                featured: true
+            },
+            {
+                id: 3,
+                title: "Juventud y política: el desencanto y la esperanza",
+                summary: "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
+                content: "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
+                category: "Sociedad",
+                author: "Juan Pérez",
+                date: "1 de noviembre, 2023",
+                image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                views: 76,
+                featured: false
             }
-            reader.readAsDataURL(file);
+        ];
+
+        let currentArticleId = articles.length > 0 ? Math.max(...articles.map(a => a.id)) : 0;
+        let authorInfo = JSON.parse(localStorage.getItem('ladoC-author')) || {
+            name: "Juan Pérez",
+            photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+            quote: "Pensar distinto también es un acto de compromiso.",
+            bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
+        };
+
+        let isAdmin = false;
+        const ADMIN_USERNAME = "admin";
+        const ADMIN_PASSWORD = "ladoc2023";
+
+        let currentSection = 'inicio';
+        let currentArchiveFilter = 'all';
+
+        function saveToLocalStorage() {
+            localStorage.setItem('ladoC-articles', JSON.stringify(articles));
+            localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
         }
-    }
 
-    function render(list = articles) {
-        document.getElementById('articles-container').innerHTML = list.map(a => `
-            <div class="article-card">
-                <img src="${a.image}" class="article-img" onerror="this.src='https://via.placeholder.com/400x200'">
+        function formatDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return now.toLocaleDateString('es-ES', options);
+        }
+
+        function showNotification(message, type = "info") {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => { notification.style.display = 'none'; }, 3000);
+        }
+
+        function showSection(sectionId) {
+            document.getElementById('inicio-section').style.display = 'none';
+            document.querySelectorAll('.category-section').forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            });
+            document.getElementById('archivo-section').style.display = 'none';
+            document.getElementById('archivo-section').classList.remove('active');
+            document.getElementById('contacto-section').style.display = 'none';
+            document.getElementById('contacto-section').classList.remove('active');
+            
+            const articleFullView = document.getElementById('article-full-view');
+            const mainContent = document.querySelector('.main-content');
+            if (!articleFullView.classList.contains('hidden')) {
+                articleFullView.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+            }
+            
+            currentSection = sectionId;
+            
+            if (sectionId === 'inicio') {
+                document.getElementById('inicio-section').style.display = 'block';
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(sectionId)) {
+                const sectionElement = document.getElementById(`${sectionId}-section`);
+                sectionElement.style.display = 'block';
+                sectionElement.classList.add('active');
+                renderCategoryArticles(sectionId);
+            } else if (sectionId === 'archivo') {
+                document.getElementById('archivo-section').style.display = 'block';
+                document.getElementById('archivo-section').classList.add('active');
+                renderFullArchive();
+            } else if (sectionId === 'contacto') {
+                document.getElementById('contacto-section').style.display = 'block';
+                document.getElementById('contacto-section').classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function renderArticles() {
+            const articlesContainer = document.getElementById('articles-container');
+            const archiveContainer = document.getElementById('archive-container');
+            
+            const featuredArticles = articles.filter(article => article.featured);
+            const otherArticles = articles.filter(article => !article.featured);
+            
+            featuredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            otherArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            articlesContainer.innerHTML = '';
+            archiveContainer.innerHTML = '';
+            
+            if (featuredArticles.length > 0) {
+                featuredArticles.forEach(article => {
+                    articlesContainer.appendChild(createArticleElement(article, true));
+                });
+            } else {
+                articlesContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales destacados aún.</p>';
+            }
+            
+            if (otherArticles.length > 0) {
+                otherArticles.forEach(article => {
+                    archiveContainer.appendChild(createArticleElement(article, false));
+                });
+            } else {
+                archiveContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en el archivo.</p>';
+            }
+            updateStatistics();
+        }
+
+        function renderCategoryArticles(category) {
+            const categoryMap = { 'opinion': 'Opinión', 'catamarca': 'Catamarca', 'politica-nacional': 'Política Nacional', 'sociedad': 'Sociedad', 'internacionales': 'Internacionales' };
+            const categoryName = categoryMap[category];
+            const container = document.getElementById(`${category}-container`);
+            if (!container) return;
+            const categoryArticles = articles.filter(article => article.category === categoryName);
+            categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            container.innerHTML = '';
+            if (categoryArticles.length > 0) {
+                categoryArticles.forEach(article => {
+                    container.appendChild(createArticleElement(article, article.featured));
+                });
+            } else {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
+            }
+        }
+
+        function renderFullArchive() {
+            const container = document.getElementById('full-archive-container');
+            let filteredArticles = currentArchiveFilter === 'all' ? articles : articles.filter(article => article.category === currentArchiveFilter);
+            filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            container.innerHTML = '';
+            if (filteredArticles.length > 0) {
+                filteredArticles.forEach(article => {
+                    container.appendChild(createArticleElement(article, article.featured));
+                });
+            } else {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales con este filtro.</p>';
+            }
+        }
+
+        function createArticleElement(article, isFeatured) {
+            const articleElement = document.createElement('div');
+            articleElement.className = `article-card ${isFeatured ? 'highlighted' : ''}`;
+            articleElement.dataset.id = article.id;
+            articleElement.innerHTML = `
+                ${isAdmin ? '<div class="admin-badge">Admin</div>' : ''}
+                <img src="${article.image}" alt="${article.title}" class="article-img">
                 <div class="article-content">
-                    <small style="color:var(--color-bordo); font-weight:bold;">${a.category.toUpperCase()}</small>
-                    <h2>${a.title}</h2>
-                    <button class="read-more" onclick="view(${a.id})">Leer Editorial</button>
-                </div>
-            </div>`).join('');
-        
-        document.getElementById('a-auth').innerHTML = columnists.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+                    <h3 class="article-title">${article.title}</h3>
+                    <div class="article-meta">
+                        <span>${article.date}</span>
+                        <span>${article.category}</span>
+                        <span>${article.views} lecturas</span>
+                    </div>
+                    <p class="article-excerpt">${article.summary}</p>
+                    <button class="read-more" onclick="viewArticle(${article.id})">Leer más</button>
+                    ${isAdmin ? `<div style="margin-top: 10px; display: flex; gap: 10px;">
+                        <button class="admin-button warning" style="padding: 5px 10px; font-size: 0.8rem;" onclick="editArticle(${article.id}); event.stopPropagation()">Editar</button>
+                        <button class="admin-button danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="deleteArticle(${article.id}); event.stopPropagation()">Eliminar</button>
+                    </div>` : ''}
+                </div>`;
+            return articleElement;
+        }
 
-        document.getElementById('admin-delete-list').innerHTML = articles.map(a => `
-            <div class="admin-list-item">
-                <span>${a.title.substring(0,25)}...</span>
-                <button onclick="deleteArt(${a.id})" style="color:red; background:none; border:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
-            </div>`).join('');
+        function viewArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            article.views++;
+            saveToLocalStorage();
+            const articleFullView = document.getElementById('article-full-view');
+            const mainContent = document.querySelector('.main-content');
+            articleFullView.innerHTML = `
+                <div class="article-full">
+                    <button class="back-button" onclick="goBack()">&larr; Volver a ${getSectionName(currentSection)}</button>
+                    <div class="article-header">
+                        <h1 class="article-full-title">${article.title}</h1>
+                        <div class="article-full-meta">
+                            <span>${article.date}</span>
+                            <span>${article.category}</span>
+                            <span>Por ${article.author || authorInfo.name}</span>
+                            <span>${article.views} lecturas</span>
+                        </div>
+                    </div>
+                    <img src="${article.image}" alt="${article.title}" class="article-full-img">
+                    <div class="article-body">${article.content}</div>
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-azul-claro);">
+                        ${isAdmin ? `<div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <button class="admin-button warning" onclick="editArticle(${article.id})">Editar este editorial</button>
+                            <button class="admin-button danger" onclick="deleteArticle(${article.id})">Eliminar este editorial</button>
+                        </div>` : ''}
+                        <button class="back-button" onclick="goBack()">&larr; Volver a ${getSectionName(currentSection)}</button>
+                    </div>
+                </div>`;
+            mainContent.classList.add('hidden');
+            articleFullView.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
 
-        document.getElementById('admin-col-list').innerHTML = columnists.map(c => `
-            <div class="admin-list-item">
-                <span>${c.name}</span>
-                <button onclick="deleteCol(${c.id})" style="color:red; background:none; border:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
-            </div>`).join('');
-    }
+        function getSectionName(sectionId) {
+            const names = { 'inicio': 'Inicio', 'opinion': 'Opinión', 'catamarca': 'Catamarca', 'politica-nacional': 'Política Nacional', 'sociedad': 'Sociedad', 'internacionales': 'Internacionales', 'archivo': 'Archivo', 'contacto': 'Contacto' };
+            return names[sectionId] || 'Inicio';
+        }
 
-    async function view(id, push = true) {
-        const a = articles.find(x => x.id === id);
-        if (!a) return goHome();
+        function goBack() {
+            document.getElementById('article-full-view').classList.add('hidden');
+            document.querySelector('.main-content').classList.remove('hidden');
+            if (currentSection === 'inicio') renderArticles();
+            else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) renderCategoryArticles(currentSection);
+            else if (currentSection === 'archivo') renderFullArchive();
+        }
 
-        const currentUrl = `https://ladocdigital.github.io/ladoc/?id=${id}`;
-        if (push) window.history.pushState({id}, a.title, `?id=${id}`);
+        function login(username, password) {
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                localStorage.setItem('ladoC-admin', 'true');
+                updateAdminUI();
+                showNotification('Sesión iniciada correctamente', 'success');
+                return true;
+            }
+            return false;
+        }
 
-        const col = columnists.find(c => c.name === a.author);
-        if(col) updateSidebar(col);
+        function logout() {
+            isAdmin = false;
+            localStorage.removeItem('ladoC-admin');
+            updateAdminUI();
+            showNotification('Sesión cerrada correctamente', 'info');
+            showSection('inicio');
+        }
 
-        document.getElementById('main-view').classList.add('hidden');
-        const f = document.getElementById('full-view'); 
-        f.classList.remove('hidden');
-        f.innerHTML = `
-            <button onclick="goHome()" style="margin-bottom:20px; cursor:pointer; color:var(--color-bordo); font-weight:bold; background:none; border:none;">← INICIO</button>
-            <h1>${a.title}</h1>
-            <p style="color:#666; margin:15px 0;">Por ${a.author} | ${a.date}</p>
-            <img src="${a.image}" style="width:100%; border-radius:8px; margin-bottom:20px;">
-            <div style="font-size:1.2rem; margin-bottom: 40px;">${a.content}</div>
+        function checkAuth() {
+            if (localStorage.getItem('ladoC-admin') === 'true') {
+                isAdmin = true;
+                updateAdminUI();
+            }
+        }
 
-            <div class="fb-comments-container">
-                <div class="fb-comments" data-href="${currentUrl}" data-width="100%" data-numposts="5"></div>
-            </div>`;
-        
-        if (window.FB) FB.XFBML.parse();
-        window.scrollTo(0,0);
-    }
+        function updateAdminUI() {
+            const indicator = document.getElementById('admin-indicator');
+            const toolbar = document.getElementById('admin-toolbar');
+            if (isAdmin) {
+                indicator.textContent = '✓';
+                toolbar.style.display = 'block';
+                document.body.classList.add('admin-mode');
+            } else {
+                indicator.textContent = '';
+                toolbar.style.display = 'none';
+                document.body.classList.remove('admin-mode');
+            }
+            showSection(currentSection);
+        }
 
-    async function publish() {
-        const p = { 
-            title: document.getElementById('a-title').value, 
-            summary: document.getElementById('a-sum').value, 
-            content: document.getElementById('a-cont').value, 
-            author: document.getElementById('a-auth').value, 
-            category: document.getElementById('a-cat').value, 
-            image: document.getElementById('a-img').value, 
-            date: new Date().toLocaleDateString('es-AR') 
-        };
-        await _supabase.from('articles').insert([p]);
-        location.reload();
-    }
+        function openAdminPanel() {
+            if (!isAdmin) { showLoginModal(); return; }
+            document.getElementById('admin-panel').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('author-name-input').value = authorInfo.name;
+            document.getElementById('author-photo-input').value = authorInfo.photo;
+            document.getElementById('author-quote-input').value = authorInfo.quote;
+            document.getElementById('author-bio-input').value = authorInfo.bio;
+            updateAdminArticleList();
+            updateStatistics();
+            document.getElementById('last-access').textContent = localStorage.getItem('ladoC-last-access') || 'Nunca';
+            document.getElementById('session-status').textContent = 'Activa';
+            localStorage.setItem('ladoC-last-access', new Date().toLocaleString());
+        }
 
-    async function deleteArt(id) {
-        if(confirm("¿Eliminar?")) { await _supabase.from('articles').delete().eq('id', id); load(); }
-    }
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
-    async function saveColumnist() {
-        const p = { 
-            name: document.getElementById('c-name').value, 
-            photo: document.getElementById('c-photo').value, 
-            bio: document.getElementById('c-bio').value,
-            quote: document.getElementById('c-quote').value 
-        };
-        await _supabase.from('columnists').insert([p]);
-        load();
-    }
+        function updateAdminArticleList() {
+            const list = document.getElementById('admin-article-list');
+            const searchTerm = document.getElementById('search-articles').value.toLowerCase();
+            list.innerHTML = '';
+            let filtered = articles.filter(a => a.title.toLowerCase().includes(searchTerm) || a.category.toLowerCase().includes(searchTerm));
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            if (filtered.length === 0) {
+                list.innerHTML = '<li class="article-list-item" style="justify-content: center; color: var(--color-gris-medio);">No se encontraron editoriales</li>';
+            } else {
+                filtered.forEach(article => {
+                    const item = document.createElement('li');
+                    item.className = 'article-list-item';
+                    item.innerHTML = `
+                        <div class="article-list-info">
+                            <div class="article-list-title">${article.title} ${article.featured ? '<span style="color: var(--color-bordo); font-size: 0.8rem;">[Destacado]</span>' : ''}</div>
+                            <div class="article-list-meta">${article.date} - ${article.category} - ${article.views} lecturas</div>
+                        </div>
+                        <div class="article-list-actions">
+                            <button class="admin-button warning" onclick="editArticle(${article.id})">Editar</button>
+                            <button class="admin-button danger" onclick="deleteArticle(${article.id})">Eliminar</button>
+                        </div>`;
+                    list.appendChild(item);
+                });
+            }
+            document.getElementById('articles-count').textContent = `(${filtered.length} editoriales)`;
+        }
 
-    async function deleteCol(id) {
-        if(confirm("¿Eliminar?")) { await _supabase.from('columnists').delete().eq('id', id); load(); }
-    }
+        function saveArticle() {
+            const title = document.getElementById('article-title').value;
+            const summary = document.getElementById('article-summary').value;
+            const content = document.getElementById('article-content').value;
+            const category = document.getElementById('article-category').value;
+            const image = document.getElementById('article-image').value || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?auto=format&fit=crop&w=1674&q=80';
+            const author = document.getElementById('article-author').value || authorInfo.name;
+            const featured = document.getElementById('article-featured').value === '1';
+            const editingId = document.getElementById('editing-article-id').value;
+            if (!title || !summary || !content) { showNotification('Complete todos los campos obligatorios', 'error'); return; }
+            if (editingId) {
+                const idx = articles.findIndex(a => a.id === parseInt(editingId));
+                if (idx !== -1) articles[idx] = { ...articles[idx], title, summary, content, category, image, author, featured };
+                document.getElementById('editing-article-id').value = '';
+                document.getElementById('save-article').textContent = 'Guardar Editorial';
+                showNotification('Editorial actualizado correctamente', 'success');
+            } else {
+                currentArticleId++;
+                articles.unshift({ id: currentArticleId, title, summary, content, category, author, date: formatDate(), image, views: 0, featured });
+                showNotification('Editorial creado correctamente', 'success');
+            }
+            saveToLocalStorage();
+            showSection(currentSection);
+            updateAdminArticleList();
+            ['article-title', 'article-summary', 'article-content', 'article-image', 'article-author'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('article-category').value = 'Opinión';
+            document.getElementById('article-featured').value = '0';
+        }
 
-    function goHome() {
-        window.history.pushState({}, "Lado C", window.location.pathname);
-        document.getElementById('main-view').classList.remove('hidden');
-        document.getElementById('full-view').classList.add('hidden');
-        document.getElementById('page-title').innerText = "Editoriales Recientes";
-        render(); // Recargar todas las noticias
-        window.scrollTo(0,0);
-    }
+        function editArticle(id) {
+            if (!isAdmin) { showNotification('Inicie sesión para editar', 'error'); return; }
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            document.getElementById('article-title').value = article.title;
+            document.getElementById('article-summary').value = article.summary;
+            document.getElementById('article-content').value = article.content;
+            document.getElementById('article-category').value = article.category;
+            document.getElementById('article-image').value = article.image;
+            document.getElementById('article-author').value = article.author;
+            document.getElementById('article-featured').value = article.featured ? '1' : '0';
+            document.getElementById('editing-article-id').value = article.id;
+            document.getElementById('save-article').textContent = 'Actualizar Editorial';
+            openAdminPanel();
+            document.querySelector('.admin-container').scrollTop = 0;
+            showNotification(`Editando: "${article.title}"`, 'info');
+        }
 
-    function updateSidebar(c) {
-        document.getElementById('side-name').innerText = c.name;
-        document.getElementById('side-photo').src = c.photo || '';
-        document.getElementById('side-bio').innerText = c.bio || '';
-        document.getElementById('side-quote').innerText = c.quote || ''; 
-    }
+        function deleteArticle(id) {
+            if (!isAdmin) { showNotification('Inicie sesión para eliminar', 'error'); return; }
+            if (!confirm("¿Eliminar este editorial?")) return;
+            articles = articles.filter(a => a.id !== id);
+            saveToLocalStorage();
+            showSection(currentSection);
+            updateAdminArticleList();
+            showNotification('Editorial eliminado', 'success');
+        }
 
-    function validateLogin() {
-        if(document.getElementById('l-user').value === 'admin' && document.getElementById('l-pass').value === 'catamarca2026') {
-            isAdmin = true; localStorage.setItem('ladoC-auth', 'true'); location.reload();
-        } else alert("Error");
-    }
+        function newArticle() {
+            ['article-title', 'article-summary', 'article-content', 'article-image', 'article-author'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('article-category').value = 'Opinión';
+            document.getElementById('article-featured').value = '0';
+            document.getElementById('editing-article-id').value = '';
+            document.getElementById('save-article').textContent = 'Guardar Editorial';
+            showNotification('Creando nuevo editorial', 'info');
+        }
 
-    function openAdmin() { !isAdmin ? document.getElementById('login-modal').style.display='block' : document.getElementById('admin-panel').style.display='block'; }
-    function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
-    function logout() { localStorage.removeItem('ladoC-auth'); location.reload(); }
-    
-    // Función de filtrado por categoría corregida
-    function filterByCat(cat) {
-        const filtered = articles.filter(a => a.category === cat);
-        document.getElementById('page-title').innerText = cat;
-        render(filtered);
-        document.getElementById('main-view').classList.remove('hidden');
-        document.getElementById('full-view').classList.add('hidden');
-        window.scrollTo(0,0);
-    }
+        function showNewArticleForm() { if (!isAdmin) { showLoginModal(); return; } openAdminPanel(); newArticle(); }
 
-    window.onpopstate = (e) => e.state ? view(e.state.id, false) : goHome();
-    window.onload = load;
-</script>
+        function previewArticle() {
+            const title = document.getElementById('article-title').value;
+            const content = document.getElementById('article-content').value;
+            if (!title || !content) { showNotification('Complete título y contenido', 'error'); return; }
+            alert("Vista previa generada. Use Aceptar para continuar.");
+        }
+
+        function saveAuthor() {
+            const name = document.getElementById('author-name-input').value;
+            const photo = document.getElementById('author-photo-input').value;
+            const quote = document.getElementById('author-quote-input').value;
+            const bio = document.getElementById('author-bio-input').value;
+            authorInfo = { name, photo, quote, bio };
+            saveToLocalStorage();
+            document.getElementById('author-name').textContent = name;
+            document.getElementById('author-photo').src = photo;
+            document.getElementById('author-quote').textContent = `"${quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
+            document.getElementById('article-author').value = name;
+            showNotification('Información del autor actualizada', 'success');
+        }
+
+        function saveSite() {
+            const selectedColor = document.querySelector('.color-option.active').dataset.color;
+            const siteTitle = document.getElementById('site-title').value;
+            document.documentElement.style.setProperty('--color-bordo', selectedColor);
+            document.title = siteTitle;
+            localStorage.setItem('ladoC-color', selectedColor);
+            localStorage.setItem('ladoC-site-title', siteTitle);
+            showNotification('Configuración guardada', 'success');
+        }
+
+        function resetData() {
+            if (!confirm("¿Restablecer datos? Se perderá todo lo actual.")) return;
+            localStorage.clear();
+            location.reload();
+        }
+
+        function updateStatistics() {
+            document.getElementById('total-articles').textContent = articles.length;
+            document.getElementById('featured-articles').textContent = articles.filter(a => a.featured).length;
+            document.getElementById('total-views').textContent = articles.reduce((sum, a) => sum + a.views, 0);
+        }
+
+        function showLoginModal() { document.getElementById('login-modal').style.display = 'flex'; }
+        function hideLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('password').value = '';
+        }
+
+        function toggleAdminToolbar() { document.getElementById('admin-toolbar-menu').classList.toggle('show'); }
+
+        function sendContactMessage() {
+            const n = document.getElementById('contact-name').value;
+            const e = document.getElementById('contact-email').value;
+            const m = document.getElementById('contact-message').value;
+            if (!n || !e || !m) { showNotification('Complete el formulario', 'error'); return; }
+            ['contact-name', 'contact-email', 'contact-message'].forEach(id => document.getElementById(id).value = '');
+            showNotification('Mensaje enviado correctamente.', 'success');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            document.getElementById('author-name').textContent = authorInfo.name;
+            document.getElementById('author-photo').src = authorInfo.photo;
+            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+            renderArticles();
+            const savedColor = localStorage.getItem('ladoC-color');
+            if (savedColor) {
+                document.documentElement.style.setProperty('--color-bordo', savedColor);
+                document.querySelectorAll('.color-option').forEach(opt => {
+                    opt.classList.remove('active');
+                    if (opt.dataset.color === savedColor) opt.classList.add('active');
+                });
+            }
+            const savedTitle = localStorage.getItem('ladoC-site-title');
+            if (savedTitle) { document.title = savedTitle; document.getElementById('site-title').value = savedTitle; }
+
+            document.getElementById('logo').addEventListener('click', e => { e.preventDefault(); showSection('inicio'); });
+            ['inicio', 'opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales', 'archivo', 'contacto'].forEach(id => {
+                document.getElementById(`nav-${id}`).addEventListener('click', e => { e.preventDefault(); showSection(id); });
+            });
+            document.getElementById('nav-admin').addEventListener('click', e => { e.preventDefault(); isAdmin ? openAdminPanel() : showLoginModal(); });
+            document.querySelectorAll('#footer-section a[id^="footer-"]').forEach(link => {
+                link.addEventListener('click', e => { e.preventDefault(); showSection(link.id.replace('footer-', '')); });
+            });
+            document.querySelectorAll('.archive-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.archive-filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentArchiveFilter = btn.dataset.filter;
+                    renderFullArchive();
+                });
+            });
+            document.getElementById('login-form').addEventListener('submit', e => {
+                e.preventDefault();
+                if (login(document.getElementById('username').value, document.getElementById('password').value)) { hideLoginModal(); openAdminPanel(); }
+                else { document.getElementById('login-error').style.display = 'block'; }
+            });
+            document.getElementById('login-modal').addEventListener('click', function(e) { if (e.target === this) hideLoginModal(); });
+            document.getElementById('open-admin').addEventListener('click', () => isAdmin ? openAdminPanel() : showLoginModal());
+            document.getElementById('new-article-button').addEventListener('click', () => { if (isAdmin) { openAdminPanel(); newArticle(); } else showLoginModal(); });
+            document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+            document.getElementById('save-article').addEventListener('click', saveArticle);
+            document.getElementById('new-article').addEventListener('click', newArticle);
+            document.getElementById('preview-article').addEventListener('click', previewArticle);
+            document.getElementById('save-author').addEventListener('click', saveAuthor);
+            document.getElementById('save-site').addEventListener('click', saveSite);
+            document.getElementById('reset-data').addEventListener('click', resetData);
+            document.getElementById('refresh-articles').addEventListener('click', updateAdminArticleList);
+            document.getElementById('send-message').addEventListener('click', sendContactMessage);
+            document.getElementById('search-articles').addEventListener('input', updateAdminArticleList);
+            document.querySelectorAll('.color-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+                    opt.classList.add('active');
+                });
+            });
+            document.getElementById('admin-toolbar-button').addEventListener('click', toggleAdminToolbar);
+            document.addEventListener('click', e => {
+                const toolbar = document.getElementById('admin-toolbar');
+                const menu = document.getElementById('admin-toolbar-menu');
+                if (!toolbar.contains(e.target) && menu.classList.contains('show')) menu.classList.remove('show');
+            });
+            setTimeout(() => { if (!isAdmin) showNotification('Bienvenido a Lado C', 'info'); }, 1000);
+        });
+    </script>
 </body>
 </html>
