@@ -218,7 +218,7 @@
            border-radius: var(--border-radius);
            font-family: 'Montserrat', sans-serif;
            font-weight: 600;
-           border: none;
+            border: none;
             cursor: pointer;
            transition: background-color 0.3s ease, transform 0.2s ease;
         }
@@ -332,19 +332,17 @@
            margin-bottom: 30px;
         }
 
-        /* --- MODIFICACIÓN DE PÁRRAFOS --- */
+        /* ESTA ES LA MODIFICACIÓN DE LOS PÁRRAFOS */
         .article-body {
-            font-size: 1.15rem;
-            line-height: 1.85;
+            font-size: 1.15rem; /* Ligeramente más grande para lectura */
+            line-height: 1.85; /* Más espacio entre líneas */
             margin-bottom: 40px;
-            color: #2c2c2c;
         }
 
         .article-body p {
-            margin-bottom: 25px; /* Espacio entre párrafos */
+            margin-bottom: 30px; /* AQUÍ SE SEPARAN BIEN LOS PÁRRAFOS */
             display: block;
         }
-        /* -------------------------------- */
 
         .back-button {
             display: inline-block;
@@ -1294,13 +1292,16 @@
             bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
         };
 
+        // SISTEMA DE AUTENTICACIÓN
         let isAdmin = false;
         const ADMIN_USERNAME = "admin";
-        const ADMIN_PASSWORD = "ladoc2023";
+        const ADMIN_PASSWORD = "ladoc2023"; // Contraseña por defecto
 
+        // VARIABLES DE ESTADO
         let currentSection = 'inicio';
         let currentArchiveFilter = 'all';
 
+        // FUNCIONES DE UTILIDAD
         function saveToLocalStorage() {
             localStorage.setItem('ladoC-articles', JSON.stringify(articles));
             localStorage.setItem('ladoC-author', JSON.stringify(authorInfo));
@@ -1317,10 +1318,15 @@
             notification.textContent = message;
             notification.className = `notification ${type}`;
             notification.style.display = 'block';
-            setTimeout(() => { notification.style.display = 'none'; }, 3000);
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
         }
 
+        // NAVEGACIÓN
         function showSection(sectionId) {
+            // Ocultar todas las secciones
             document.getElementById('inicio-section').style.display = 'none';
             document.querySelectorAll('.category-section').forEach(section => {
                 section.style.display = 'none';
@@ -1331,6 +1337,7 @@
             document.getElementById('contacto-section').style.display = 'none';
             document.getElementById('contacto-section').classList.remove('active');
             
+            // Ocultar vista de artículo si está abierta
             const articleFullView = document.getElementById('article-full-view');
             const mainContent = document.querySelector('.main-content');
             if (!articleFullView.classList.contains('hidden')) {
@@ -1338,6 +1345,7 @@
                 mainContent.classList.remove('hidden');
             }
             
+            // Mostrar la sección solicitada
             currentSection = sectionId;
             
             if (sectionId === 'inicio') {
@@ -1356,51 +1364,78 @@
                 document.getElementById('contacto-section').style.display = 'block';
                 document.getElementById('contacto-section').classList.add('active');
             }
+            
+            // Scroll al inicio de la página
             window.scrollTo(0, 0);
         }
 
+        // RENDERIZAR ARTÍCULOS POR SECCIÓN
         function renderArticles() {
             const articlesContainer = document.getElementById('articles-container');
             const archiveContainer = document.getElementById('archive-container');
             
+            // Separar artículos destacados y no destacados
             const featuredArticles = articles.filter(article => article.featured);
             const otherArticles = articles.filter(article => !article.featured);
             
+            // Ordenar por fecha (más recientes primero)
             featuredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
             otherArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             articlesContainer.innerHTML = '';
             archiveContainer.innerHTML = '';
             
+            // Renderizar destacados
             if (featuredArticles.length > 0) {
                 featuredArticles.forEach(article => {
-                    articlesContainer.appendChild(createArticleElement(article, true));
+                    const articleElement = createArticleElement(article, true);
+                    articlesContainer.appendChild(articleElement);
                 });
             } else {
                 articlesContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales destacados aún.</p>';
             }
             
+            // Renderizar archivo
             if (otherArticles.length > 0) {
                 otherArticles.forEach(article => {
-                    archiveContainer.appendChild(createArticleElement(article, false));
+                    const articleElement = createArticleElement(article, false);
+                    archiveContainer.appendChild(articleElement);
                 });
             } else {
                 archiveContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en el archivo.</p>';
             }
+            
+            // Actualizar estadísticas
             updateStatistics();
         }
 
         function renderCategoryArticles(category) {
-            const categoryMap = { 'opinion': 'Opinión', 'catamarca': 'Catamarca', 'politica-nacional': 'Política Nacional', 'sociedad': 'Sociedad', 'internacionales': 'Internacionales' };
+            const categoryMap = {
+                'opinion': 'Opinión',
+                'catamarca': 'Catamarca',
+                'politica-nacional': 'Política Nacional',
+                'sociedad': 'Sociedad',
+                'internacionales': 'Internacionales'
+            };
+            
             const categoryName = categoryMap[category];
-            const container = document.getElementById(`${category}-container`);
+            const containerId = `${category}-container`;
+            const container = document.getElementById(containerId);
+            
             if (!container) return;
+            
+            // Filtrar artículos por categoría
             const categoryArticles = articles.filter(article => article.category === categoryName);
+            
+            // Ordenar por fecha (más recientes primero)
             categoryArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
             container.innerHTML = '';
+            
             if (categoryArticles.length > 0) {
                 categoryArticles.forEach(article => {
-                    container.appendChild(createArticleElement(article, article.featured));
+                    const articleElement = createArticleElement(article, article.featured);
+                    container.appendChild(articleElement);
                 });
             } else {
                 container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales en esta categoría aún.</p>';
@@ -1409,12 +1444,23 @@
 
         function renderFullArchive() {
             const container = document.getElementById('full-archive-container');
-            let filteredArticles = currentArchiveFilter === 'all' ? articles : articles.filter(article => article.category === currentArchiveFilter);
+            
+            let filteredArticles = articles;
+            
+            // Aplicar filtro si no es "all"
+            if (currentArchiveFilter !== 'all') {
+                filteredArticles = articles.filter(article => article.category === currentArchiveFilter);
+            }
+            
+            // Ordenar por fecha (más recientes primero)
             filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
             container.innerHTML = '';
+            
             if (filteredArticles.length > 0) {
                 filteredArticles.forEach(article => {
-                    container.appendChild(createArticleElement(article, article.featured));
+                    const articleElement = createArticleElement(article, article.featured);
+                    container.appendChild(articleElement);
                 });
             } else {
                 container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--color-gris-medio); padding: 40px;">No hay editoriales con este filtro.</p>';
@@ -1425,6 +1471,7 @@
             const articleElement = document.createElement('div');
             articleElement.className = `article-card ${isFeatured ? 'highlighted' : ''}`;
             articleElement.dataset.id = article.id;
+            
             articleElement.innerHTML = `
                 ${isAdmin ? '<div class="admin-badge">Admin</div>' : ''}
                 <img src="${article.image}" alt="${article.title}" class="article-img">
@@ -1441,20 +1488,29 @@
                         <button class="admin-button warning" style="padding: 5px 10px; font-size: 0.8rem;" onclick="editArticle(${article.id}); event.stopPropagation()">Editar</button>
                         <button class="admin-button danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="deleteArticle(${article.id}); event.stopPropagation()">Eliminar</button>
                     </div>` : ''}
-                </div>`;
+                </div>
+            `;
+            
             return articleElement;
         }
 
+        // VISTA DE ARTÍCULO COMPLETO
         function viewArticle(id) {
             const article = articles.find(a => a.id === id);
             if (!article) return;
+            
+            // Incrementar contador de vistas
             article.views++;
             saveToLocalStorage();
+            
+            // Mostrar artículo completo
             const articleFullView = document.getElementById('article-full-view');
             const mainContent = document.querySelector('.main-content');
+            
             articleFullView.innerHTML = `
                 <div class="article-full">
                     <button class="back-button" onclick="goBack()">&larr; Volver a ${getSectionName(currentSection)}</button>
+                    
                     <div class="article-header">
                         <h1 class="article-full-title">${article.title}</h1>
                         <div class="article-full-meta">
@@ -1464,34 +1520,65 @@
                             <span>${article.views} lecturas</span>
                         </div>
                     </div>
+                    
                     <img src="${article.image}" alt="${article.title}" class="article-full-img">
-                    <div class="article-body">${article.content}</div>
+                    
+                    <div class="article-body">
+                        ${article.content}
+                    </div>
+                    
                     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-azul-claro);">
-                        ${isAdmin ? `<div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        ${isAdmin ? `
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
                             <button class="admin-button warning" onclick="editArticle(${article.id})">Editar este editorial</button>
                             <button class="admin-button danger" onclick="deleteArticle(${article.id})">Eliminar este editorial</button>
-                        </div>` : ''}
+                        </div>
+                        ` : ''}
                         <button class="back-button" onclick="goBack()">&larr; Volver a ${getSectionName(currentSection)}</button>
                     </div>
-                </div>`;
+                </div>
+            `;
+            
             mainContent.classList.add('hidden');
             articleFullView.classList.remove('hidden');
+            
+            // Scroll al inicio del artículo
             window.scrollTo(0, 0);
         }
 
         function getSectionName(sectionId) {
-            const names = { 'inicio': 'Inicio', 'opinion': 'Opinión', 'catamarca': 'Catamarca', 'politica-nacional': 'Política Nacional', 'sociedad': 'Sociedad', 'internacionales': 'Internacionales', 'archivo': 'Archivo', 'contacto': 'Contacto' };
-            return names[sectionId] || 'Inicio';
+            const sectionNames = {
+                'inicio': 'Inicio',
+                'opinion': 'Opinión',
+                'catamarca': 'Catamarca',
+                'politica-nacional': 'Política Nacional',
+                'sociedad': 'Sociedad',
+                'internacionales': 'Internacionales',
+                'archivo': 'Archivo',
+                'contacto': 'Contacto'
+            };
+            
+            return sectionNames[sectionId] || 'Inicio';
         }
 
         function goBack() {
-            document.getElementById('article-full-view').classList.add('hidden');
-            document.querySelector('.main-content').classList.remove('hidden');
-            if (currentSection === 'inicio') renderArticles();
-            else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) renderCategoryArticles(currentSection);
-            else if (currentSection === 'archivo') renderFullArchive();
+            const articleFullView = document.getElementById('article-full-view');
+            const mainContent = document.querySelector('.main-content');
+            
+            articleFullView.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            
+            // Recargar artículos para actualizar vistas
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            }
         }
 
+        // SISTEMA DE AUTENTICACIÓN
         function login(username, password) {
             if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 isAdmin = true;
@@ -1512,39 +1599,66 @@
         }
 
         function checkAuth() {
-            if (localStorage.getItem('ladoC-admin') === 'true') {
+            const savedAuth = localStorage.getItem('ladoC-admin');
+            if (savedAuth === 'true') {
                 isAdmin = true;
                 updateAdminUI();
             }
         }
 
         function updateAdminUI() {
-            const indicator = document.getElementById('admin-indicator');
-            const toolbar = document.getElementById('admin-toolbar');
+            const adminIndicator = document.getElementById('admin-indicator');
+            const adminToolbar = document.getElementById('admin-toolbar');
+            
             if (isAdmin) {
-                indicator.textContent = '✓';
-                toolbar.style.display = 'block';
+                adminIndicator.textContent = '✓';
+                adminToolbar.style.display = 'block';
                 document.body.classList.add('admin-mode');
+                showNotification('Modo administrador activo', 'success');
             } else {
-                indicator.textContent = '';
-                toolbar.style.display = 'none';
+                adminIndicator.textContent = '';
+                adminToolbar.style.display = 'none';
                 document.body.classList.remove('admin-mode');
             }
-            showSection(currentSection);
+            
+            // Actualizar vista de artículos
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            }
         }
 
+        // PANEL DE ADMINISTRACIÓN
         function openAdminPanel() {
-            if (!isAdmin) { showLoginModal(); return; }
+            if (!isAdmin) {
+                showLoginModal();
+                return;
+            }
+            
             document.getElementById('admin-panel').style.display = 'block';
             document.body.style.overflow = 'hidden';
+            
+            // Cargar datos actuales en el formulario
             document.getElementById('author-name-input').value = authorInfo.name;
             document.getElementById('author-photo-input').value = authorInfo.photo;
             document.getElementById('author-quote-input').value = authorInfo.quote;
             document.getElementById('author-bio-input').value = authorInfo.bio;
+            
+            // Actualizar lista de artículos
             updateAdminArticleList();
+            
+            // Actualizar estadísticas
             updateStatistics();
-            document.getElementById('last-access').textContent = localStorage.getItem('ladoC-last-access') || 'Nunca';
-            document.getElementById('session-status').textContent = 'Activa';
+            
+            // Cargar última fecha de acceso
+            const lastAccess = localStorage.getItem('ladoC-last-access') || 'Nunca';
+            document.getElementById('last-access').textContent = lastAccess;
+            document.getElementById('session-status').textContent = isAdmin ? 'Activa' : 'No activa';
+            
+            // Guardar fecha de acceso actual
             localStorage.setItem('ladoC-last-access', new Date().toLocaleString());
         }
 
@@ -1554,18 +1668,32 @@
         }
 
         function updateAdminArticleList() {
-            const list = document.getElementById('admin-article-list');
+            const adminArticleList = document.getElementById('admin-article-list');
             const searchTerm = document.getElementById('search-articles').value.toLowerCase();
-            list.innerHTML = '';
-            let filtered = articles.filter(a => a.title.toLowerCase().includes(searchTerm) || a.category.toLowerCase().includes(searchTerm));
-            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-            if (filtered.length === 0) {
-                list.innerHTML = '<li class="article-list-item" style="justify-content: center; color: var(--color-gris-medio);">No se encontraron editoriales</li>';
+            
+            adminArticleList.innerHTML = '';
+            
+            let filteredArticles = articles;
+            
+            // Aplicar filtro de búsqueda si existe
+            if (searchTerm) {
+                filteredArticles = articles.filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) || 
+                    article.summary.toLowerCase().includes(searchTerm) ||
+                    article.category.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Ordenar por fecha (más recientes primero)
+            filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filteredArticles.length === 0) {
+                adminArticleList.innerHTML = '<li class="article-list-item" style="justify-content: center; color: var(--color-gris-medio);">No se encontraron editoriales</li>';
             } else {
-                filtered.forEach(article => {
-                    const item = document.createElement('li');
-                    item.className = 'article-list-item';
-                    item.innerHTML = `
+                filteredArticles.forEach(article => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'article-list-item';
+                    listItem.innerHTML = `
                         <div class="article-list-info">
                             <div class="article-list-title">${article.title} ${article.featured ? '<span style="color: var(--color-bordo); font-size: 0.8rem;">[Destacado]</span>' : ''}</div>
                             <div class="article-list-meta">${article.date} - ${article.category} - ${article.views} lecturas</div>
@@ -1573,46 +1701,109 @@
                         <div class="article-list-actions">
                             <button class="admin-button warning" onclick="editArticle(${article.id})">Editar</button>
                             <button class="admin-button danger" onclick="deleteArticle(${article.id})">Eliminar</button>
-                        </div>`;
-                    list.appendChild(item);
+                        </div>
+                    `;
+                    adminArticleList.appendChild(listItem);
                 });
             }
-            document.getElementById('articles-count').textContent = `(${filtered.length} editoriales)`;
+            
+            // Actualizar contador
+            document.getElementById('articles-count').textContent = `(${filteredArticles.length} editoriales)`;
         }
 
+        // FUNCIONES DE GESTIÓN DE EDITORIALES
         function saveArticle() {
             const title = document.getElementById('article-title').value;
             const summary = document.getElementById('article-summary').value;
             const content = document.getElementById('article-content').value;
             const category = document.getElementById('article-category').value;
-            const image = document.getElementById('article-image').value || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?auto=format&fit=crop&w=1674&q=80';
+            const image = document.getElementById('article-image').value;
             const author = document.getElementById('article-author').value || authorInfo.name;
             const featured = document.getElementById('article-featured').value === '1';
             const editingId = document.getElementById('editing-article-id').value;
-            if (!title || !summary || !content) { showNotification('Complete todos los campos obligatorios', 'error'); return; }
+            
+            if (!title || !summary || !content) {
+                showNotification('Por favor complete todos los campos obligatorios', 'error');
+                return;
+            }
+            
+            // Si no hay imagen, usar una por defecto
+            const finalImage = image || 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80';
+            
             if (editingId) {
-                const idx = articles.findIndex(a => a.id === parseInt(editingId));
-                if (idx !== -1) articles[idx] = { ...articles[idx], title, summary, content, category, image, author, featured };
+                // Actualizar artículo existente
+                const articleIndex = articles.findIndex(a => a.id === parseInt(editingId));
+                if (articleIndex !== -1) {
+                    articles[articleIndex] = {
+                        ...articles[articleIndex],
+                        title,
+                        summary,
+                        content,
+                        category,
+                        image: finalImage,
+                        author,
+                        featured
+                    };
+                }
+                
+                // Limpiar modo edición
                 document.getElementById('editing-article-id').value = '';
                 document.getElementById('save-article').textContent = 'Guardar Editorial';
+                
                 showNotification('Editorial actualizado correctamente', 'success');
             } else {
+                // Crear nuevo artículo
                 currentArticleId++;
-                articles.unshift({ id: currentArticleId, title, summary, content, category, author, date: formatDate(), image, views: 0, featured });
+                const newArticle = {
+                    id: currentArticleId,
+                    title,
+                    summary,
+                    content,
+                    category,
+                    author,
+                    date: formatDate(),
+                    image: finalImage,
+                    views: 0,
+                    featured
+                };
+                
+                articles.unshift(newArticle);
                 showNotification('Editorial creado correctamente', 'success');
             }
+            
             saveToLocalStorage();
-            showSection(currentSection);
+            
+            // Actualizar vista actual
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            }
+            
             updateAdminArticleList();
-            ['article-title', 'article-summary', 'article-content', 'article-image', 'article-author'].forEach(id => document.getElementById(id).value = '');
+            
+            // Limpiar formulario
+            document.getElementById('article-title').value = '';
+            document.getElementById('article-summary').value = '';
+            document.getElementById('article-content').value = '';
+            document.getElementById('article-image').value = '';
+            document.getElementById('article-author').value = '';
             document.getElementById('article-category').value = 'Opinión';
             document.getElementById('article-featured').value = '0';
         }
 
         function editArticle(id) {
-            if (!isAdmin) { showNotification('Inicie sesión para editar', 'error'); return; }
+            if (!isAdmin) {
+                showNotification('Debe iniciar sesión como administrador para editar editoriales', 'error');
+                return;
+            }
+            
             const article = articles.find(a => a.id === id);
             if (!article) return;
+            
+            // Cargar datos en el formulario
             document.getElementById('article-title').value = article.title;
             document.getElementById('article-summary').value = article.summary;
             document.getElementById('article-content').value = article.content;
@@ -1621,38 +1812,93 @@
             document.getElementById('article-author').value = article.author;
             document.getElementById('article-featured').value = article.featured ? '1' : '0';
             document.getElementById('editing-article-id').value = article.id;
+            
+            // Cambiar botón a modo edición
             document.getElementById('save-article').textContent = 'Actualizar Editorial';
+            
+            // Abrir panel de administración si no está abierto
             openAdminPanel();
+            
+            // Scroll al formulario
             document.querySelector('.admin-container').scrollTop = 0;
+            
             showNotification(`Editando: "${article.title}"`, 'info');
         }
 
         function deleteArticle(id) {
-            if (!isAdmin) { showNotification('Inicie sesión para eliminar', 'error'); return; }
-            if (!confirm("¿Eliminar este editorial?")) return;
+            if (!isAdmin) {
+                showNotification('Debe iniciar sesión como administrador para eliminar editoriales', 'error');
+                return;
+            }
+            
+            if (!confirm("¿Está seguro de que desea eliminar este editorial? Esta acción no se puede deshacer.")) {
+                return;
+            }
+            
             articles = articles.filter(a => a.id !== id);
             saveToLocalStorage();
-            showSection(currentSection);
+            
+            // Actualizar vista actual
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            }
+            
             updateAdminArticleList();
-            showNotification('Editorial eliminado', 'success');
+            
+            showNotification('Editorial eliminado correctamente', 'success');
         }
 
         function newArticle() {
-            ['article-title', 'article-summary', 'article-content', 'article-image', 'article-author'].forEach(id => document.getElementById(id).value = '');
+            // Limpiar formulario
+            document.getElementById('article-title').value = '';
+            document.getElementById('article-summary').value = '';
+            document.getElementById('article-content').value = '';
+            document.getElementById('article-image').value = '';
+            document.getElementById('article-author').value = '';
             document.getElementById('article-category').value = 'Opinión';
             document.getElementById('article-featured').value = '0';
             document.getElementById('editing-article-id').value = '';
+            
+            // Cambiar botón a modo creación
             document.getElementById('save-article').textContent = 'Guardar Editorial';
+            
             showNotification('Creando nuevo editorial', 'info');
         }
 
-        function showNewArticleForm() { if (!isAdmin) { showLoginModal(); return; } openAdminPanel(); newArticle(); }
+        function showNewArticleForm() {
+            if (!isAdmin) {
+                showLoginModal();
+                return;
+            }
+            
+            openAdminPanel();
+            newArticle();
+        }
 
         function previewArticle() {
             const title = document.getElementById('article-title').value;
             const content = document.getElementById('article-content').value;
-            if (!title || !content) { showNotification('Complete título y contenido', 'error'); return; }
-            alert("Vista previa generada. Use Aceptar para continuar.");
+            
+            if (!title || !content) {
+                showNotification('Complete título y contenido para ver la vista previa', 'error');
+                return;
+            }
+            
+            // Crear una vista previa simple
+            const preview = `
+                <h2>Vista Previa: ${title}</h2>
+                <div style="margin-top: 20px; padding: 20px; border: 1px solid var(--color-azul-claro); border-radius: var(--border-radius);">
+                    ${content}
+                </div>
+                <p style="margin-top: 15px; color: var(--color-gris-medio); font-size: 0.9rem;">Esta es solo una vista previa. Para ver el formato final, guarde el editorial y ábralo desde la vista pública.</p>
+            `;
+            
+            alert("Vista previa del editorial (use el botón Aceptar para continuar)");
+            // En un sistema más avanzado, podríamos abrir un modal con la vista previa
         }
 
         function saveAuthor() {
@@ -1660,99 +1906,316 @@
             const photo = document.getElementById('author-photo-input').value;
             const quote = document.getElementById('author-quote-input').value;
             const bio = document.getElementById('author-bio-input').value;
+            
             authorInfo = { name, photo, quote, bio };
             saveToLocalStorage();
+            
+            // Actualizar vista pública
             document.getElementById('author-name').textContent = name;
             document.getElementById('author-photo').src = photo;
             document.getElementById('author-quote').textContent = `"${quote}"`;
             document.getElementById('author-bio').innerHTML = `<p>${bio}</p>`;
+            
+            // Actualizar también el campo de autor en el formulario de artículos
             document.getElementById('article-author').value = name;
-            showNotification('Información del autor actualizada', 'success');
+            
+            showNotification('Información del autor actualizada correctamente', 'success');
         }
 
         function saveSite() {
             const selectedColor = document.querySelector('.color-option.active').dataset.color;
             const siteTitle = document.getElementById('site-title').value;
+            
+            // Aplicar nuevo color
             document.documentElement.style.setProperty('--color-bordo', selectedColor);
+            
+            // Actualizar título del sitio
             document.title = siteTitle;
+            
+            // Guardar en localStorage
             localStorage.setItem('ladoC-color', selectedColor);
             localStorage.setItem('ladoC-site-title', siteTitle);
-            showNotification('Configuración guardada', 'success');
+            
+            showNotification('Configuración del sitio guardada correctamente', 'success');
         }
 
         function resetData() {
-            if (!confirm("¿Restablecer datos? Se perderá todo lo actual.")) return;
-            localStorage.clear();
-            location.reload();
+            if (!confirm("¿Está seguro de que desea restablecer los datos de ejemplo? Se perderán todos los editoriales actuales. Esta acción no se puede deshacer.")) {
+                return;
+            }
+            
+            // Restaurar datos iniciales
+            articles = [
+                {
+                    id: 1,
+                    title: "El futuro del socialismo democrático en Catamarca",
+                    summary: "Un análisis sobre los desafíos y oportunidades del socialismo democrático en la provincia y su impacto en las políticas públicas locales.",
+                    content: "<p>En los últimos años, Catamarca ha experimentado transformaciones significativas en su escenario político. El socialismo democrático, como corriente de pensamiento y acción política, enfrenta el desafío de adaptarse a las particularidades de nuestra provincia mientras mantiene sus principios fundamentales.</p><p>La experiencia de gobiernos locales en la región muestra que es posible implementar políticas progresistas que mejoren la calidad de vida sin renunciar a los valores democráticos. Sin embargo, el camino está lleno de obstáculos, desde la resistencia de sectores conservadores hasta las limitaciones presupuestarias.</p><p>El verdadero cambio no vendrá de discursos vacíos, sino de la construcción de alternativas concretas que respondan a las necesidades reales de los catamarqueños. La participación ciudadana, la transparencia en la gestión y la defensa de los derechos sociales deben ser los pilares de cualquier proyecto político que se reclame del socialismo democrático.</p>",
+                    category: "Catamarca",
+                    author: "Juan Pérez",
+                    date: "15 de noviembre, 2023",
+                    image: "https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                    views: 142,
+                    featured: true
+                },
+                {
+                    id: 2,
+                    title: "La desigualdad regional en Argentina: un problema estructural",
+                    summary: "Reflexiones sobre las profundas brechas entre las regiones del país y las políticas necesarias para enfrentarlas desde una perspectiva socialista.",
+                    content: "<p>Argentina se presenta al mundo como un país unificado, pero bajo la superficie persisten profundas desigualdades regionales que condicionan el desarrollo y la calidad de vida de millones de personas. Catamarca, como otras provincias del noroeste, enfrenta desafíos particulares que requieren soluciones específicas.</p><p>El centralismo porteño no es solo geográfico, sino también económico y cultural. Las decisiones que afectan a todo el país se toman en Buenos Aires, muchas veces sin considerar las realidades diversas de las provincias. Esta dinámica perpetúa un sistema donde algunas regiones avanzan mientras otras quedan estancadas.</p><p>Desde el socialismo democrático, proponemos un federalismo real que redistribuya no solo recursos, sino también poder de decisión. Un proyecto nacional debe construirse desde la diversidad, reconocer y valorar las particularidades de cada región.</p>",
+                    category: "Política Nacional",
+                    author: "Juan Pérez",
+                    date: "8 de noviembre, 2023",
+                    image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1776&q=80",
+                    views: 98,
+                    featured: true
+                },
+                {
+                    id: 3,
+                    title: "Juventud y política: el desencanto y la esperanza",
+                    summary: "Cómo los jóvenes catamarqueños perciben la política actual y qué oportunidades existen para renovar la participación ciudadana.",
+                    content: "<p>En Catamarca, como en el resto del país, una gran parte de la juventud manifiesta desencanto hacia la política tradicional. Este fenómeno, sin embargo, no debe interpretarse como apatía, sino como rechazo a las formas caducas de hacer política.</p><p>Los jóvenes están interesados en los problemas que afectan su vida cotidiana: el acceso a la educación, las oportunidades laborales, el cuidado del medio ambiente, los derechos de las minorías. Donde no encuentran respuestas en los espacios tradicionales, crean los propios: colectivos, organizaciones barriales, movimientos culturales.</p><p>El desafío para el socialismo democrático es tender puentes con estas nuevas formas de participación, sin intentar cooptarlas ni domesticarlas. Debemos aprender a escuchar y crear espacios donde las voces jóvenes puedan expresarse y traducirse en acción política concreta.</p>",
+                    category: "Sociedad",
+                    author: "Juan Pérez",
+                    date: "1 de noviembre, 2023",
+                    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+                    views: 76,
+                    featured: false
+                }
+            ];
+            
+            currentArticleId = 3;
+            
+            authorInfo = {
+                name: "Juan Pérez",
+                photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+                quote: "Pensar distinto también es un acto de compromiso.",
+                bio: "Periodista y politólogo catamarqueño. Columnista especializado en análisis político desde una perspectiva socialista democrática. Con más de 15 años de experiencia en medios locales y nacionales. Su trabajo se centra en el análisis de las políticas públicas, la participación ciudadana y los desafíos de la democracia en el siglo XXI, con especial atención a la realidad de Catamarca y el noroeste argentino."
+            };
+            
+            saveToLocalStorage();
+            
+            // Actualizar vista de autor
+            document.getElementById('author-name').textContent = authorInfo.name;
+            document.getElementById('author-photo').src = authorInfo.photo;
+            document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
+            document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+            
+            // Actualizar vista actual
+            if (currentSection === 'inicio') {
+                renderArticles();
+            } else if (['opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales'].includes(currentSection)) {
+                renderCategoryArticles(currentSection);
+            } else if (currentSection === 'archivo') {
+                renderFullArchive();
+            }
+            
+            updateAdminArticleList();
+            
+            showNotification('Datos restablecidos correctamente', 'success');
         }
 
         function updateStatistics() {
-            document.getElementById('total-articles').textContent = articles.length;
-            document.getElementById('featured-articles').textContent = articles.filter(a => a.featured).length;
-            document.getElementById('total-views').textContent = articles.reduce((sum, a) => sum + a.views, 0);
+            const totalArticles = articles.length;
+            const featuredArticles = articles.filter(a => a.featured).length;
+            const totalViews = articles.reduce((sum, article) => sum + article.views, 0);
+            
+            document.getElementById('total-articles').textContent = totalArticles;
+            document.getElementById('featured-articles').textContent = featuredArticles;
+            document.getElementById('total-views').textContent = totalViews;
         }
 
-        function showLoginModal() { document.getElementById('login-modal').style.display = 'flex'; }
+        // LOGIN MODAL
+        function showLoginModal() {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+
         function hideLoginModal() {
             document.getElementById('login-modal').style.display = 'none';
             document.getElementById('login-error').style.display = 'none';
             document.getElementById('password').value = '';
         }
 
-        function toggleAdminToolbar() { document.getElementById('admin-toolbar-menu').classList.toggle('show'); }
-
-        function sendContactMessage() {
-            const n = document.getElementById('contact-name').value;
-            const e = document.getElementById('contact-email').value;
-            const m = document.getElementById('contact-message').value;
-            if (!n || !e || !m) { showNotification('Complete el formulario', 'error'); return; }
-            ['contact-name', 'contact-email', 'contact-message'].forEach(id => document.getElementById(id).value = '');
-            showNotification('Mensaje enviado correctamente.', 'success');
+        // ADMIN TOOLBAR
+        function toggleAdminToolbar() {
+            const menu = document.getElementById('admin-toolbar-menu');
+            menu.classList.toggle('show');
         }
 
+        // FUNCIONES DE CONTACTO
+        function sendContactMessage() {
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            
+            if (!name || !email || !message) {
+                showNotification('Por favor complete todos los campos del formulario', 'error');
+                return;
+            }
+            
+            // Limpiar formulario
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-message').value = '';
+            
+            showNotification('Mensaje enviado correctamente. Nos pondremos en contacto pronto.', 'success');
+        }
+
+        // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
+            // Verificar autenticación
             checkAuth();
+            
+            // Inicializar información del autor en la barra lateral
             document.getElementById('author-name').textContent = authorInfo.name;
             document.getElementById('author-photo').src = authorInfo.photo;
             document.getElementById('author-quote').textContent = `"${authorInfo.quote}"`;
             document.getElementById('author-bio').innerHTML = `<p>${authorInfo.bio}</p>`;
+            
+            // Renderizar artículos iniciales
             renderArticles();
+            
+            // Configurar color guardado
             const savedColor = localStorage.getItem('ladoC-color');
             if (savedColor) {
                 document.documentElement.style.setProperty('--color-bordo', savedColor);
-                document.querySelectorAll('.color-option').forEach(opt => {
-                    opt.classList.remove('active');
-                    if (opt.dataset.color === savedColor) opt.classList.add('active');
+                
+                // Marcar color activo en el panel
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('active');
+                    if (option.dataset.color === savedColor) {
+                        option.classList.add('active');
+                    }
                 });
             }
+            
+            // Configurar título del sitio guardado
             const savedTitle = localStorage.getItem('ladoC-site-title');
-            if (savedTitle) { document.title = savedTitle; document.getElementById('site-title').value = savedTitle; }
-
-            document.getElementById('logo').addEventListener('click', e => { e.preventDefault(); showSection('inicio'); });
-            ['inicio', 'opinion', 'catamarca', 'politica-nacional', 'sociedad', 'internacionales', 'archivo', 'contacto'].forEach(id => {
-                document.getElementById(`nav-${id}`).addEventListener('click', e => { e.preventDefault(); showSection(id); });
+            if (savedTitle) {
+                document.title = savedTitle;
+                document.getElementById('site-title').value = savedTitle;
+            }
+            
+            // CONFIGURAR NAVEGACIÓN
+            document.getElementById('logo').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('inicio');
             });
-            document.getElementById('nav-admin').addEventListener('click', e => { e.preventDefault(); isAdmin ? openAdminPanel() : showLoginModal(); });
+            
+            document.getElementById('nav-inicio').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('inicio');
+            });
+            
+            document.getElementById('nav-opinion').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('opinion');
+            });
+            
+            document.getElementById('nav-catamarca').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('catamarca');
+            });
+            
+            document.getElementById('nav-politica-nacional').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('politica-nacional');
+            });
+            
+            document.getElementById('nav-sociedad').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('sociedad');
+            });
+            
+            document.getElementById('nav-internacionales').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('internacionales');
+            });
+            
+            document.getElementById('nav-archivo').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('archivo');
+            });
+            
+            document.getElementById('nav-contacto').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('contacto');
+            });
+            
+            document.getElementById('nav-admin').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (isAdmin) {
+                    openAdminPanel();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Footer navigation
             document.querySelectorAll('#footer-section a[id^="footer-"]').forEach(link => {
-                link.addEventListener('click', e => { e.preventDefault(); showSection(link.id.replace('footer-', '')); });
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.id.replace('footer-', '');
+                    showSection(sectionId);
+                });
             });
+            
+            // Filtros de archivo
             document.querySelectorAll('.archive-filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.archive-filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentArchiveFilter = btn.dataset.filter;
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.archive-filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    currentArchiveFilter = this.dataset.filter;
                     renderFullArchive();
                 });
             });
-            document.getElementById('login-form').addEventListener('submit', e => {
+            
+            // Formulario de login
+            document.getElementById('login-form').addEventListener('submit', function(e) {
                 e.preventDefault();
-                if (login(document.getElementById('username').value, document.getElementById('password').value)) { hideLoginModal(); openAdminPanel(); }
-                else { document.getElementById('login-error').style.display = 'block'; }
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (login(username, password)) {
+                    hideLoginModal();
+                    openAdminPanel();
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                }
             });
-            document.getElementById('login-modal').addEventListener('click', function(e) { if (e.target === this) hideLoginModal(); });
-            document.getElementById('open-admin').addEventListener('click', () => isAdmin ? openAdminPanel() : showLoginModal());
-            document.getElementById('new-article-button').addEventListener('click', () => { if (isAdmin) { openAdminPanel(); newArticle(); } else showLoginModal(); });
+            
+            // Cerrar modal de login al hacer clic fuera
+            document.getElementById('login-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideLoginModal();
+                }
+            });
+            
+            // Botón de abrir panel admin desde sidebar
+            document.getElementById('open-admin').addEventListener('click', function() {
+                if (isAdmin) {
+                    openAdminPanel();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Botón de nuevo artículo desde sidebar
+            document.getElementById('new-article-button').addEventListener('click', function() {
+                if (isAdmin) {
+                    openAdminPanel();
+                    newArticle();
+                } else {
+                    showLoginModal();
+                }
+            });
+            
+            // Cerrar panel admin
             document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+            
+            // Botones del panel de administración
             document.getElementById('save-article').addEventListener('click', saveArticle);
             document.getElementById('new-article').addEventListener('click', newArticle);
             document.getElementById('preview-article').addEventListener('click', previewArticle);
@@ -1761,20 +2224,37 @@
             document.getElementById('reset-data').addEventListener('click', resetData);
             document.getElementById('refresh-articles').addEventListener('click', updateAdminArticleList);
             document.getElementById('send-message').addEventListener('click', sendContactMessage);
+            
+            // Búsqueda en tiempo real
             document.getElementById('search-articles').addEventListener('input', updateAdminArticleList);
-            document.querySelectorAll('.color-option').forEach(opt => {
-                opt.addEventListener('click', () => {
+            
+            // Selectores de color
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
                     document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
-                    opt.classList.add('active');
+                    this.classList.add('active');
                 });
             });
+            
+            // Admin toolbar
             document.getElementById('admin-toolbar-button').addEventListener('click', toggleAdminToolbar);
-            document.addEventListener('click', e => {
+            
+            // Cerrar toolbar al hacer clic fuera
+            document.addEventListener('click', function(e) {
                 const toolbar = document.getElementById('admin-toolbar');
-                const menu = document.getElementById('admin-toolbar-menu');
-                if (!toolbar.contains(e.target) && menu.classList.contains('show')) menu.classList.remove('show');
+                const toolbarMenu = document.getElementById('admin-toolbar-menu');
+                
+                if (!toolbar.contains(e.target) && toolbarMenu.classList.contains('show')) {
+                    toolbarMenu.classList.remove('show');
+                }
             });
-            setTimeout(() => { if (!isAdmin) showNotification('Bienvenido a Lado C', 'info'); }, 1000);
+            
+            // Mostrar mensaje de bienvenida
+            setTimeout(() => {
+                if (!isAdmin) {
+                    showNotification('Bienvenido a Lado C - Un medio de opinión política catamarqueño', 'info');
+                }
+            }, 1000);
         });
     </script>
 </body>
